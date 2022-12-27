@@ -1,0 +1,14 @@
+{{-- pagination --}}
+@if($entries->hasPages())
+	<div class="paginate">
+        <ul>
+            @if($entries->previousPageUrl())
+                <li><a href="{{ $entries->previousPageUrl() }}">Previous Page</a></li>
+            @endif
+            <li><a href="#" class="act">{{ $entries->currentPage() }}</a></li>
+            @if($entries->nextPageUrl())
+                <li><a href="{{ $entries->nextPageUrl() }}">Next Page</a></li>
+            @endif
+        </ul>
+	</div>
+@endif

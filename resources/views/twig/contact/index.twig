@@ -1,0 +1,119 @@
+{% extends 'coilpack::twig/layouts/_contact-layout' %}
+
+{# page vars (prefix p_) #}
+{% set p_title = "contact #{global.site_name}" %}
+{% set p_description = "contact #{global.site_name}" %}
+{% set p_url = 'contact' %}
+{% set p_url_entry = 'entry' %}
+
+{# channel vars (prefix ch_) #}
+{% set ch = 'contact' %}
+{% set ch_disable = 'categories|category_fields|member_data|pagination' %}
+{% set entry = exp.channel.entries({channel: ch, disable: ch_disable, limit: 1}) %}
+
+
+{% block contact_contents %}
+
+{#
+    404 Redirect
+    ============
+    This is a single entry channel page, it only needs a second segment when the form has been successfully submitted. So we use the following code to make sure the page sends a 404 if someone types in an incorrect URL in the browser address bar. i.e. http://example.com/page/nothing
+#}
+{% if segment_2 is not empty and segment_2 != 'thanks' %}
+	{{ exp.redirect({segment_1}/{segment_2}/{segment_3}) }}
+{% endif %}
+
+
+
+
+{#
+    no results redirect
+    ===================
+    If the page doesn't exist, we redirect to 404.
+#}
+{% if entry is empty %}
+    {{ exp.redirect(404) }}
+{% endif %}
+
+{# every template using the blog layout will set these which lets us use
+	 shared markup with customizable details. #}
+
+{# layout vars, dynamic, not output #}
+{% set title = "#{entry.seo_title}#{global.gv_sep}" %}
+{% set description = entry.seo_description %}
+{# OpenGraph meta output #}
+{% set og_title = entry.seo_title %}
+{% set og_url = exp.path(p_url) %}
+{% set og_description = entry.seo_description %}
+
+{# content output #}
+<h1>{{ entry.title }}
+	<span class="required">Required Fields &#10033;</span>
+</h1>
+{# page_content is a textarea with HTML output we don't need to wrap this tag with HTML as that is already included in it's output. #}
+{{ entry.page_content | raw }}
+{# /content output #}
+
+
+<div class="alert issue hide"></div>
+{# only show this thank you message if segment_2 is thanks #}
+{% if segment_2 == 'thanks' %}
+<div class="alert success">
+	<h3>email sent</h3>
+	<p>Thanks, your email was sent, we'll respond in 48 hours or less.</p>
+	<a class="close" href="{path='{p_url}'}">&#10005; Close</a>
+</div>
+{% endif %}
+{# email contact form #}
+
+{% set form = exp.email.contact_form.parameters({
+    form_class: 'contact-form',
+    return: "#{global.site_url}index.php/#{p_url}/thanks",
+    redirect: '0'
+}) %}
+{{ form.open() | raw }}
+<fieldset class="row">
+	<section class="w-4 instruct">
+		<label>Name</label>
+		<em>What do you want to be called?</em>
+	</section>
+	<section class="w-12 field">
+		<input name="name" type="text" value="{{ form.member_name }}">
+	</section>
+</fieldset>
+<fieldset class="row">
+	<section class="w-4 instruct">
+		<label>Email
+			<span class="required" title="required field">&#10033;</span>
+		</label>
+		<em>How do we contact you?</em>
+	</section>
+	<section class="w-12 field">
+		<input class="required" name="from" type="text" value="{{ form.member_email }}">
+	</section>
+</fieldset>
+<fieldset class="row">
+	<section class="w-4 instruct">
+		<label>Subject</label>
+		<em>What did you want to discuss?</em>
+	</section>
+	<section class="w-12 field">
+		<input name="subject" type="text" value="">
+	</section>
+</fieldset>
+<fieldset class="row">
+	<section class="w-4 instruct">
+		<label>Message
+			<span class="required" title="required field">&#10033;</span>
+		</label>
+		<em>Please keep it kind, brief and courteous.</em>
+	</section>
+	<section class="w-12 field">
+		<textarea class="required" name="message" cols="" rows=""></textarea>
+	</section>
+</fieldset>
+<fieldset class="ctrls">
+	<input class="btn" type="submit" value="Send e-mail">
+</fieldset>
+{{ form.close() | raw }}
+{% endblock %}

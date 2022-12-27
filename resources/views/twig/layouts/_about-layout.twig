@@ -1,0 +1,37 @@
+{% extends "coilpack::twig/layouts/_html-wrapper" %}
+
+{# embed for breadcrumb, needed to pass arguments (embeds aren't evil) #}
+{% block breadcrumbs %}
+	{{ include('coilpack::twig/common/_breadcrumb') }}
+{% endblock %}
+
+{% set scripts = [] %}
+
+{% block contents %}
+
+		<section class="row reverse pad">
+			<section class="w-12">
+            {% block about_contents %}{% endblock %}
+			</section>
+			<section class="w-4">
+				<div class="sidebar">
+					<ul class="list">
+						{#
+							sub navigation
+							==============
+							This is a dynamic way to create sub navigation for this section. I use the parameter dynamic='no' to prevent the URL from changing the output of a channel entries tag. I also use a status of 'Default Page' to determine the, well default page.
+							NOTE: A channel should only have one Default Page.
+						#}
+						{% for entry in exp.channel.entries({channel: ch, orderby: 'status', status: ch_status}) %}
+							{# we need to treat the default page link a little differently so we check for the 'Default Page' status and output it, then all other page links output below that. We use the orderby='status' and sort='asc' parameters to accomplish this. #}
+							{% if status == 'Default Page' %}
+								<li><a{% if segment_1 == p_url and segment_2 == ''%} class="act"{% endif %} href="{{ exp.path(p_url) }}">{{ entry.title }}</a></li>
+							{% else %}
+								<li><a{% if segment_2 == entry.url_title %} class="act"{% endif %} href="{{ exp.path(p_url ~ '/' ~ entry.url_title) }}">{{ entry.title }}</a></li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+			</section>
+		</section>
+{% endblock %}

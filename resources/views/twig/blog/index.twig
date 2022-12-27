@@ -1,0 +1,79 @@
+{% extends 'coilpack::twig/layouts/_blog-layout' %}
+
+{# page vars (prefix p_) #}
+{% set p_title="My Blog" %}
+{% set p_description="A blog about things, things I like and things I do." %}
+{% set p_url='blog' %}
+{% set p_url_entry='entry' %}
+
+{# channel vars (prefix ch_) #}
+{% set ch='blog' %}
+{% set ch_disable='category_fields|member_data' %}
+
+
+{# every template using the blog layout will set these which lets us use
+	 shared markup with customizable details. #}
+
+
+{% block blog_contents %}
+    {#
+        404 Redirect
+        ============
+        This is a listing page, it needs categories and pagination to work, but also needs to redirect if segment_2 is invalid . i.e. http://example.com/blog/nothing
+    #}
+    {% if segment_2 %}
+        {% if segment_2 != 'category' and segment_2  matches '/^(?!P\d+).*/' %}
+            {{ exp.redirect(404) }}
+        {% endif %}
+    {% endif %}
+
+    {# prevents 3rd ++ segments on non category listings #}
+    {% if segment_3 %}
+        {% if segment_2 != 'category' %}
+            {{ exp.redirect("#{segment_1}/#{segment_2}") }}
+        {% endif %}
+    {% endif %}
+
+    {# prevents 4th ++ segments on category listings #}
+    {% if segment_4 %}
+        {% if segment_4 matches '/^(?!P\d+).*/' %}
+            {{ exp.redirect("#{segment_1}/#{segment_2}/#{segment_3}") }}
+        {% endif %}
+    {% endif %}
+
+    {# prevents 5th ++ segments on paginated category listings #}
+    {% if segment_5 %}
+        {{ exp.redirect("#{segment_1}/#{segment_2}/#{segment_3}/#{segment_4}") }}
+    {% endif %}
+
+
+
+    {# Heading output is different in the case of category listings. #}
+    {% if segment_2 == 'category' %}
+        {% set category = exp.channel.category_heading({channel: ch}) %}
+        {% set cat_ch = ch %}
+        {% set entries = exp.channel.entries({channel: ch, category: segment_3, paginate: 5}) %}
+
+        <h1>{{ category.category_name }}</h1>
+        {% if category.category_description %}
+            <p>{{ category.category_description }}</p>
+        {% endif %}
+    {% else %}
+        <h1>{{ p_title }}</h1>
+        <p>{{ p_description }}</p>
+        {% set entries = exp.channel.entries({channel: ch, paginate: 5}) %}
+    {% endif %}
+    <div class="entries">
+        {% for entry in entries %}
+            {# listing as a snippet, as it's used through more than one template #}
+            {% include('coilpack::twig/_partials/snp_blog_list') %}
+            {# no results output #}
+        {% else %}
+                <div class="alert warn no-results">
+                    <p>{{ global.gv_entries_none | raw}}</p>
+                </div>
+        {% endfor %}
+
+        {% include('coilpack::twig/_partials/snp_blog_list_paginate') %}
+    </div>
+{% endblock %}
