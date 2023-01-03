@@ -30,7 +30,8 @@ abstract class Modifier {
             'Fieldtype',
             (new \ReflectionClass($this->fieldtype))->getShortName(),
             'Modifier',
-            (new \ReflectionClass($this))->getShortName()
+            (new \ReflectionClass(static::class))->getShortName(),
+            $this->name,
         ]);
     }
 

@@ -67,12 +67,10 @@ class FieldtypeRegistrar {
 
     public function registerModifier(Modifier $modifier)
     {
-
-        $name = $modifier->getQualifiedName();//"Modifier\\{$modifier->name}";
-        $name = "Modifier.{$modifier->name}";
+        $name = $modifier->getQualifiedName();
 
         if(array_key_exists($name, $this->inputs)) {
-            return $this->inputs[$name];
+            return GraphQL::type($name);
         }
 
         if(empty($modifier->parameters)) {
