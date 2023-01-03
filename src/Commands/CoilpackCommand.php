@@ -220,19 +220,23 @@ class CoilpackCommand extends Command
         // Move and set permissions
         $this->info("Moving installation to $installPath");
         if ($this->option('force') || count(File::glob("{$installPath}/*", GLOB_NOSORT)) === 0) {
-            File::moveDirectory("{$localPath}/unpacked", $installPath);
+            File::moveDirectory("{$localPath}/unpacked", $installPath, true);
 
             $permissionsMap = [
-                'system/user/config' => 777,
-                'system/user/cache' => 777,
-                'system/user/templates' => 777,
-                'system/user/language' => 777,
-                'images' => 777,
-                'themes/user' => 777,
+                'system/user/config' => 0777,
+                'system/user/cache' => 0777,
+                'system/user/templates' => 0777,
+                'system/user/language' => 0777,
+                'images' => 0777,
+                'themes/user' => 0777,
             ];
 
+            // Recursively set permissions on directories
             foreach($permissionsMap as $path => $permission) {
-                exec("chmod -R $permission $installPath/$path");
+                $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator("$installPath/$path"));
+                foreach ($iterator as $item) {
+                    @chmod($item, $permission);
+                }
             }
         }
     }
