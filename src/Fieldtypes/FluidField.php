@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class FluidField extends Fieldtype
 {
-    public function apply(FieldContent $content, $parameters = [])
+
+    public function apply(FieldContent $content, array $parameters = [])
     {
         $data = $this->loadData($content);
 

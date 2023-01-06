@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\DB;
 
 class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
 {
-    public function apply(FieldContent $content, $parameters = [])
+    public function apply(FieldContent $content, array $parameters = [])
     {
         $data = $this->loadData($content, $parameters);
 
         return FieldtypeOutput::make($data);
     }
 
-    protected function loadData(FieldContent $content, $parameters = [])
+    protected function loadData(FieldContent $content, array $parameters = [])
     {
         if (! isset($content->entry_id)) {
             return [];

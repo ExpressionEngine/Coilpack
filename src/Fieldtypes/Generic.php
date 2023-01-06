@@ -10,7 +10,7 @@ class Generic extends Fieldtype
 {
     private $handler = null;
 
-    public function __construct($name, $id = null)
+    public function __construct(string $name, $id = null)
     {
         $this->name = $name;
         $this->id = $id;
@@ -34,19 +34,23 @@ class Generic extends Fieldtype
         return $this->handler;
     }
 
-    public function apply(FieldContent $content, $parameters = [])
+    public function apply(FieldContent $content, array $parameters = [])
     {
         $handler = $this->getHandler();
 
         $data = $content->getAttribute('data');
-        $processed = $handler->replace_tag($data, $parameters);
 
-        return FieldtypeOutput::make($processed);
+        $output = \Expressionengine\Coilpack\Facades\Coilpack::isolateTemplateLibrary(function ($template) use ($handler, $data, $parameters) {
+            $output = $handler->replace_tag($data, $parameters);
+            // If the Fieldtype stored data for us in the template library that is preferable to the generated output
+            return $template->get_data() ?: $output;
+        });
+
+        return FieldtypeOutput::make($output);
     }
 
     public function modifiers()
     {
-        // return [];
         // @todo Cache this statically
         return collect(get_class_methods($this->getHandler()))->flatMap(function ($method) {
             if (Str::startsWith($method, 'replace_') && $method !== 'replace_tag') {

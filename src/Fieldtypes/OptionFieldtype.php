@@ -7,7 +7,7 @@ use Expressionengine\Coilpack\Models\FieldContent;
 
 class OptionFieldtype extends Generic
 {
-    public function apply(FieldContent $content, $parameters = [])
+    public function apply(FieldContent $content, array $parameters = [])
     {
         $handler = $this->getHandler();
 

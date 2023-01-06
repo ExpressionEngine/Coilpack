@@ -40,7 +40,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         return $this->fieldtype;
     }
 
-    public function value($parameters = [])
+    /**
+     * Get the value of this Field Content by applying the fieldtype
+     *
+     * @param  array  $parameters
+     * @return \Expressionengine\Coilpack\FieldtypeOutput
+     */
+    public function value(array $parameters = [])
     {
         // should hash and cache params too
         if (empty($parameters) && array_key_exists('value', $this->attributes)) {
@@ -57,14 +63,14 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         return $value;
     }
 
-    public function callModifier($name, $parameters = [])
+    public function callModifier(string $name, $parameters = [])
     {
         $fieldtype = $this->getFieldtype();
 
-        return $fieldtype->callModifier($this, $name, $parameters);
+        return $fieldtype->callModifier($this, $name, is_array($parameters) ? $parameters : []);
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->value()->getIterator());
     }

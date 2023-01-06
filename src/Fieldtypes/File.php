@@ -8,7 +8,7 @@ use GraphQL\Type\Definition\Type;
 
 class File extends Generic
 {
-    public function apply(FieldContent $content, $parameters = [])
+    public function apply(FieldContent $content, array $parameters = [])
     {
         $handler = $this->getHandler();
         $data = $handler->pre_process($content->data);
