@@ -46,10 +46,6 @@ class Relationship extends Fieldtype implements ListsGraphType
 
     public function graphType()
     {
-        return \Rebing\GraphQL\Support\Facades\GraphQL::type('ChannelEntry');
-
-        return \GraphQL\Type\Definition\Type::listOf(
-            \Rebing\GraphQL\Support\Facades\GraphQL::type('ChannelEntry')
-        );
+        return 'ChannelEntry';
     }
 }

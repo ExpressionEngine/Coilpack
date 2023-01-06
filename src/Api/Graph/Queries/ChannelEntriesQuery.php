@@ -26,6 +26,9 @@ class ChannelEntriesQuery extends Query
             'channel' => [
                 'type' => Type::string(),
             ],
+            'title' => [
+                'type' => Type::string(),
+            ],
             'status' => [
                 'type' => Type::string(),
             ],
@@ -45,14 +48,19 @@ class ChannelEntriesQuery extends Query
 
         $entries = ChannelEntry::select($select)->with($with);
 
-        // Filter by Channel name
+        // Filter by Channel Name
         $entries->when($args['channel'] ?? false, function ($query) use ($args) {
             $query->whereHas('channel', function ($query) use ($args) {
                 $query->where('channel_name', $args['channel']);
             });
         });
 
-        // Filter by status
+        // Filter by Entry Title
+        $entries->when($args['title'] ?? false, function ($query) use ($args) {
+            $query->where('title', $args['title']);
+        });
+
+        // Filter by Status
         $entries->when($args['status'] ?? false, function ($query) use ($args) {
             $query->where('status', $args['status']);
         });

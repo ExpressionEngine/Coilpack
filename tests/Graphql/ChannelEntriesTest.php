@@ -133,6 +133,29 @@ class ChannelEntriesTest extends TestCase
         ->assertJsonFragment(['width' => 100]);
     }
 
+    public function test_entries_relationship()
+    {
+        $this->postJson('graphql', [
+            'query' => <<<GQL
+            {
+                channel_entries(title:"Test Fieldtypes" limit:1){
+                    entry_id
+                    test_relationships {
+                        title
+                        blog_audio {
+                            id
+                            type
+                        }
+                    }
+                }
+            }
+          GQL
+        ])
+        ->assertJsonFragment(['title' => 'Entry with SoundCloud audio'])
+        ->assertJsonFragment(['id' => '164768245'])
+        ->assertJsonFragment(['type' => 'soundcloud']);
+    }
+
     public function test_entries_text_field_modifier()
     {
         $this->postJson('graphql', [

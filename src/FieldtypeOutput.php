@@ -62,6 +62,11 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
 
     public function getIterator(): \Traversable
     {
+        // If we have an object set and it is iterable we will prefer to use that
+        if ($this->object && method_exists($this->object, 'getIterator')) {
+            return $this->object->getIterator();
+        }
+
         if (is_object($this->array) && method_exists($this->array, 'getIterator')) {
             return $this->array->getIterator();
         }
@@ -129,6 +134,10 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
 
     public function __get($key)
     {
+        if ($this->object && property_exists($this->object, $key)) {
+            return $this->object->$key;
+        }
+
         if (array_key_exists($key, (array) $this->array)) {
             return $this->array[$key];
         }
