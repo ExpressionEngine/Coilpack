@@ -6,11 +6,10 @@ use Tests\TestCase;
 
 class CategoriesTest extends TestCase
 {
-
     public function test_categories()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 categories {
                     cat_id,
@@ -21,5 +20,4 @@ class CategoriesTest extends TestCase
         ])
         ->assertJsonFragment(['cat_id' => 2]);
     }
-
 }

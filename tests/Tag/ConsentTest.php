@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class ConsentTest extends TestCase
 {
-
     public function test_consent_form()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
@@ -16,18 +14,13 @@ class ConsentTest extends TestCase
         // dd($form);
     }
 
-
-
     public function test_consent_alert()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
 
         $alert = $exp->consent->alert();
         // dd($alert);
-
     }
-
-
 
     public function test_consent_requests()
     {

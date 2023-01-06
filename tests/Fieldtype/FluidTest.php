@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class FluidTest extends TestCase
 {
-
     public function test_fluid()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,8 +15,8 @@ class FluidTest extends TestCase
         $this->assertEquals([
             'one',
             'two',
-            '1664639700'
-        ], array_map(function($row) {
+            '1664639700',
+        ], array_map(function ($row) {
             return (string) $row->value();
         }, $output->toArray()));
     }

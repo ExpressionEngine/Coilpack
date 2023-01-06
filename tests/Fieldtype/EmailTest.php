@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class EmailTest extends TestCase
 {
-
     public function test_email()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -23,5 +22,4 @@ class EmailTest extends TestCase
         $output = $entry->test_email->mailto(['title' => 'Test', 'subject' => 'Testing', 'encode' => false]);
         $this->assertEquals('<a href="mailto:test@example.com?subject=Testing">Test</a>', (string) $output);
     }
-
 }

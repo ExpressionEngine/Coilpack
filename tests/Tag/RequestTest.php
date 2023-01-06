@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class RequestTest extends TestCase
 {
-
     public function test_get_variable()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);

@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class MultiSelectTest extends TestCase
 {
-
     public function test_multi_select()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -15,7 +14,7 @@ class MultiSelectTest extends TestCase
         $output = $entry->test_multi_select->value();
 
         $this->assertEquals([
-            'one'
+            'one',
         ], $output->toArray());
 
         $this->assertEquals('one', (string) $output);

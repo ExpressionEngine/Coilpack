@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class UrlTest extends TestCase
 {
-
     public function test_url()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

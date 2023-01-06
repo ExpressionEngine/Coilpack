@@ -2,13 +2,11 @@
 
 namespace Tests\Fieldtype;
 
-
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class GridTest extends TestCase
 {
-
     public function test_grid()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -17,8 +15,8 @@ class GridTest extends TestCase
         $this->assertEquals([
             'one',
             'two',
-            'three'
-        ], array_map(function($row) {
+            'three',
+        ], array_map(function ($row) {
             return (string) $row->test_grid_col;
         }, $output->toArray()));
     }

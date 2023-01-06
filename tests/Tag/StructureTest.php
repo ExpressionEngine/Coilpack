@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class StructureTest extends TestCase
 {
-
     public function test_structure_breadcrumb()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);

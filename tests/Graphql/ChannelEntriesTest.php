@@ -2,16 +2,14 @@
 
 namespace Tests\Graphql;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class ChannelEntriesTest extends TestCase
 {
-
     public function test_entries()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about"){
                     entry_id
@@ -30,7 +28,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_author()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about"){
                     entry_id
@@ -47,7 +45,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_channel()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about"){
                     entry_id
@@ -66,7 +64,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_categories()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"blog"){
                     entry_id
@@ -85,7 +83,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_grid_field()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about" limit:1){
                     entry_id
@@ -112,7 +110,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_grid_field_image_modifier()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about" limit:1){
                     entry_id
@@ -136,7 +134,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_relationship()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(title:"Test Fieldtypes" limit:1){
                     entry_id
@@ -159,7 +157,7 @@ class ChannelEntriesTest extends TestCase
     public function test_entries_text_field_modifier()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 channel_entries(channel:"about"){
                     entry_id
@@ -172,7 +170,6 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-            ->assertJsonFragment(['page_content' => "4461"]);
+            ->assertJsonFragment(['page_content' => '4461']);
     }
-
 }

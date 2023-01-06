@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class RelationshipTest extends TestCase
 {
-
     public function test_relationship()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -15,5 +14,4 @@ class RelationshipTest extends TestCase
         $output = $entry->test_relationships->value();
         $this->assertEquals('Entry with SoundCloud audio', $output->toArray()[0]['title']);
     }
-
 }

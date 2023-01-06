@@ -2,7 +2,6 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class FileTest extends TestCase
@@ -11,6 +10,7 @@ class FileTest extends TestCase
      * A basic test example.
      *
      * https://docs.expressionengine.com/latest/add-ons/file.html#file-entries-tag
+     *
      * @return void
      */
     public function test_file_entries()

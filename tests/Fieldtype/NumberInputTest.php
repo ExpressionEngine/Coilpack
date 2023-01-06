@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class NumberInputTest extends TestCase
 {
-
     public function test_number_input()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -23,5 +22,4 @@ class NumberInputTest extends TestCase
         $output = $entry->test_number_input->parameters(['decimal_places' => 2]);
         $this->assertEquals(123.00, (string) $output);
     }
-
 }

@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-
     public function test_file()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

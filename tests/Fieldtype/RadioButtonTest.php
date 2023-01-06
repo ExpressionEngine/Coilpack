@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class RadioButtonTest extends TestCase
 {
-
     public function test_radio_button()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,5 +15,4 @@ class RadioButtonTest extends TestCase
 
         $this->assertEquals('One', (string) $output);
     }
-
 }

@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ValueSliderTest extends TestCase
 {
-
     public function test_value_slider()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,5 +15,4 @@ class ValueSliderTest extends TestCase
 
         $this->assertEquals('5', (string) $output);
     }
-
 }

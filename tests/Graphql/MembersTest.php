@@ -6,11 +6,10 @@ use Tests\TestCase;
 
 class MembersTest extends TestCase
 {
-
     public function test_members_me()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 me {
                     member_id

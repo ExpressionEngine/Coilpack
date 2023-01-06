@@ -1,10 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [0.0.2] - 2023-01-06
 
 ### Added
 
 - Changelog with automated release process
+
 ### Fixed
 
 - Filesystem errors on some Windows environments when running coilpack install command
@@ -21,3 +22,7 @@
 ### Added
 
 - Initial Beta Release
+
+[0.0.2]: https://github.com/ExpressionEngine/Coilpack/compare/0.0.1...0.0.2
+
+[0.0.1]: https://github.com/ExpressionEngine/Coilpack/releases/tag/0.0.1

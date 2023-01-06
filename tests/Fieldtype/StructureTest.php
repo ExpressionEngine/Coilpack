@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class StructureTest extends TestCase
 {
-
     public function test_structure()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -15,5 +14,4 @@ class StructureTest extends TestCase
         $output = $entry->test_structure->value();
         $this->assertEquals('http://laravel.test/about-default-theme/', (string) $output);
     }
-
 }

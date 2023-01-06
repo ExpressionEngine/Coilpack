@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class ChannelCalendarTest extends TestCase
 {
-
     public function test_channel_calendar()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
@@ -16,5 +14,4 @@ class ChannelCalendarTest extends TestCase
         // this tag needs some heavy work
         // dd($calendar);
     }
-
 }

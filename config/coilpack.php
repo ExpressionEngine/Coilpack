@@ -34,5 +34,5 @@ return [
      */
     'expressionengine' => [
 
-    ]
+    ],
 ];

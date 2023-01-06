@@ -6,11 +6,10 @@ use Tests\TestCase;
 
 class VariablesTest extends TestCase
 {
-
     public function test_variables()
     {
         $this->postJson('graphql', [
-            'query' => <<<GQL
+            'query' => <<<'GQL'
             {
                 variables {
                     global {

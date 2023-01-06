@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class CheckboxesTest extends TestCase
 {
-
     public function test_checkboxes()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,7 +15,7 @@ class CheckboxesTest extends TestCase
 
         $this->assertEquals([
             'One',
-            'Three'
+            'Three',
         ], $output->toArray());
 
         $this->assertEquals('One, Three', (string) $output);

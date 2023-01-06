@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class SelectableButtonsTest extends TestCase
 {
-
     public function test_selectable_buttons()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -15,7 +14,7 @@ class SelectableButtonsTest extends TestCase
         $output = $entry->test_selectable_buttons->value();
 
         $this->assertEquals([
-            'One'
+            'One',
         ], $output->toArray());
     }
 

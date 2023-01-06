@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class SelectDropdownTest extends TestCase
 {
-
     public function test_select_dropdown()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

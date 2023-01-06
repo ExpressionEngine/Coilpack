@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class RichTextEditorTest extends TestCase
 {
-
     public function test_rich_text_editor()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

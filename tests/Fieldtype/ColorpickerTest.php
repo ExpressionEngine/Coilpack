@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ColorpickerTest extends TestCase
 {
-
     public function test_colorpicker()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

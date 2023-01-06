@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class ChannelTest extends TestCase
 {
-
     public function test_channel_entries_channel()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
@@ -76,7 +74,7 @@ class ChannelTest extends TestCase
             'Personal',
             'Photos',
             'Videos',
-            'Music'
+            'Music',
         ], $categories->pluck('category_name')->toArray());
     }
 

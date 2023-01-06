@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class DurationTest extends TestCase
 {
-
     public function test_duration()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

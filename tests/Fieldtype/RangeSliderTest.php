@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class RangeSliderTest extends TestCase
 {
-
     public function test_range_slider()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,7 +15,7 @@ class RangeSliderTest extends TestCase
 
         $this->assertEquals([
             'from' => 5,
-            'to' => 10
+            'to' => 10,
         ], $output->toArray());
 
         $this->assertEquals('5 &mdash; 10', (string) $output);
@@ -27,14 +26,14 @@ class RangeSliderTest extends TestCase
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
 
         $output = $entry->test_range_slider->parameters([
-            'decimal_place'  => '2',
-            'prefix'  => 'yes',
-            'suffix'  => 'yes',
+            'decimal_place' => '2',
+            'prefix' => 'yes',
+            'suffix' => 'yes',
         ]);
 
         $this->assertEquals([
             'from' => 5,
-            'to' => 10
+            'to' => 10,
         ], $output->toArray());
 
         $this->assertEquals('5.00 &mdash; 10.00', (string) $output);

@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ToggleTest extends TestCase
 {
-
     public function test_toggle()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
@@ -16,5 +15,4 @@ class ToggleTest extends TestCase
 
         $this->assertEquals('1', (string) $output);
     }
-
 }

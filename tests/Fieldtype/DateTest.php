@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class DateTest extends TestCase
 {
-
     public function test_date()
     {
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();

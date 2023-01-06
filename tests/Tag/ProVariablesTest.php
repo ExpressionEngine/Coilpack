@@ -2,12 +2,10 @@
 
 namespace Tests\Tag;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Tests\TestCase;
 
 class ProVariablesTest extends TestCase
 {
-
     public function test_variable_single()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
@@ -31,7 +29,4 @@ class ProVariablesTest extends TestCase
         $label = $exp->pro_variables->label(['var' => 'gv_comment_disabled']);
         $this->assertEquals('', $label);
     }
-
-
-
 }
