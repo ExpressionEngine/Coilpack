@@ -55,6 +55,8 @@ class CoilpackCommand extends Command
 
         $this->updateRoutesFile();
 
+        $this->askForStar();
+
         return self::SUCCESS;
     }
 
@@ -241,5 +243,32 @@ class CoilpackCommand extends Command
                 }
             }
         }
+    }
+
+    protected function askForStar()
+    {
+        $url = 'https://github.com/expressionengine/coilpack';
+        $question = "We're thrilled that you have chosen to use Coilpack! \n Would you like to tell others by starring our repo? (y/n)";
+        $response = strtolower($this->ask($question, 'n'));
+
+        // If we don't get a "y" or "yes" we're done
+        if (! in_array($response, ['y', 'yes'])) {
+            return;
+        }
+
+        // Choose the proper command to open the url based on the current operating system
+        $openUrlCommands = [
+            'Darwin' => 'open',
+            'Linux' => 'xdg-open',
+            'Windows' => 'start',
+        ];
+
+        $command = array_key_exists(PHP_OS_FAMILY, $openUrlCommands) ? $openUrlCommands[PHP_OS_FAMILY] : null;
+
+        if (! $command) {
+            $this->info("Oops, this is embarrassing. \n We can't open the url on your operating system but you can still star the repo: $url");
+        }
+
+        exec("$command $url");
     }
 }

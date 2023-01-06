@@ -13,3 +13,9 @@ If you have found an issue with the documentation or would like to contribute pl
 ## License
 
 Coilpack is open-sourced software licensed under the MIT license.
+
+## Helpful Links
+
+- [ExpressionEngine](https://expressionengine.com/)
+- [ExpressionEngine Github](https://github.com/expressionengine/expressionengine)
+- [ExpressionEngine Slack](https://expressionengine.com/blog/join-us-in-slack)
