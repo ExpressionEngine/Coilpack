@@ -4,15 +4,14 @@ namespace Expressionengine\Coilpack;
 
 use Illuminate\Support\Facades\Event;
 
-class Extensions extends \EE_Extensions {
-
-
+class Extensions extends \EE_Extensions
+{
     public function __construct($data = [])
     {
-        if(!empty($data)) {
+        if (! empty($data)) {
             $this->extensions = $data['extensions'];
             $this->version_numbers = $data['version_numbers'];
-        }else{
+        } else {
             parent::__construct();
         }
     }
@@ -23,7 +22,6 @@ class Extensions extends \EE_Extensions {
      * Used in ExpressionEngine to call an extension based on whichever
      * hook is being triggered
      *
-     * @access	public
      * @param	string	Name of the  extension hook
      * @param	mixed
      * @return	mixed
@@ -65,7 +63,6 @@ class Extensions extends \EE_Extensions {
      *
      * Check If Hook Has Activated Extension
      *
-     * @access	public
      * @param	string	Name of the  extension hook
      * @return	bool
      */
@@ -90,10 +87,10 @@ class Extensions extends \EE_Extensions {
     {
         $events = [
             "ee:$eventName",
-            "ee:$eventName:final"
+            "ee:$eventName:final",
         ];
 
-        $hasListeners = !empty(array_filter($events, function ($event) {
+        $hasListeners = ! empty(array_filter($events, function ($event) {
             // $listeners = array_filter(Event::getListeners($event), function($listener) {
             //     if($listener instanceof \Closure) {
             //         $func = new \ReflectionFunction($listener);
@@ -110,7 +107,4 @@ class Extensions extends \EE_Extensions {
 
         return $hasListeners;
     }
-
-
-
 }

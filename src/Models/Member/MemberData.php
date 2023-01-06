@@ -1,14 +1,11 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Member;
 
 use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\FieldContent;
-use \Illuminate\Support\Arr;
-use \Illuminate\Support\Str;
-use ExpressionEngine\Service\Model\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 /**
  * Channel Data Model
@@ -16,6 +13,7 @@ use ExpressionEngine\Service\Model\Collection;
 class MemberData extends Model
 {
     protected $primaryKey = 'member_id';
+
     protected $table = 'member_data';
 
     public function member()
@@ -27,7 +25,7 @@ class MemberData extends Model
     {
         $fields = ($fields) ?: MemberField::all();
 
-        if (!$fields || $fields->isEmpty()) {
+        if (! $fields || $fields->isEmpty()) {
             return $query;
         }
 
@@ -52,23 +50,23 @@ class MemberData extends Model
 
     public function fields()
     {
-        $fields = MemberField::all()->keyBy('m_field_id');;
+        $fields = MemberField::all()->keyBy('m_field_id');
 
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'm_field_');
         })->reduce(function ($carry, $key) use ($fields) {
-            list($name, $id) = array_slice(explode('_', $key), 2);
+            [$name, $id] = array_slice(explode('_', $key), 2);
 
-            if (!$fields->has($id)) {
+            if (! $fields->has($id)) {
                 return $carry;
             }
 
-            if (!$carry->has($id)) {
+            if (! $carry->has($id)) {
                 $carry->put($id, new FieldContent(array_merge(
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'member' => $this->member
+                        'member' => $this->member,
                     ],
                     Arr::only($this->attributes, ['member_id', 'site_id', 'channel_id'])
                 )));
@@ -76,7 +74,7 @@ class MemberData extends Model
 
             $nameMap = [
                 'id' => 'data',
-                'ft' => 'format'
+                'ft' => 'format',
             ];
 
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);

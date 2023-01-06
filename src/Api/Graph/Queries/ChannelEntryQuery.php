@@ -24,7 +24,7 @@ class ChannelEntryQuery extends Query
             'entry_id' => [
                 'name' => 'entry_id',
                 'type' => Type::int(),
-                'rules' => ['required']
+                'rules' => ['required'],
             ],
         ];
     }

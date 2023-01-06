@@ -1,9 +1,8 @@
 <?php
 
-if (!defined('SYSPATH')) {
+if (! defined('SYSPATH')) {
     exit('No direct script access allowed');
 }
-
 
 /*
  * ------------------------------------------------------
@@ -13,14 +12,14 @@ if (!defined('SYSPATH')) {
  *             files check for this (`if ! defined ...`)
  * ------------------------------------------------------
  */
-defined('BASEPATH') || define('BASEPATH', SYSPATH . 'ee/legacy/');
-defined('EESELF') || define('EESELF', SELF);
+defined('BASEPATH') || define('BASEPATH', SYSPATH.'ee/legacy/');
+defined('EESELF') || define('EESELF', self);
 
 // load user configurable constants
-$constants = require SYSPATH . 'ee/ExpressionEngine/Config/constants.php';
+$constants = require SYSPATH.'ee/ExpressionEngine/Config/constants.php';
 
-if (file_exists(SYSPATH . 'user/config/constants.php')) {
-    $user_constants = include SYSPATH . 'user/config/constants.php';
+if (file_exists(SYSPATH.'user/config/constants.php')) {
+    $user_constants = include SYSPATH.'user/config/constants.php';
     if (is_array($user_constants)) {
         $constants = array_merge($constants, $user_constants);
     }
@@ -35,15 +34,15 @@ foreach ($constants as $k => $v) {
  *  Load the autoloader and register it
  * ------------------------------------------------------
  */
-require SYSPATH . '../vendor-build/autoload.php';
-require SYSPATH . 'ee/ExpressionEngine/Core/Autoloader.php';
+require SYSPATH.'../vendor-build/autoload.php';
+require SYSPATH.'ee/ExpressionEngine/Core/Autoloader.php';
 
 ExpressionEngine\Core\Autoloader::getInstance()
-    ->addPrefix('EllisLab\Addons', SYSPATH . 'ee/ExpressionEngine/Addons/')
-    ->addPrefix('EllisLab\ExpressionEngine', SYSPATH . 'ee/ExpressionEngine/')
-    ->addPrefix('ExpressionEngine', SYSPATH . 'ee/ExpressionEngine/')
-    ->addPrefix('Michelf', SYSPATH . 'ee/legacy/libraries/typography/Markdown/Michelf/')
-    ->addPrefix('Mexitek', SYSPATH . 'ee/Mexitek/')
+    ->addPrefix('EllisLab\Addons', SYSPATH.'ee/ExpressionEngine/Addons/')
+    ->addPrefix('EllisLab\ExpressionEngine', SYSPATH.'ee/ExpressionEngine/')
+    ->addPrefix('ExpressionEngine', SYSPATH.'ee/ExpressionEngine/')
+    ->addPrefix('Michelf', SYSPATH.'ee/legacy/libraries/typography/Markdown/Michelf/')
+    ->addPrefix('Mexitek', SYSPATH.'ee/Mexitek/')
     ->register();
 
 /*
@@ -51,7 +50,7 @@ ExpressionEngine\Core\Autoloader::getInstance()
  *  Load the global functions
  * ------------------------------------------------------
  */
-require SYSPATH . 'ee/ExpressionEngine/Boot/boot.common.php';
+require SYSPATH.'ee/ExpressionEngine/Boot/boot.common.php';
 
 /*
  * ------------------------------------------------------
@@ -75,8 +74,8 @@ use ExpressionEngine\Core;
 
 if (
     defined('REQ') && in_array(REQ, ['CP', 'CLI']) &&
-    is_dir(SYSPATH . 'ee/installer/') &&
-    (!defined('INSTALL_MODE') or INSTALL_MODE != false)
+    is_dir(SYSPATH.'ee/installer/') &&
+    (! defined('INSTALL_MODE') or INSTALL_MODE != false)
 ) {
     $core = new Core\Installer();
 } else {
@@ -135,7 +134,7 @@ function ee($dep = null)
     if (isset($dep) && isset($facade->di)) {
         $args = func_get_args();
 
-        return call_user_func_array(array($facade->di, 'make'), $args);
+        return call_user_func_array([$facade->di, 'make'], $args);
 
         return $facade->di->make($dep);
     }
@@ -143,7 +142,4 @@ function ee($dep = null)
     return $facade;
 }
 
-
 return new \Expressionengine\Coilpack\Core($core);
-
-

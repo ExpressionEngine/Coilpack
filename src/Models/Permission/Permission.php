@@ -12,6 +12,7 @@ use Expressionengine\Coilpack\Models\Site\Site;
 class Permission extends Model
 {
     protected $primaryKey = 'permission_id';
+
     protected $table = 'permissions';
 
     protected $casts = [
@@ -29,8 +30,4 @@ class Permission extends Model
     {
         return $this->belongsTo(Site::class, 'site_id');
     }
-
-
 }
-
-

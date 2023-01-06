@@ -2,10 +2,8 @@
 
 namespace Expressionengine\Coilpack\View\Tags\Structure;
 
-use Illuminate\Support\Arr;
-
-use Expressionengine\Coilpack\Traits\InteractsWithAddon;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Traits\InteractsWithAddon;
 use Expressionengine\Coilpack\View\Tags\Channel\Entries as ChannelEntriesTag;
 
 class Entries extends ChannelEntriesTag
@@ -54,7 +52,7 @@ class Entries extends ChannelEntriesTag
     public function run()
     {
         // This code is adapted from the Structure Mod's entries() function
-        if(is_numeric($this->getParameter('parent_id'))) {
+        if (is_numeric($this->getParameter('parent_id'))) {
             $child_ids = $this->structure->sql->get_child_entries(
                 $this->getParameter('parent_id'),
                 $this->getParameter('category'),

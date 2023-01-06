@@ -2,14 +2,12 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Illuminate\Support\Str;
 use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use GraphQL\GraphQL;
+use Illuminate\Support\Str;
 
-class Generic extends Fieldtype {
-
+class Generic extends Fieldtype
+{
     private $handler = null;
 
     public function __construct($name, $id = null)
@@ -20,14 +18,14 @@ class Generic extends Fieldtype {
 
     public function getHandler()
     {
-        if($this->handler) {
+        if ($this->handler) {
             return $this->handler;
         }
 
         ee()->load->library('api');
         ee()->legacy_api->instantiate('channel_fields');
         ee()->api_channel_fields->include_handler($this->name);
-        if(empty(ee()->api_channel_fields->custom_fields)) {
+        if (empty(ee()->api_channel_fields->custom_fields)) {
             ee()->api_channel_fields->fetch_custom_channel_fields();
         }
 
@@ -50,16 +48,16 @@ class Generic extends Fieldtype {
     {
         // return [];
         // @todo Cache this statically
-        return collect(get_class_methods($this->getHandler()))->flatMap(function($method) {
-            if(Str::startsWith($method, 'replace_') && $method !== 'replace_tag'){
+        return collect(get_class_methods($this->getHandler()))->flatMap(function ($method) {
+            if (Str::startsWith($method, 'replace_') && $method !== 'replace_tag') {
                 return [
                     substr($method, 8) => new Modifiers\Generic($this, [
                         'name' => substr($method, 8),
-                    ])
+                    ]),
                 ];
             }
+
             return [];
         })->filter()->toArray();
     }
-
 }

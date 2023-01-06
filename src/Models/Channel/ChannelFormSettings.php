@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
 use Expressionengine\Coilpack\Model;
@@ -11,6 +10,7 @@ use Expressionengine\Coilpack\Model;
 class ChannelFormSettings extends Model
 {
     protected $primaryKey = 'channel_form_settings_id';
+
     protected $table = 'channel_form_settings';
 
     public function channel()
@@ -18,5 +18,3 @@ class ChannelFormSettings extends Model
         return $this->belongsTo(Channel::class, 'channel_id');
     }
 }
-
-

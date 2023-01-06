@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use Expressionengine\Coilpack\Model;
@@ -12,6 +10,6 @@ use Expressionengine\Coilpack\Model;
 class FieldGroup extends Model
 {
     protected $primaryKey = 'group_id';
-    protected $table = 'field_groups';
 
+    protected $table = 'field_groups';
 }

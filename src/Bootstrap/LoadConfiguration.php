@@ -2,12 +2,11 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Exception;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
@@ -38,7 +37,7 @@ class LoadConfiguration
         // $app->instance('config', $config = new Repository($items));
 
         // if (!isset($loadedFromCache)) {
-            $this->loadConfigurationFiles($app, app('config'));
+        $this->loadConfigurationFiles($app, app('config'));
         // }
     }
 
@@ -57,12 +56,11 @@ class LoadConfiguration
 
         foreach ($files as $key => $path) {
             $config = [];
-            require($path);
+            require $path;
 
-            if (!empty($config)) {
+            if (! empty($config)) {
                 $repository->set('coilpack.expressionengine', $config);
             }
-
         }
     }
 
@@ -78,26 +76,27 @@ class LoadConfiguration
         $path = config('coilpack.base_path');
         $absolute = (Str::startsWith($path, DIRECTORY_SEPARATOR));
         $basePath = Str::finish($absolute ? $path : base_path($path), DIRECTORY_SEPARATOR);
-        $configPath = realpath($basePath . config('coilpack.config_path', 'system/user/config'));
+        $configPath = realpath($basePath.config('coilpack.config_path', 'system/user/config'));
 
-        if(!defined('BASEPATH')) {
-            $systemPath = realpath($basePath . config('coilpack.system_path', 'system')) . DIRECTORY_SEPARATOR;
-            define('BASEPATH', realpath($systemPath . '/ee/legacy') . '/',);
+        if (! defined('BASEPATH')) {
+            $systemPath = realpath($basePath.config('coilpack.system_path', 'system')).DIRECTORY_SEPARATOR;
+            define('BASEPATH', realpath($systemPath.'/ee/legacy').'/');
         }
 
-        if(File::missing($configPath)) {
+        if (File::missing($configPath)) {
             return $files;
         }
 
-        if(!file_exists($configPath . DIRECTORY_SEPARATOR . 'config.php')) {
+        if (! file_exists($configPath.DIRECTORY_SEPARATOR.'config.php')) {
             app('log')->warning("Config path $configPath may be incorrect, missing config.php.");
+
             return $files;
         }
 
         foreach (Finder::create()->files()->name('*.php')->in($configPath) as $file) {
             $directory = $this->getNestedDirectory($file, $configPath);
 
-            $files[$directory . basename($file->getRealPath(), '.php')] = $file->getRealPath();
+            $files[$directory.basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
 
         ksort($files, SORT_NATURAL);
@@ -117,7 +116,7 @@ class LoadConfiguration
         $directory = $file->getPath();
 
         if ($nested = trim(str_replace($configPath, '', $directory), DIRECTORY_SEPARATOR)) {
-            $nested = str_replace(DIRECTORY_SEPARATOR, '.', $nested) . '.';
+            $nested = str_replace(DIRECTORY_SEPARATOR, '.', $nested).'.';
         }
 
         return $nested;

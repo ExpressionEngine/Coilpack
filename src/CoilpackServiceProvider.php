@@ -2,17 +2,15 @@
 
 namespace Expressionengine\Coilpack;
 
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-// use Illuminate\Contracts\Support\DeferrableProvider;
-use Expressionengine\Coilpack\View\Composers;
-use Expressionengine\Coilpack\Commands\CoilpackCommand;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use Expressionengine\Coilpack\Commands\CoilpackCommand;
+use Expressionengine\Coilpack\View\Composers;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
+// use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class CoilpackServiceProvider extends ServiceProvider
 {
@@ -24,10 +22,10 @@ class CoilpackServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/coilpack.php' => config_path('coilpack.php'),
+            __DIR__.'/../config/coilpack.php' => config_path('coilpack.php'),
         ], 'coilpack-config');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'coilpack');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'coilpack');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -36,16 +34,16 @@ class CoilpackServiceProvider extends ServiceProvider
         }
 
         // Load ExpressionEngine in this phase if we're in an artisan/cli context
-        if(defined('ARTISAN_BINARY')) {
+        if (defined('ARTISAN_BINARY')) {
             (new Bootstrap\LoadExpressionEngine)->cli()->bootstrap(app());
         }
 
         Route::macro('templates', new Routing\TemplateRoute);
         // $this->callAfterResolving('view', function() {
-            // $this->registerRouteMacros();
+        // $this->registerRouteMacros();
         // });
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         // Event::listen('*', function ($event) {
         //     echo $event . "\n";
@@ -56,9 +54,9 @@ class CoilpackServiceProvider extends ServiceProvider
         // });
 
         // Event::listen('bootstrapped: Illuminate\Foundation\Bootstrap\BootProviders', function() {
-        Event::listen(function(\Illuminate\Routing\Events\RouteMatched $event) {
+        Event::listen(function (\Illuminate\Routing\Events\RouteMatched $event) {
             // Prevent Coilpack from finishing the boot process if we're handling the request with EE
-            if($event->route->isFallback || $event->route->uri == config('coilpack.admin_url', 'admin.php')) {
+            if ($event->route->isFallback || $event->route->uri == config('coilpack.admin_url', 'admin.php')) {
                 return;
             }
 
@@ -84,13 +82,13 @@ class CoilpackServiceProvider extends ServiceProvider
             ee()->legacy_api->instantiate('channel_fields');
 
             // Only boot the GraphQL fieldtype registrar when needed
-            if($event->route->uri == 'graphql') {
+            if ($event->route->uri == 'graphql') {
                 app(FieldtypeRegistrar::class)->boot();
             }
         });
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/graphql.php',
+            __DIR__.'/../config/graphql.php',
             'graphql'
         );
     }
@@ -103,7 +101,7 @@ class CoilpackServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/coilpack.php',
+            __DIR__.'/../config/coilpack.php',
             'coilpack'
         );
 
@@ -113,15 +111,15 @@ class CoilpackServiceProvider extends ServiceProvider
         // Allow the ee() helper to be called as app('ee') in case that's more
         // desirable for integration with Laravel projects
         $this->app->singleton('ee', function ($app, $parameters) {
-            if(!function_exists('ee')) {
+            if (! function_exists('ee')) {
                 (new Bootstrap\LoadExpressionEngine)->bootstrap($app);
             }
 
-            return ee(... $parameters);
+            return ee(...$parameters);
         });
 
         // Register the FieldtypeManager and boot it
-        $this->app->singleton(FieldtypeManager::class, function($app) {
+        $this->app->singleton(FieldtypeManager::class, function ($app) {
             $manager = new FieldtypeManager;
             $manager->boot();
 
@@ -137,7 +135,7 @@ class CoilpackServiceProvider extends ServiceProvider
         });
 
         // Register our Exp view object as a singleton
-        $this->app->singleton(\Expressionengine\Coilpack\View\Exp::class, function($app) {
+        $this->app->singleton(\Expressionengine\Coilpack\View\Exp::class, function ($app) {
             return new \Expressionengine\Coilpack\View\Exp;
         });
 

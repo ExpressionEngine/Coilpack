@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Role;
 
 use Expressionengine\Coilpack\Model;
@@ -13,6 +12,7 @@ use Expressionengine\Coilpack\Models\Permission\Permission;
 class Role extends Model
 {
     protected $primaryKey = 'role_id';
+
     protected $table = 'roles';
 
     protected $casts = [
@@ -44,7 +44,4 @@ class Role extends Model
     {
         return $this->belongsToMany(Member::class, 'members_roles', 'role_id');
     }
-
 }
-
-

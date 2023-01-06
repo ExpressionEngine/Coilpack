@@ -1,17 +1,11 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Category;
 
-use ExpressionEngine\Model\Content\ContentModel;
-use ExpressionEngine\Model\Content\Display\LayoutInterface;
-use ExpressionEngine\Model\Category\Display\CategoryFieldLayout;
-use ExpressionEngine\Service\Model\Collection;
-
+use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\FieldtypeManager;
 
 /**
  * Category Model
@@ -19,6 +13,7 @@ use Expressionengine\Coilpack\FieldtypeManager;
 class Category extends Model
 {
     protected $primaryKey = 'cat_id';
+
     protected $table = 'categories';
 
     public function channelEntries()
@@ -65,11 +60,11 @@ class Category extends Model
         if (is_null($value) && app(FieldtypeManager::class)->hasField($key, 'category')) {
             $this->getRelationValue('data');
             $fields = $this->data->fields($this->group);
-            $value = ($fields->has($key)) ?  $fields->get($key) : new FieldContent([
+            $value = ($fields->has($key)) ? $fields->get($key) : new FieldContent([
                 // 'field' => $fields->get($key),
                 'field' => app(FieldtypeManager::class)->getField($key),
                 'data' => null,
-                'entry' => $this
+                'entry' => $this,
             ]);
 
             // $value->setAttribute('data', 'null');
@@ -77,8 +72,4 @@ class Category extends Model
 
         return $value;
     }
-
-
 }
-
-

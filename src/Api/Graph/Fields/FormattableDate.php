@@ -40,7 +40,7 @@ class FormattableDate extends Field
     {
         $date = $root->{$this->getProperty()};
 
-        if (!$date instanceof \Carbon\Carbon) {
+        if (! $date instanceof \Carbon\Carbon) {
             return null;
         }
 

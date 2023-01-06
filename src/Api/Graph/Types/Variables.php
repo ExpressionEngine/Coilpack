@@ -2,9 +2,9 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class Variables extends GraphQLType
@@ -14,13 +14,12 @@ class Variables extends GraphQLType
         'description' => 'Collection of Global Variables',
     ];
 
-
     public function fields(): array
     {
         $fields = [];
         $variables = (new \Expressionengine\Coilpack\View\Composers\GlobalComposer)->globals()['global'];
 
-        foreach($variables as $key => $value) {
+        foreach ($variables as $key => $value) {
             $fields[$key] = $this->addField('Variables', $key, $value);
         }
 
@@ -34,26 +33,27 @@ class Variables extends GraphQLType
 
             $typeDefinition = new GeneratedType([
                 'name' => $name,
-                'fields' => function () use ($name, $key, $value) {
+                'fields' => function () use ($name, $value) {
                     $fields = [];
                     foreach ($value as $k => $v) {
                         $fields[$k] = $this->addField($name, $k, $v);
                     }
+
                     return $fields;
-                }
+                },
             ]);
 
             GraphQL::addType($typeDefinition, $name);
 
             return [
                 'name' => $key,
-                'type' => GraphQL::type($name)
+                'type' => GraphQL::type($name),
             ];
         }
 
         return [
             'name' => $key,
-            'type' => (is_bool($value)) ? Type::boolean() : Type::string()
+            'type' => (is_bool($value)) ? Type::boolean() : Type::string(),
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Comment;
 
 use Expressionengine\Coilpack\Model;
@@ -14,6 +13,7 @@ use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 class Comment extends Model
 {
     protected $primaryKey = 'comment_id';
+
     protected $table = 'comments';
 
     protected static $_hook_id = 'comment';
@@ -37,8 +37,4 @@ class Comment extends Model
     {
         return $this->belongsTo(Site::class, 'site_id');
     }
-
-
 }
-
-

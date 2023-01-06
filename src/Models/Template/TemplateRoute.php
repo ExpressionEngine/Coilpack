@@ -1,9 +1,7 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Template;
 
-use EE_Route;
 use Expressionengine\Coilpack\Model;
 
 /**
@@ -14,19 +12,17 @@ use Expressionengine\Coilpack\Model;
 class TemplateRoute extends Model
 {
     protected $primaryKey = 'route_id';
+
     protected $table = 'template_routes';
 
-    protected $casts = array(
+    protected $casts = [
         'order' => 'integer',
         'route_required' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-    );
+    ];
 
-    protected static $_relationships = array(
-        'Template' => array(
-            'type' => 'BelongsTo'
-        )
-    );
-
+    protected static $_relationships = [
+        'Template' => [
+            'type' => 'BelongsTo',
+        ],
+    ];
 }
-
-

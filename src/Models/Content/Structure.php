@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 /**
@@ -9,5 +8,3 @@ namespace Expressionengine\Coilpack\Models\Content;
 interface Structure
 {
 }
-
-

@@ -4,6 +4,7 @@
  * ExpressionEngine (https://expressionengine.com)
  *
  * @link      https://expressionengine.com/
+ *
  * @copyright Copyright (c) 2003-2020, Packet Tide, LLC (https://www.packettide.com)
  * @license   https://expressionengine.com/license Licensed under Apache License, Version 2.0
  */
@@ -18,6 +19,7 @@ use Expressionengine\Coilpack\Model;
 class CookieSetting extends Model
 {
     protected $primaryKey = 'cookie_id';
+
     protected $table = 'cookie_settings';
 
     protected $casts = [
@@ -25,19 +27,16 @@ class CookieSetting extends Model
         'cookie_provider' => 'string',
         'cookie_name' => 'string',
         'cookie_title' => 'string',
-        'cookie_description' => 'string'
+        'cookie_description' => 'string',
     ];
 
     protected static $_relationships = [
         'ConsentRequestVersion' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'ConsentRequestVersion',
-            'pivot' => array(
-                'table' => 'consent_request_version_cookies'
-            )
+            'pivot' => [
+                'table' => 'consent_request_version_cookies',
+            ],
         ],
     ];
-
 }
-
-

@@ -19,7 +19,7 @@ class HookTriggered
     /**
      * The hook status.
      *
-     * @var boolean
+     * @var bool
      */
     public $isActive;
 

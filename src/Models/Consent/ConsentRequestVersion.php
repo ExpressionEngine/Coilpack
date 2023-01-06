@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Consent;
 
 use Expressionengine\Coilpack\Model;
@@ -11,6 +10,7 @@ use Expressionengine\Coilpack\Model;
 class ConsentRequestVersion extends Model
 {
     protected $primaryKey = 'consent_request_version_id';
+
     protected $table = 'consent_request_versions';
 
     protected $casts = [
@@ -27,7 +27,7 @@ class ConsentRequestVersion extends Model
         'CurrentVersion' => [
             'type' => 'belongsTo',
             'model' => 'ConsentRequest',
-            'to_key' => 'consent_request_version_id'
+            'to_key' => 'consent_request_version_id',
         ],
         'Consents' => [
             'type' => 'hasMany',
@@ -37,21 +37,18 @@ class ConsentRequestVersion extends Model
             'type' => 'belongsTo',
             'model' => 'Member',
             'from_key' => 'author_id',
-            'weak' => true
+            'weak' => true,
         ],
         'Logs' => [
             'type' => 'hasMany',
-            'model' => 'ConsentAuditLog'
+            'model' => 'ConsentAuditLog',
         ],
         'Cookies' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'CookieSetting',
-            'pivot' => array(
-                'table' => 'consent_request_version_cookies'
-            )
+            'pivot' => [
+                'table' => 'consent_request_version_cookies',
+            ],
         ],
     ];
-
 }
-
-

@@ -2,8 +2,6 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Support;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
-use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\InputType as GraphQLType;
 
 class GeneratedInputType extends GraphQLType
@@ -15,7 +13,7 @@ class GeneratedInputType extends GraphQLType
 
     public function fields(): array
     {
-        if(is_callable($this->attributes['fields'])) {
+        if (is_callable($this->attributes['fields'])) {
             return $this->attributes['fields']();
         }
 

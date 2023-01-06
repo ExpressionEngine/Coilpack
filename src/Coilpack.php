@@ -4,13 +4,12 @@ namespace Expressionengine\Coilpack;
 
 class Coilpack
 {
-
     /**
      * Execute a closure while stubbing the current ee()->TMPL library
      * The stubbed library is passed to the closure as $template
      *
-     * @param callable $callable
-     * @param mixed $parameters
+     * @param  callable  $callable
+     * @param  mixed  $parameters
      * @return mixed
      */
     public function isolateTemplateLibrary(callable $callable, $parameters = null)
@@ -20,7 +19,7 @@ class Coilpack
         $template = new View\TemplateStub;
         ee()->set('TMPL', $template);
 
-        if($parameters) {
+        if ($parameters) {
             $template->tagparams = $parameters;
         }
 
@@ -35,8 +34,8 @@ class Coilpack
     /**
      * Register a tag
      *
-     * @param string $name
-     * @param string $class
+     * @param  string  $name
+     * @param  string  $class
      * @return void
      */
     public function registerTag($name, $class)
@@ -47,8 +46,8 @@ class Coilpack
     /**
      * Register a fieldtype
      *
-     * @param string $name
-     * @param string $class
+     * @param  string  $name
+     * @param  string  $class
      * @return void
      */
     public function registerFieldtype($name, $class)

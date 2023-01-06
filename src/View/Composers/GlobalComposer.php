@@ -2,20 +2,18 @@
 
 namespace Expressionengine\Coilpack\View\Composers;
 
-use Illuminate\View\View;
-use Illuminate\Support\Str;
-
-use ExpressionEngine\Service\Template\Variables\StandardGlobals;
 use Expressionengine\Coilpack\View\GlobalVariables;
+use ExpressionEngine\Service\Template\Variables\StandardGlobals;
+use Illuminate\View\View;
 
-class GlobalComposer {
-
-    static $cache = [];
+class GlobalComposer
+{
+    public static $cache = [];
 
     // @todo separate global variable collection from view composer
     public function globals()
     {
-        if(static::$cache['globals'] ?? false) {
+        if (static::$cache['globals'] ?? false) {
             return static::$cache['globals'];
         }
 
@@ -28,7 +26,7 @@ class GlobalComposer {
             $globals->getTemplateVariables(),
             ee()->config->_global_vars,
             [
-                'current_time' => now()
+                'current_time' => now(),
             ]
         ))];
 
@@ -38,7 +36,7 @@ class GlobalComposer {
     public function loadSiteVariables()
     {
         // load site variables into the global_vars array
-        foreach (array(
+        foreach ([
             'site_id',
             'site_label',
             'site_short_name',
@@ -46,8 +44,8 @@ class GlobalComposer {
             'site_url',
             'site_description',
             'site_index',
-            'webmaster_email'
-        ) as $site_var) {
+            'webmaster_email',
+        ] as $site_var) {
             ee()->config->_global_vars[$site_var] = stripslashes(ee()->config->item($site_var));
         }
     }
@@ -57,8 +55,8 @@ class GlobalComposer {
         $segments = ee()->uri->segment_array();
         $defaults = array_fill(1, 9, null);
 
-        $segmentVariables = [] ;
-        foreach($defaults as $key => $value) {
+        $segmentVariables = [];
+        foreach ($defaults as $key => $value) {
             $segmentVariables["segment_$key"] = $segments[$key] ?? $value;
         }
 
@@ -66,7 +64,7 @@ class GlobalComposer {
         return array_merge($segmentVariables, [
             'last_segment' => end($segments),
             'current_url' => ee()->functions->fetch_current_uri(),
-            'current_path' => (ee()->uri->uri_string) ? str_replace(array('"', "'"), array('%22', '%27'), ee()->uri->uri_string) : '/',
+            'current_path' => (ee()->uri->uri_string) ? str_replace(['"', "'"], ['%22', '%27'], ee()->uri->uri_string) : '/',
             'current_query_string' => http_build_query($_GET), // GET has been sanitized!
             // 'template_name' => $this->template_name,
             // 'template_group' => $this->group_name,
@@ -91,9 +89,8 @@ class GlobalComposer {
      */
     public function compose(View $view)
     {
-        foreach($this->all() as $name => $value) {
+        foreach ($this->all() as $name => $value) {
             $view->with($name, $value);
         }
     }
-
 }

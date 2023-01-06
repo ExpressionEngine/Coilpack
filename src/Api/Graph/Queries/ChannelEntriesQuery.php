@@ -2,13 +2,12 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Queries;
 
-use GraphQL\Type\Definition\Type;
+use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use GraphQL\Type\Definition\ResolveInfo;
-use Rebing\GraphQL\Support\SelectFields;
+use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Rebing\GraphQL\Support\SelectFields;
 
 class ChannelEntriesQuery extends Query
 {
@@ -25,14 +24,14 @@ class ChannelEntriesQuery extends Query
     {
         return [
             'channel' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'status' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'limit' => [
-                'type' => Type::int()
-            ]
+                'type' => Type::int(),
+            ],
 
         ];
     }
@@ -47,8 +46,8 @@ class ChannelEntriesQuery extends Query
         $entries = ChannelEntry::select($select)->with($with);
 
         // Filter by Channel name
-        $entries->when($args['channel'] ?? false, function($query) use($args) {
-            $query->whereHas('channel', function($query) use($args) {
+        $entries->when($args['channel'] ?? false, function ($query) use ($args) {
+            $query->whereHas('channel', function ($query) use ($args) {
                 $query->where('channel_name', $args['channel']);
             });
         });
@@ -64,5 +63,4 @@ class ChannelEntriesQuery extends Query
 
         return $entries->get();
     }
-
 }

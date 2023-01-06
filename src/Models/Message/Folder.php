@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Message;
 
 use Expressionengine\Coilpack\Model;
@@ -13,12 +12,13 @@ use Expressionengine\Coilpack\Model;
 class Folder extends Model
 {
     protected $primaryKey = 'member_id';
+
     protected $table = 'message_folders';
 
     protected static $_relationships = [
         'Member' => [
-            'type' => 'belongsTo'
-        ]
+            'type' => 'belongsTo',
+        ],
     ];
 
     protected $casts = [
@@ -32,10 +32,6 @@ class Folder extends Model
         'folder7_name' => 'string',
         'folder8_name' => 'string',
         'folder9_name' => 'string',
-        'folder10_name' => 'string'
+        'folder10_name' => 'string',
     ];
-
 }
-
-
-

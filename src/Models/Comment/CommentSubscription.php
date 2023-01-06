@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Comment;
 
 use Expressionengine\Coilpack\Model;
@@ -14,6 +13,7 @@ use Expressionengine\Coilpack\Model;
 class CommentSubscription extends Model
 {
     protected $primaryKey = 'subscription_id';
+
     protected $table = 'comment_subscriptions';
 
     public function entry()
@@ -25,7 +25,4 @@ class CommentSubscription extends Model
     {
         return $this->belongsTo(Member::class, 'member_id');
     }
-
 }
-
-

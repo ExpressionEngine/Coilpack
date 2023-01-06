@@ -1,13 +1,9 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
-use InvalidArgumentException;
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Model\Content\Display\LayoutDisplay;
 use ExpressionEngine\Model\Content\Display\LayoutInterface;
-use ExpressionEngine\Model\Content\Display\LayoutTab;
 
 /**
  * Channel Layout Model
@@ -15,28 +11,29 @@ use ExpressionEngine\Model\Content\Display\LayoutTab;
 class ChannelLayout extends Model implements LayoutInterface
 {
     protected $primaryKey = 'layout_id';
+
     protected $table = 'layout_publish';
 
     protected static $_hook_id = 'channel_layout';
 
-    protected $casts = array(
+    protected $casts = [
         'field_layout' => \Expressionengine\Coilpack\Casts\Serialize::class,
-    );
+    ];
 
-    protected static $_relationships = array(
-        'Channel' => array(
+    protected static $_relationships = [
+        'Channel' => [
             'type' => 'belongsTo',
-            'key' => 'channel_id'
-        ),
-        'PrimaryRoles' => array(
+            'key' => 'channel_id',
+        ],
+        'PrimaryRoles' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Role',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'layout_publish_member_roles',
                 'key' => 'role_id',
-            )
-        ),
-    );
+            ],
+        ],
+    ];
 
     public function channel()
     {

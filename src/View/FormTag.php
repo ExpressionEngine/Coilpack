@@ -2,17 +2,18 @@
 
 namespace Expressionengine\Coilpack\View;
 
-use Expressionengine\Coilpack\View\Tag;
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
-
 abstract class FormTag extends Tag
 {
-
     protected $formId;
+
     protected $formClass;
+
     protected $allowAttachments = false;
+
     protected $charset;
+
     protected $return;
+
     protected $redirect;
 
     public function setFormClassParameter($class)
@@ -39,9 +40,9 @@ abstract class FormTag extends Tag
                 ? 'index'
                 : ee()->uri->uri_string,
                 'charset' => $this->charset,
-                'allow_attachments' => $this->encrypt('allow_attachments_' . ($this->allow_attachments ? 'y' : 'n')),
+                'allow_attachments' => $this->encrypt('allow_attachments_'.($this->allow_attachments ? 'y' : 'n')),
                 'redirect' => $this->redirect,
-            ]
+            ],
         ];
 
         $data = array_merge_recursive($defaults, $data);
@@ -64,7 +65,8 @@ abstract class FormTag extends Tag
 
     /**
      * Encrypt a given string of data
-     * @param string $data Raw data to encrypt
+     *
+     * @param  string  $data Raw data to encrypt
      * @return string encrypted and base64 encoded string of data
      */
     protected function encrypt($data)
@@ -74,12 +76,12 @@ abstract class FormTag extends Tag
 
     /**
      * Decrypt a given string of data, assumed to be base64_encoded
-     * @param string $data Base64 encoded encrypted string of data
+     *
+     * @param  string  $data Base64 encoded encrypted string of data
      * @return string Decrypted data
      */
     protected function decrypt($data)
     {
         return ee('Encrypt')->decode($data, ee()->config->item('session_crypt_key'));
     }
-
 }

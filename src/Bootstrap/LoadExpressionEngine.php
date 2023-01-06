@@ -2,18 +2,13 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Exception;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Str;
 
 class LoadExpressionEngine
 {
-
     public static $core = null;
 
     public $dependentBootstrappers = [
@@ -28,10 +23,10 @@ class LoadExpressionEngine
         $path = config('coilpack.base_path');
         $absolute = (Str::startsWith($path, DIRECTORY_SEPARATOR));
         $this->basePath = Str::finish($absolute ? $path : base_path($path), DIRECTORY_SEPARATOR);
-        $this->systemPath = realpath($this->basePath . config('coilpack.system_path', 'system')) . DIRECTORY_SEPARATOR;
-        $this->configPath = realpath($this->basePath . config('coilpack.config_path')) . DIRECTORY_SEPARATOR;
+        $this->systemPath = realpath($this->basePath.config('coilpack.system_path', 'system')).DIRECTORY_SEPARATOR;
+        $this->configPath = realpath($this->basePath.config('coilpack.config_path')).DIRECTORY_SEPARATOR;
 
-        if(empty($_SERVER['DOCUMENT_ROOT'])) {
+        if (empty($_SERVER['DOCUMENT_ROOT'])) {
             $_SERVER['DOCUMENT_ROOT'] = realpath($this->basePath);
         }
 
@@ -48,7 +43,7 @@ class LoadExpressionEngine
             'SELF' => 'index.php',
             'EESELF' => 'index.php',
             'FCPATH' => $this->basePath,
-            'BASEPATH' => realpath($this->systemPath .'/ee/legacy') . '/',
+            'BASEPATH' => realpath($this->systemPath.'/ee/legacy').'/',
         ];
     }
 
@@ -88,14 +83,14 @@ class LoadExpressionEngine
 
     public function admin()
     {
-        $installerExists = file_exists($this->systemPath . 'ee/installer/');
-        $configFileExists = file_exists($this->configPath . 'config.php');
-        $configFileSize = filesize($this->configPath . 'config.php');
+        $installerExists = file_exists($this->systemPath.'ee/installer/');
+        $configFileExists = file_exists($this->configPath.'config.php');
+        $configFileSize = filesize($this->configPath.'config.php');
 
         // Load installer if the folder exists and config hasn't been set
-        if (env('EE_INSTALL_MODE', false) || ($installerExists && (!$configFileExists || $configFileSize == 0))) {
+        if (env('EE_INSTALL_MODE', false) || ($installerExists && (! $configFileExists || $configFileSize == 0))) {
             return $this->installer();
-        } else if ($this->hasUpdater()) {
+        } elseif ($this->hasUpdater()) {
             return $this->updater();
         }
 
@@ -139,15 +134,15 @@ class LoadExpressionEngine
             'db_password' => env('DB_PASSWORD'),
         ];
 
-        foreach($defaults as $key => $value) {
-            if(!isset($_POST[$key])) {
+        foreach ($defaults as $key => $value) {
+            if (! isset($_POST[$key])) {
                 $_POST[$key] = $value;
             }
         }
 
         // The SCRIPT_FILENAME must match EESELF constant defined above.
         // The installer/controller/wizard.php file uses both values to determine the base_path
-        $_SERVER['SCRIPT_FILENAME'] = realpath($this->basePath) . Str::start(config('coilpack.admin_url', 'admin.php'), '/');
+        $_SERVER['SCRIPT_FILENAME'] = realpath($this->basePath).Str::start(config('coilpack.admin_url', 'admin.php'), '/');
         // PHP_SELF is used to determine the site_url in installer/controller/wizard
         $_SERVER['PHP_SELF'] = Str::start(config('coilpack.admin_url', 'admin.php'), '/');
 
@@ -156,7 +151,7 @@ class LoadExpressionEngine
 
     public function hasUpdater()
     {
-        return file_exists($this->systemPath . 'ee/updater/boot.php');
+        return file_exists($this->systemPath.'ee/updater/boot.php');
     }
 
     /**
@@ -167,20 +162,21 @@ class LoadExpressionEngine
      */
     public function bootstrap(Application $app)
     {
-        if(!realpath(($this->basePath))) {
+        if (! realpath(($this->basePath))) {
             return;
         }
 
-        if(static::$core) {
+        if (static::$core) {
             $this->bootstrapDependencies($app);
+
             return static::$core;
         }
 
-        if(request()->has('ACT') !== false) {
+        if (request()->has('ACT') !== false) {
             $this->constants['REQ'] = 'ACTION';
         }
 
-        if($this->constants['REQ'] !== 'CP') {
+        if ($this->constants['REQ'] !== 'CP') {
             global $routing;
             $routing = [
                 'directory' => '',
@@ -189,17 +185,17 @@ class LoadExpressionEngine
             ];
         }
 
-        foreach($this->constants as $constant => $value) {
+        foreach ($this->constants as $constant => $value) {
             (defined($constant)) || define($constant, $value);
         }
 
         // Load the updater package if it's here
         if ($this->constants['REQ'] === 'CP' && $this->hasUpdater()) {
-            require_once SYSPATH . 'ee/updater/boot.php';
+            require_once SYSPATH.'ee/updater/boot.php';
             exit();
         }
 
-        $core = new \Expressionengine\Coilpack\Core(require_once(SYSPATH . 'ee/ExpressionEngine/Boot/boot.php'));
+        $core = new \Expressionengine\Coilpack\Core(require_once SYSPATH.'ee/ExpressionEngine/Boot/boot.php');
 
         // Override ExpressionEngine error handler with Laravel
         (new \Illuminate\Foundation\Bootstrap\HandleExceptions)->bootstrap($app);
@@ -208,21 +204,20 @@ class LoadExpressionEngine
             'base_url' => Str::finish(config('app.url'), '/'),
         ];
 
-        foreach($configOverrides as $key => $value) {
+        foreach ($configOverrides as $key => $value) {
             ee()->config->set_item($key, $value);
             // this needs to be set as well because config->site_prefs is called during route and overwrites all set
             ee()->config->default_ini[$key] = $value;
         }
 
-
-        if (!$this->constants['INSTALL_MODE']) {
+        if (! $this->constants['INSTALL_MODE']) {
             $core->loadApplicationCore();
             ee()->set('coilpack', app('coilpack'));
         }
 
         ee()->load->library('core');
 
-        if(defined('ARTISAN_BINARY')) {
+        if (defined('ARTISAN_BINARY')) {
             $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
             ee()->core->bootstrap();
 
@@ -231,8 +226,7 @@ class LoadExpressionEngine
             ee()->load->library('session');
         }
 
-
-        if (!$this->constants['INSTALL_MODE']) {
+        if (! $this->constants['INSTALL_MODE']) {
             // @todo move to function or class - Template Setup
             ee()->load->library('template');
             ee()->remove('TMPL');
@@ -245,7 +239,7 @@ class LoadExpressionEngine
                 ee()->api_template_structure->register_template_engine(['twig' => 'Twig', 'blade' => 'Blade']);
             }
             // Tell Laravel where the EE templates live and how to interpret new extensions
-            app('view')->addNamespace('ee', SYSPATH . 'user/templates');
+            app('view')->addNamespace('ee', SYSPATH.'user/templates');
             // adding too many extensions could slow down template rendering by
             // causing more file_exists checks so we're only looking for files
             // ending in `.twig` or `.blade` The TwigBridge sets up .twig ext
@@ -255,18 +249,18 @@ class LoadExpressionEngine
 
         // These are set in run_ee() but should be moved so we aren't duplicating here
         // @todo update in core
-        ee()->core->native_plugins = array('markdown', 'rss_parser', 'xml_encode');
-        ee()->core->native_modules = array(
+        ee()->core->native_plugins = ['markdown', 'rss_parser', 'xml_encode'];
+        ee()->core->native_modules = [
             'block_and_allow', 'channel', 'comment', 'commerce', 'email',
             'file', 'filepicker', 'forum', 'ip_to_nation', 'member',
             'metaweblog_api', 'moblog', 'pages', 'query', 'relationship', 'rss',
-            'rte', 'search', 'simple_commerce', 'spam', 'stats'
-        );
-        if (!$this->constants['INSTALL_MODE']) {
+            'rte', 'search', 'simple_commerce', 'spam', 'stats',
+        ];
+        if (! $this->constants['INSTALL_MODE']) {
             if ($this->constants['REQ'] !== 'CP') {
                 ee()->load->library('core');
                 ee()->core->bootstrap();
-            }else{
+            } else {
                 ee()->load->database();
                 ee()->load->library('extensions');
             }
@@ -282,7 +276,7 @@ class LoadExpressionEngine
 
             // Fire Coilpack Booted Event
             // \Illuminate\Support\Facades\Event::dispatch('coilpack:booted');
-            if (ee()->extensions->active_hook('coilpack_booted') === TRUE) {
+            if (ee()->extensions->active_hook('coilpack_booted') === true) {
                 ee()->extensions->call('coilpack_booted');
             }
         }
@@ -298,12 +292,11 @@ class LoadExpressionEngine
     {
         $dependencies = [];
 
-        if(!in_array($this->constants['REQ'], ['CP', 'ASSET'])) {
+        if (! in_array($this->constants['REQ'], ['CP', 'ASSET'])) {
             $dependencies[] = LoadAddonFiles::class;
             $dependencies[] = ReplaceTemplateTags::class;
         }
 
         $app->bootstrapWith(array_merge($this->dependentBootstrappers, $dependencies));
     }
-
 }

@@ -1,22 +1,12 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
 use Expressionengine\Coilpack\FieldtypeManager;
-use InvalidArgumentException;
-use ExpressionEngine\Library\Data\Collection;
-use ExpressionEngine\Model\Content\ContentModel;
-use ExpressionEngine\Model\Content\Display\FieldDisplay;
-use ExpressionEngine\Model\Content\Display\LayoutInterface;
-use Expressionengine\Coilpack\Models\Category\Category;
-use Expressionengine\Coilpack\Models\Member\Member;
-
-use Expressionengine\Coilpack\Models\FieldContent;
-use ExpressionEngine\Service\Validation\Result as ValidationResult;
-
 use Expressionengine\Coilpack\Model;
+use Expressionengine\Coilpack\Models\Category\Category;
+use Expressionengine\Coilpack\Models\FieldContent;
+use Expressionengine\Coilpack\Models\Member\Member;
 
 /**
  * Channel Entry
@@ -31,9 +21,10 @@ use Expressionengine\Coilpack\Model;
 class ChannelEntry extends Model
 {
     protected $primaryKey = 'entry_id';
+
     protected $table = 'channel_titles';
 
-    protected $casts = array(
+    protected $casts = [
         'versioning_enabled' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'allow_comments' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'sticky' => \Expressionengine\Coilpack\Casts\BooleanString::class,
@@ -44,76 +35,76 @@ class ChannelEntry extends Model
         'edit_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
         'entry_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
         'recent_comment_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
-    );
+    ];
 
-    protected static $_relationships = array(
-        'Channel' => array(
+    protected static $_relationships = [
+        'Channel' => [
             'type' => 'belongsTo',
-            'key' => 'channel_id'
-        ),
-        'Author' => array(
+            'key' => 'channel_id',
+        ],
+        'Author' => [
             'type' => 'belongsTo',
             'model' => 'Member',
-            'from_key' => 'author_id'
-        ),
+            'from_key' => 'author_id',
+        ],
         'Status' => [
             'type' => 'belongsTo',
-            'weak' => true
+            'weak' => true,
         ],
-        'Categories' => array(
+        'Categories' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Category',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'category_posts',
                 'left' => 'entry_id',
-                'right' => 'cat_id'
-            )
-        ),
-        'Autosaves' => array(
+                'right' => 'cat_id',
+            ],
+        ],
+        'Autosaves' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntryAutosave',
-            'to_key' => 'original_entry_id'
-        ),
-        'Parents' => array(
+            'to_key' => 'original_entry_id',
+        ],
+        'Parents' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'ChannelEntry',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'relationships',
                 'left' => 'child_id',
-                'right' => 'parent_id'
-            )
-        ),
-        'Children' => array(
+                'right' => 'parent_id',
+            ],
+        ],
+        'Children' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'ChannelEntry',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'relationships',
                 'left' => 'parent_id',
-                'right' => 'child_id'
-            )
-        ),
-        'Versions' => array(
+                'right' => 'child_id',
+            ],
+        ],
+        'Versions' => [
             'type' => 'hasMany',
-            'model' => 'ChannelEntryVersion'
-        ),
-        'Comments' => array(
+            'model' => 'ChannelEntryVersion',
+        ],
+        'Comments' => [
             'type' => 'hasMany',
-            'model' => 'Comment'
-        ),
-        'CommentSubscriptions' => array(
+            'model' => 'Comment',
+        ],
+        'CommentSubscriptions' => [
             'type' => 'hasMany',
-            'model' => 'CommentSubscription'
-        ),
-        'Site' => array(
-            'type' => 'belongsTo'
-        ),
-    );
+            'model' => 'CommentSubscription',
+        ],
+        'Site' => [
+            'type' => 'belongsTo',
+        ],
+    ];
 
-    protected static $_field_data = array(
+    protected static $_field_data = [
         'field_model' => 'ChannelField',
         'group_column' => 'channel_id',
         'structure_model' => 'Channel',
-    );
+    ];
 
     public function author()
     {
@@ -134,7 +125,7 @@ class ChannelEntry extends Model
     {
         $manager = app(FieldtypeManager::class);
         $fields = $manager->fieldsForChannel(($this->exists && $this->channel) ? $this->channel : null);
-        $fields = (!$fields->isEmpty()) ? $fields : $manager->allFields('channel');
+        $fields = (! $fields->isEmpty()) ? $fields : $manager->allFields('channel');
 
         return $this->hasOne(ChannelData::class, 'entry_id', 'entry_id')->customFields($fields);
     }
@@ -151,18 +142,15 @@ class ChannelEntry extends Model
 
     public function grids()
     {
-
     }
 
     public function parents()
     {
-
     }
 
     public function children()
     {
         $this->belongsToMany(static::class, 'relationships', 'parent_id', 'child_id');
-
     }
 
     public function siblings()
@@ -185,14 +173,14 @@ class ChannelEntry extends Model
 
         // $fields = Field::select('field_name')->get()->keyBy('field_name');
         // if(is_null($value) && $fields->has($key)) {
-        if(is_null($value) && app(FieldtypeManager::class)->hasField($key)) {
+        if (is_null($value) && app(FieldtypeManager::class)->hasField($key)) {
             $this->getRelationValue('data');
             $fields = $this->data->fields($this->channel);
-            $value = ($fields->has($key)) ?  $fields->get($key) : new FieldContent([
+            $value = ($fields->has($key)) ? $fields->get($key) : new FieldContent([
                 // 'field' => $fields->get($key),
                 'field' => app(FieldtypeManager::class)->getField($key),
                 'data' => null,
-                'entry' => $this
+                'entry' => $this,
             ]);
 
             // $value->setAttribute('data', 'null');
@@ -200,6 +188,4 @@ class ChannelEntry extends Model
 
         return $value;
     }
-
-
 }

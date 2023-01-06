@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use ExpressionEngine\Service\Model\Gateway;
@@ -10,9 +9,6 @@ use ExpressionEngine\Service\Model\Gateway;
  */
 class VariableColumnGateway extends Gateway
 {
-    /**
-     *
-     */
     public function getFieldList($cached = true)
     {
         if ($cached && isset($this->_field_list_cache)) {
@@ -28,5 +24,3 @@ class VariableColumnGateway extends Gateway
         return $this->_field_list_cache = array_merge($known, $all);
     }
 }
-
-

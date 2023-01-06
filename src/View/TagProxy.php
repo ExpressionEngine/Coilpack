@@ -4,8 +4,8 @@ namespace Expressionengine\Coilpack\View;
 
 class TagProxy
 {
-
     private $tags = [];
+
     private $fallback;
 
     public function __construct($tags, $fallback = null)
@@ -16,7 +16,7 @@ class TagProxy
 
     public function __get($key)
     {
-        if($this->hasTag($key)) {
+        if ($this->hasTag($key)) {
             return $this->getTag($key);
         }
 
@@ -34,7 +34,7 @@ class TagProxy
 
     protected function getTag($tag)
     {
-        if (!$this->hasTag($tag)) {
+        if (! $this->hasTag($tag)) {
             return null;
         }
         // Check that the class extends \Expressionengine\Coilpack\View\Tag
@@ -51,13 +51,10 @@ class TagProxy
         return $this->hasTag($tag) && is_array($this->tags[$tag]);
     }
 
-
-
-
     public function __isset($key)
     {
         return true;
+
         return $this->hasTag($key);
     }
-
 }

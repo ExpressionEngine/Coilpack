@@ -8,7 +8,6 @@ use GraphQL\Type\Definition\Type;
 
 class File extends Generic
 {
-
     public function apply(FieldContent $content, $parameters = [])
     {
         $handler = $this->getHandler();
@@ -16,7 +15,7 @@ class File extends Generic
         $string = $data['url'];
 
         if (isset($parameters['wrap'])) {
-            $string = $handler->_wrap_it($data, $parameters['wrap'], $data['path'] . $data['filename'] . '.' . $data['extension']);
+            $string = $handler->_wrap_it($data, $parameters['wrap'], $data['path'].$data['filename'].'.'.$data['extension']);
         }
 
         return FieldtypeOutput::make($data)->string($string);
@@ -31,8 +30,8 @@ class File extends Generic
                 'parameters' => [
                     'angle' => [
                         'type' => Type::string(),
-                        'description' => 'Rotation angle'
-                    ]
+                        'description' => 'Rotation angle',
+                    ],
                 ],
                 // 'graphql' => [
                 //     // 'type' =>
@@ -44,11 +43,11 @@ class File extends Generic
                 'parameters' => [
                     'height' => [
                         'type' => Type::int(),
-                        'description' => 'Height to resize to, px'
+                        'description' => 'Height to resize to, px',
                     ],
                     'width' => [
                         'type' => Type::int(),
-                        'description' => 'Width to resize to, px'
+                        'description' => 'Width to resize to, px',
                     ],
                     'quality' => [
                         'type' => Type::int(),
@@ -63,7 +62,7 @@ class File extends Generic
                     // 'master_dimension' => [
                     //     'type' => Type::enum()
                     // ]
-                ]
+                ],
             ]),
             'resize_crop' => new Modifiers\File($this, [
                 'name' => 'resize_crop',
@@ -93,7 +92,7 @@ class File extends Generic
                     ],
                     'crop_width' => [
                         'type' => Type::int(),
-                        'description' => 'Width to crop to, px'
+                        'description' => 'Width to crop to, px',
                     ],
                     'crop_quality' => [
                         'type' => Type::int(),
@@ -115,7 +114,7 @@ class File extends Generic
                         'description' => 'Vertical crop offset, px',
                         'defaultValue' => 0,
                     ],
-                ]
+                ],
             ]),
             'crop' => new Modifiers\File($this, [
                 'name' => 'crop',
@@ -149,7 +148,7 @@ class File extends Generic
                         'description' => 'Vertical offset, px',
                         'defaultValue' => 0,
                     ],
-                ]
+                ],
             ]),
             'webp' => new Modifiers\File($this, [
                 'name' => 'webp',
@@ -157,11 +156,11 @@ class File extends Generic
                 'parameters' => [
                     'height' => [
                         'type' => Type::int(),
-                        'description' => 'Height to resize to, px'
+                        'description' => 'Height to resize to, px',
                     ],
                     'width' => [
                         'type' => Type::int(),
-                        'description' => ''
+                        'description' => '',
                     ],
                     'quality' => [
                         'type' => Type::int(),
@@ -176,13 +175,13 @@ class File extends Generic
                     // 'master_dimension' => [
                     //     'type' => Type::enum()
                     // ]
-                ]
+                ],
             ]),
         ];
     }
 
     public function graphType()
     {
-        return "Fieldtypes\\File";
+        return 'Fieldtypes\\File';
     }
 }

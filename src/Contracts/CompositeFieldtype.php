@@ -2,7 +2,6 @@
 
 namespace Expressionengine\Coilpack\Contracts;
 
-interface CompositeFieldtype {
-
-
+interface CompositeFieldtype
+{
 }

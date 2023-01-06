@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Message;
 
 use Expressionengine\Coilpack\Model;
@@ -13,16 +12,17 @@ use Expressionengine\Coilpack\Model;
 class Attachment extends Model
 {
     protected $primaryKey = 'attachment_id';
+
     protected $table = 'message_attachments';
 
     protected static $_relationships = [
         'Member' => [
             'type' => 'belongsTo',
-            'from_key' => 'sender_id'
+            'from_key' => 'sender_id',
         ],
         'Message' => [
-            'type' => 'belongsTo'
-        ]
+            'type' => 'belongsTo',
+        ],
     ];
 
     protected $casts = [
@@ -37,8 +37,4 @@ class Attachment extends Model
         'attachment_size' => 'integer',
         'is_temp' => \Expressionengine\Coilpack\Casts\BooleanString::class,
     ];
-
 }
-
-
-

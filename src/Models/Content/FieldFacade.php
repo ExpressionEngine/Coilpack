@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 /**
@@ -9,16 +8,27 @@ namespace Expressionengine\Coilpack\Models\Content;
 class FieldFacade
 {
     private $id;
+
     private $data; // field_id_*
+
     private $format;  // field_ft_*
+
     private $timezone; // field_dt_*
+
     private $metadata;
+
     private $required;
+
     private $field_name;
+
     private $content_id;
+
     private $content_type;
+
     private $value;
+
     private $api;
+
     private $icon;
 
     /**
@@ -127,7 +137,7 @@ class FieldFacade
     {
         $required = $this->getItem('field_required');
 
-        return ($required === true || $required === 'y');
+        return $required === true || $required === 'y';
     }
 
     public function getItem($field)
@@ -174,7 +184,7 @@ class FieldFacade
     {
         $this->initField();
 
-        $result = $this->api->apply('validate', array($value));
+        $result = $this->api->apply('validate', [$value]);
 
         if (is_array($result)) {
             if (isset($result['value'])) {
@@ -202,7 +212,7 @@ class FieldFacade
         $value = $this->data;
         $this->initField();
 
-        return $this->data = $this->api->apply('save', array($value, $model));
+        return $this->data = $this->api->apply('save', [$value, $model]);
     }
 
     public function postSave()
@@ -210,7 +220,7 @@ class FieldFacade
         $value = $this->data;
         $this->initField();
 
-        return $this->data = $this->api->apply('post_save', array($value));
+        return $this->data = $this->api->apply('post_save', [$value]);
     }
 
     public function hasReindex()
@@ -231,7 +241,7 @@ class FieldFacade
         $value = $this->data;
         $this->initField();
 
-        return $this->data = $this->api->apply('reindex', array($value, $model));
+        return $this->data = $this->api->apply('reindex', [$value, $model]);
     }
 
     public function getForm()
@@ -240,14 +250,14 @@ class FieldFacade
 
         $field_value = $data['field_data'];
 
-        return $this->api->apply('display_publish_field', array($field_value));
+        return $this->api->apply('display_publish_field', [$field_value]);
     }
 
     public function getSettingsForm()
     {
         ee()->load->library('table');
         $data = $this->initField();
-        $out = $this->api->apply('display_settings', array($data));
+        $out = $this->api->apply('display_settings', [$data]);
 
         if ($out == '') {
             return ee()->table->rows;
@@ -260,14 +270,14 @@ class FieldFacade
     {
         $this->initField();
 
-        return $this->api->apply('validate_settings', array($settings));
+        return $this->api->apply('validate_settings', [$settings]);
     }
 
     public function saveSettingsForm($data)
     {
         $this->initField();
 
-        return $this->api->apply('save_settings', array($data));
+        return $this->api->apply('save_settings', [$data]);
     }
 
     /**
@@ -277,14 +287,14 @@ class FieldFacade
     {
         $this->initField();
 
-        return $this->api->apply('post_save_settings', array($data));
+        return $this->api->apply('post_save_settings', [$data]);
     }
 
     public function delete()
     {
         $this->initField();
 
-        return $this->api->apply('delete', array(array($this->getContentId())));
+        return $this->api->apply('delete', [[$this->getContentId()]]);
     }
 
     public function getStatus()
@@ -296,10 +306,10 @@ class FieldFacade
             $data['field_data']
         );
 
-        return $this->api->apply('get_field_status', array($field_value));
+        return $this->api->apply('get_field_status', [$field_value]);
     }
 
-    public function replaceTag($tagdata, $params = array(), $modifier = '', $full_modifier = '')
+    public function replaceTag($tagdata, $params = [], $modifier = '', $full_modifier = '')
     {
         $ft = $this->getNativeField();
 
@@ -307,27 +317,27 @@ class FieldFacade
 
         $data = $this->getItem('row');
 
-        $this->api->apply('_init', array(array(
+        $this->api->apply('_init', [[
             'row' => $data,
             'content_id' => $this->content_id,
             'content_type' => $this->content_type,
-        )));
+        ]]);
 
-        $data = $this->api->apply('pre_process', array(
-            $data['field_id_' . $this->getId()]
-        ));
+        $data = $this->api->apply('pre_process', [
+            $data['field_id_'.$this->getId()],
+        ]);
 
-        $parse_fnc = ($modifier) ? 'replace_' . $modifier : 'replace_tag';
+        $parse_fnc = ($modifier) ? 'replace_'.$modifier : 'replace_tag';
 
         $output = '';
 
         if (method_exists($ft, $parse_fnc)) {
-            $output = $this->api->apply($parse_fnc, array($data, $params, $tagdata));
+            $output = $this->api->apply($parse_fnc, [$data, $params, $tagdata]);
         }
         // Go to catchall and include modifier
         elseif (method_exists($ft, 'replace_tag_catchall') and $modifier !== '') {
             $modifier = $full_modifier ?: $modifier;
-            $output = $this->api->apply('replace_tag_catchall', array($data, $params, $tagdata, $modifier));
+            $output = $this->api->apply('replace_tag_catchall', [$data, $params, $tagdata, $modifier]);
         }
 
         return $output;
@@ -401,11 +411,11 @@ class FieldFacade
         $this->ensurePopulatedDefaults();
 
         // not all custom field tables will specify all of these things
-        $defaults = array(
+        $defaults = [
             'field_instructions' => '',
             'field_text_direction' => 'rtl',
-            'field_settings' => array()
-        );
+            'field_settings' => [],
+        ];
 
         $info = $this->metadata;
         $info = array_merge($defaults, $info);
@@ -421,10 +431,10 @@ class FieldFacade
         $data = $this->setupField();
 
         $this->api->setup_handler($data['field_id']);
-        $this->api->apply('_init', array(array(
+        $this->api->apply('_init', [[
             'content_id' => $this->content_id,
-            'content_type' => $this->content_type
-        )));
+            'content_type' => $this->content_type,
+        ]]);
 
         return $data;
     }
@@ -437,25 +447,25 @@ class FieldFacade
         $field_name = $this->getName();
 
         // not all custom field tables will specify all of these things
-        $defaults = array(
+        $defaults = [
             'field_instructions' => '',
             'field_text_direction' => 'rtl',
-            'field_settings' => array()
-        );
+            'field_settings' => [],
+        ];
 
         $info = $this->metadata;
         $info = array_merge($defaults, $info);
 
-        $settings = array(
+        $settings = [
             'field_instructions' => trim($info['field_instructions']),
             'field_text_direction' => ($info['field_text_direction'] == 'rtl') ? 'rtl' : 'ltr',
             'field_fmt' => $field_fmt,
             'field_dt' => $field_dt,
             'field_data' => $field_data,
-            'field_name' => $field_name
-        );
+            'field_name' => $field_name,
+        ];
 
-        $field_settings = empty($info['field_settings']) ? array() : $info['field_settings'];
+        $field_settings = empty($info['field_settings']) ? [] : $info['field_settings'];
 
         $settings = array_merge($info, $settings, $field_settings);
 
@@ -464,5 +474,3 @@ class FieldFacade
         return $settings;
     }
 }
-
-

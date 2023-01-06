@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use Expressionengine\Coilpack\Model;
@@ -11,11 +10,11 @@ use ExpressionEngine\Service\Validation\Result as ValidationResult;
  */
 abstract class FieldModel extends Model
 {
-    protected static $_events = array(
+    protected static $_events = [
         'afterInsert',
         'afterUpdate',
         'afterDelete',
-    );
+    ];
 
     protected $_field_facade;
 
@@ -24,20 +23,14 @@ abstract class FieldModel extends Model
      */
     abstract public function getDataTable();
 
-    /**
-     *
-     */
     abstract public function getStructure();
 
-    /**
-     *
-     */
-    public function getField($override = array())
+    public function getField($override = [])
     {
         $field_type = $this->getFieldType();
 
         if (empty($field_type)) {
-            throw new \Exception('Cannot get field of unknown type "' . $field_type . '".');
+            throw new \Exception('Cannot get field of unknown type "'.$field_type.'".');
         }
 
         if (! isset($this->_field_facade) ||
@@ -71,7 +64,7 @@ abstract class FieldModel extends Model
         return $this->getStructure()->getContentType();
     }
 
-    public function set(array $data = array())
+    public function set(array $data = [])
     {
         // getField() requires that we have a field type, but we might be trying
         // to set it! So, if we are, we'll do that first.
@@ -141,8 +134,8 @@ abstract class FieldModel extends Model
 
         $this->dropTable();
 
-        if (! $this->hasProperty($this->getColumnPrefix() . 'legacy_field_data')
-            || $this->getProperty($this->getColumnPrefix() . 'legacy_field_data') == true) {
+        if (! $this->hasProperty($this->getColumnPrefix().'legacy_field_data')
+            || $this->getProperty($this->getColumnPrefix().'legacy_field_data') == true) {
             $this->dropColumns($this->getColumns());
         }
     }
@@ -169,13 +162,13 @@ abstract class FieldModel extends Model
         }
     }
 
-    protected function callSettingsModify($ft, $action, $changed = array())
+    protected function callSettingsModify($ft, $action, $changed = [])
     {
         $data = $this->getValues();
         $data = array_merge($data, $changed);
 
         if (! isset($data['field_settings'])) {
-            $data['field_settings'] = array();
+            $data['field_settings'] = [];
         }
 
         $data['ee_action'] = $action;
@@ -196,7 +189,7 @@ abstract class FieldModel extends Model
     /**
      * Get the instance of the current fieldtype
      */
-    protected function getFieldtypeInstance($field_type = null, $changed = array())
+    protected function getFieldtypeInstance($field_type = null, $changed = [])
     {
         $field_type = $field_type ?: $this->getFieldType();
         $values = array_merge($this->getValues(), $changed);
@@ -211,7 +204,6 @@ abstract class FieldModel extends Model
      * Simple getter for field type, override if your field type property has a
      * different name.
      *
-     * @access protected
      * @return string The field type.
      */
     protected function getFieldType()
@@ -219,16 +211,13 @@ abstract class FieldModel extends Model
         return $this->field_type;
     }
 
-    /**
-     *
-     */
     private function diffColumns($old, $new)
     {
         $old = $this->ensureDefaultColumns($old);
         $new = $this->ensureDefaultColumns($new);
 
-        $drop = array();
-        $change = array();
+        $drop = [];
+        $change = [];
 
         foreach ($old as $name => $prefs) {
             if (! isset($new[$name])) {
@@ -248,7 +237,7 @@ abstract class FieldModel extends Model
     /**
      * Modify columns that were changed
      *
-     * @param Array $columns List of [column name => column definition]
+     * @param  array  $columns List of [column name => column definition]
      */
     private function modifyColumns($columns)
     {
@@ -258,8 +247,8 @@ abstract class FieldModel extends Model
 
         $data_table = $this->getTableName();
 
-        if (! $this->hasProperty($this->getColumnPrefix() . 'legacy_field_data')
-            || $this->getProperty($this->getColumnPrefix() . 'legacy_field_data') == true) {
+        if (! $this->hasProperty($this->getColumnPrefix().'legacy_field_data')
+            || $this->getProperty($this->getColumnPrefix().'legacy_field_data') == true) {
             $data_table = $this->getDataTable();
         }
 
@@ -276,7 +265,7 @@ abstract class FieldModel extends Model
     /**
      * Drop columns, including the defaults
      *
-     * @param Array $columns List of column definitions as in createColumns, but
+     * @param  array  $columns List of column definitions as in createColumns, but
      *						 only the keys are actually used
      */
     private function dropColumns($columns)
@@ -299,26 +288,26 @@ abstract class FieldModel extends Model
     /**
      * Add the default columns if they don't exist
      *
-     * @param Array $columns Column definitions
+     * @param  array  $columns Column definitions
      * @return array Updated column definitions
      */
     private function ensureDefaultColumns($columns)
     {
-        $id_field_name = $this->getColumnPrefix() . 'field_id_' . $this->getId();
-        $ft_field_name = $this->getColumnPrefix() . 'field_ft_' . $this->getId();
+        $id_field_name = $this->getColumnPrefix().'field_id_'.$this->getId();
+        $ft_field_name = $this->getColumnPrefix().'field_ft_'.$this->getId();
 
         if (! isset($columns[$id_field_name])) {
-            $columns[$id_field_name] = array(
+            $columns[$id_field_name] = [
                 'type' => 'text',
-                'null' => true
-            );
+                'null' => true,
+            ];
         }
 
         if (! isset($columns[$ft_field_name])) {
-            $columns[$ft_field_name] = array(
+            $columns[$ft_field_name] = [
                 'type' => 'tinytext',
-                'null' => true
-            );
+                'null' => true,
+            ];
         }
 
         return $columns;
@@ -329,10 +318,10 @@ abstract class FieldModel extends Model
         $ft = $this->getFieldtypeInstance();
         $data = $this->getValues();
         $data['ee_action'] = 'add';
-        $columns = array();
+        $columns = [];
 
         foreach ($ft->settings_modify_column($data) as $key => $values) {
-            $columns[$this->getColumnPrefix() . $key] = $values;
+            $columns[$this->getColumnPrefix().$key] = $values;
         }
 
         return $this->ensureDefaultColumns($columns);
@@ -340,7 +329,7 @@ abstract class FieldModel extends Model
 
     private function getCacheKey()
     {
-        return $cache_key = '/' . get_class($this) . '/' . $this->getId();
+        return $cache_key = '/'.get_class($this).'/'.$this->getId();
     }
 
     public function getColumnNames()
@@ -359,7 +348,7 @@ abstract class FieldModel extends Model
     /**
      * Set a prefix on the default columns we manage for fields
      *
-     * @return	String	Prefix string to use
+     * @return	string	Prefix string to use
      */
     public function getColumnPrefix()
     {
@@ -368,13 +357,13 @@ abstract class FieldModel extends Model
 
     public function getTableName()
     {
-        return $this->getDataTable() . '_field_' . $this->getId();
+        return $this->getDataTable().'_field_'.$this->getId();
     }
 
     public function getDataStorageTable()
     {
-        if (! $this->hasProperty($this->getColumnPrefix() . 'legacy_field_data')
-            || $this->getProperty($this->getColumnPrefix() . 'legacy_field_data') == true) {
+        if (! $this->hasProperty($this->getColumnPrefix().'legacy_field_data')
+            || $this->getProperty($this->getColumnPrefix().'legacy_field_data') == true) {
             return $this->getDataTable();
         }
 
@@ -395,21 +384,21 @@ abstract class FieldModel extends Model
             return;
         }
 
-        $fields = array(
-            'id' => array(
+        $fields = [
+            'id' => [
                 'type' => 'int',
                 'constraint' => 10,
                 'null' => false,
                 'unsigned' => true,
-                'auto_increment' => true
-            ),
-            $this->getForeignKey() => array(
+                'auto_increment' => true,
+            ],
+            $this->getForeignKey() => [
                 'type' => 'int',
                 'constraint' => 10,
                 'null' => false,
                 'unsigned' => true,
-            )
-        );
+            ],
+        ];
 
         $fields = array_merge($fields, $this->getColumns());
 
@@ -438,12 +427,12 @@ abstract class FieldModel extends Model
     /**
      * TEMPORARY, VOLATILE, DO NOT USE
      *
-     * @param	mixed	$data			Data for this field
-     * @param	int		$content_id		Content ID to pass to the fieldtype
-     * @param	string	$content_type	Content type to pass to the fieldtype
-     * @param	array	$variable_mods		Variable modifiers and parameters, if present
-     * @param	string	$tagdata		Tagdata to perform the replacement in
-     * @param	string	$row			Row array to set on the fieldtype
+     * @param  mixed  $data			Data for this field
+     * @param  int  $content_id		Content ID to pass to the fieldtype
+     * @param  string  $content_type	Content type to pass to the fieldtype
+     * @param  array  $variable_mods		Variable modifiers and parameters, if present
+     * @param  string  $tagdata		Tagdata to perform the replacement in
+     * @param  string  $row			Row array to set on the fieldtype
      * @return	string	String with variable parsed
      */
     public function parse($data, $content_id, $content_type, $variable_mods, $tagdata, $row, $tag = false)
@@ -451,9 +440,9 @@ abstract class FieldModel extends Model
         $fieldtype = $this->getFieldtypeInstance();
         $settings = $this->getSettingsValues();
         $field_fmt = isset($this->field_fmt) ? $this->field_fmt : $this->field_default_fmt;
-        $settings['field_settings'] = array_merge($settings['field_settings'], array('field_fmt' => $field_fmt));
+        $settings['field_settings'] = array_merge($settings['field_settings'], ['field_fmt' => $field_fmt]);
         $modifier = (! empty($variable_mods['modifier'])) ? $variable_mods['modifier'] : '';
-        $params = (! empty($variable_mods['params'])) ? $variable_mods['params'] : array();
+        $params = (! empty($variable_mods['params'])) ? $variable_mods['params'] : [];
 
         if ($this->field_type == 'date') {
             // Set 0 to NULL, kill any formatting
@@ -461,42 +450,42 @@ abstract class FieldModel extends Model
             $data = ($data == 0) ? null : $data;
         }
 
-        $fieldtype->_init(array(
+        $fieldtype->_init([
             'row' => $row,
             'field_id' => $this->getId(),
             'content_id' => $content_id,
             'content_type' => $content_type,
             'field_fmt' => $field_fmt,
-            'settings' => $settings['field_settings']
-        ));
+            'settings' => $settings['field_settings'],
+        ]);
 
-        $parse_fnc = ($modifier) ? 'replace_' . $modifier : 'replace_tag';
+        $parse_fnc = ($modifier) ? 'replace_'.$modifier : 'replace_tag';
         if (method_exists($fieldtype, $parse_fnc)) {
-            $data = ee()->api_channel_fields->apply($parse_fnc, array(
+            $data = ee()->api_channel_fields->apply($parse_fnc, [
                 $data,
                 $params,
-                false
-            ));
+                false,
+            ]);
         }
         if ($tag) {
-            return str_replace(LD . $tag . RD, $data, $tagdata);
+            return str_replace(LD.$tag.RD, $data, $tagdata);
         }
         $tag = $this->field_name;
         if ($modifier) {
-            $tag = $tag . ':' . $modifier;
+            $tag = $tag.':'.$modifier;
         }
 
-        return str_replace(LD . $tag . RD, $data, $tagdata);
+        return str_replace(LD.$tag.RD, $data, $tagdata);
     }
 
     public function getCompatibleFieldtypes()
     {
-        $fieldtypes = array();
-        $compatibility = array();
+        $fieldtypes = [];
+        $compatibility = [];
 
         foreach (ee('Addon')->installed() as $addon) {
             if ($addon->hasFieldtype()) {
-                foreach ($addon->get('fieldtypes', array()) as $fieldtype => $metadata) {
+                foreach ($addon->get('fieldtypes', []) as $fieldtype => $metadata) {
                     if (isset($metadata['compatibility'])) {
                         $compatibility[$fieldtype] = $metadata['compatibility'];
                     }
@@ -508,7 +497,7 @@ abstract class FieldModel extends Model
 
         if ($this->getFieldType()) {
             if (! isset($compatibility[$this->getFieldType()])) {
-                return array($this->getFieldType() => $fieldtypes[$this->getFieldType()]);
+                return [$this->getFieldType() => $fieldtypes[$this->getFieldType()]];
             }
 
             $my_type = $compatibility[$this->getFieldType()];
@@ -525,4 +514,3 @@ abstract class FieldModel extends Model
         return $fieldtypes;
     }
 }
-

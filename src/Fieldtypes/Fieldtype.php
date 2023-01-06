@@ -2,12 +2,11 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\FieldtypeOutput;
+use Expressionengine\Coilpack\Models\FieldContent;
 
 abstract class Fieldtype
 {
-
     public function __construct($name, $id = null)
     {
         $this->name = $name;
@@ -17,7 +16,7 @@ abstract class Fieldtype
     /**
      * Apply the fieldtype to the data in provided
      *
-     * @param FieldContent $content
+     * @param  FieldContent  $content
      * @return FieldtypeOutput
      */
     abstract public function apply(FieldContent $content, $parameters = []);
@@ -29,7 +28,7 @@ abstract class Fieldtype
 
     public function callModifier(FieldContent $content, $name, $parameters)
     {
-        if(array_key_exists($name, $this->modifiers()) && $this->modifiers()[$name] instanceof Modifier) {
+        if (array_key_exists($name, $this->modifiers()) && $this->modifiers()[$name] instanceof Modifier) {
             return $this->modifiers()[$name]->handle($content, $parameters);
         }
     }

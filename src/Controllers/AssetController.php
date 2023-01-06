@@ -2,10 +2,10 @@
 
 namespace Expressionengine\Coilpack\Controllers;
 
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AssetController
@@ -30,9 +30,9 @@ class AssetController
 
             // Set caching header
             $headers = [
-                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
+                'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified).' GMT',
                 'Etag' => $etagFile,
-                'Cache-Control' => 'public'
+                'Cache-Control' => 'public',
             ];
 
             $mime_type = $disk->mimeType($file);
@@ -65,7 +65,8 @@ class AssetController
         return $disk->get($file);
     }
 
-    private function fileResponse($path, $headers) {
+    private function fileResponse($path, $headers)
+    {
         $response = new StreamedResponse;
         $filename = $name ?? basename($path);
         $response->headers->replace($headers);

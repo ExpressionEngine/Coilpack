@@ -1,19 +1,17 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Member;
 
-use ExpressionEngine\Model\Content\FieldModel;
-
-use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\FieldtypeManager;
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Model;
+
 /**
  * Member Field Model
  */
 class MemberField extends Model
 {
     protected $primaryKey = 'm_field_id';
+
     protected $table = 'member_fields';
 
     protected $casts = [
@@ -32,8 +30,4 @@ class MemberField extends Model
     {
         return "member_data_field_{$this->m_field_id}";
     }
-
-
 }
-
-

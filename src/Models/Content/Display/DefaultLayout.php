@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content\Display;
 
 use ExpressionEngine\Model\Content\Display\LayoutDisplay;
@@ -12,7 +11,8 @@ use ExpressionEngine\Model\Content\Display\LayoutTab;
 class DefaultLayout implements LayoutInterface
 {
     protected $layout;
-    protected $assigned = array();
+
+    protected $assigned = [];
 
     public function __construct()
     {
@@ -25,11 +25,11 @@ class DefaultLayout implements LayoutInterface
      */
     protected function createLayout()
     {
-        return array(array(
+        return [[
             'id' => 'main',
             'name' => 'Main',
-            'fields' => array()
-        ));
+            'fields' => [],
+        ]];
     }
 
     /**

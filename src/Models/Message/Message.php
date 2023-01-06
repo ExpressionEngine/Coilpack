@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Message;
 
 use Expressionengine\Coilpack\Model;
@@ -11,12 +10,13 @@ use Expressionengine\Coilpack\Model;
 class Message extends Model
 {
     protected $primaryKey = 'message_id';
+
     protected $table = 'message_data';
 
     protected static $_relationships = [
         'Member' => [
             'type' => 'belongsTo',
-            'from_key' => 'sender_id'
+            'from_key' => 'sender_id',
         ],
         'Recipients' => [
             'type' => 'hasAndBelongsToMany',
@@ -24,9 +24,9 @@ class Message extends Model
             'pivot' => [
                 'table' => 'message_copies',
                 'left' => 'message_id',
-                'right' => 'recipient_id'
-            ]
-        ]
+                'right' => 'recipient_id',
+            ],
+        ],
     ];
 
     protected $casts = [
@@ -42,10 +42,6 @@ class Message extends Model
         'message_hide_cc' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'message_sent_copy' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'total_recipients' => 'integer',
-        'message_status' => 'string'
+        'message_status' => 'string',
     ];
-
 }
-
-
-

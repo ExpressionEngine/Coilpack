@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use Expressionengine\Coilpack\Model;
@@ -11,5 +10,3 @@ use Expressionengine\Coilpack\Model;
 abstract class StructureModel extends Model implements Structure
 {
 }
-
-

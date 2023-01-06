@@ -1,12 +1,10 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Category;
 
+use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\FieldtypeManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -16,6 +14,7 @@ use Illuminate\Support\Str;
 class CategoryData extends Model
 {
     protected $primaryKey = 'cat_id';
+
     protected $table = 'category_field_data';
 
     public function category()
@@ -25,7 +24,7 @@ class CategoryData extends Model
 
     public function scopeCustomFields($query, $fields = null)
     {
-        if (!$fields || $fields->isEmpty()) {
+        if (! $fields || $fields->isEmpty()) {
             return $query;
         }
 
@@ -56,18 +55,18 @@ class CategoryData extends Model
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'field_');
         })->reduce(function ($carry, $key) use ($fields) {
-            list($name, $id) = array_slice(explode('_', $key), 1);
+            [$name, $id] = array_slice(explode('_', $key), 1);
 
-            if (!$fields->has($id)) {
+            if (! $fields->has($id)) {
                 return $carry;
             }
 
-            if (!$carry->has($id)) {
+            if (! $carry->has($id)) {
                 $carry->put($id, new FieldContent(array_merge(
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'category' => $this->category
+                        'category' => $this->category,
                     ],
                     Arr::only($this->attributes, ['cat_id', 'site_id', 'channel_id'])
                 )));
@@ -75,7 +74,7 @@ class CategoryData extends Model
 
             $nameMap = [
                 'id' => 'data',
-                'ft' => 'format'
+                'ft' => 'format',
             ];
 
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);
@@ -86,5 +85,3 @@ class CategoryData extends Model
         });
     }
 }
-
-

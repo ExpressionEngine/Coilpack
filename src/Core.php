@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack;
 
-class Core {
-
+class Core
+{
     public function __construct(\ExpressionEngine\Core\Core $core)
     {
         $this->core = $core;
@@ -39,10 +39,10 @@ class Core {
             // Thanks to @litzinger for the code suggestion to parse
             // global vars in snippets...here we go.
 
-            $var_keys = array();
+            $var_keys = [];
 
             foreach (ee()->config->_global_vars as $k => $v) {
-                $var_keys[] = LD . $k . RD;
+                $var_keys[] = LD.$k.RD;
             }
 
             $snippets = str_replace($var_keys, ee()->config->_global_vars, $snippets);
@@ -69,7 +69,7 @@ class Core {
         $status = $this->accessRestrictedProperty($response, 'status');
         $headers = $this->accessRestrictedProperty($response, 'headers');
 
-        if($body == '') {
+        if ($body == '') {
             return Response::fromOutput($status);
         }
 
@@ -81,7 +81,7 @@ class Core {
         $reflection = new \ReflectionClass($object);
         $prop = $reflection->getProperty($property);
         $prop->setAccessible(true);
+
         return $prop->getValue($object);
     }
-
 }

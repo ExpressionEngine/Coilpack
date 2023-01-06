@@ -2,27 +2,27 @@
 
 namespace Expressionengine\Coilpack;
 
-use ArrayIterator;
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 
 class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
 {
     protected $array = [];
+
     protected $string = '';
+
     protected $object = null;
 
     public static function make($value)
     {
         $instance = new static;
 
-        if(is_object($value)) {
+        if (is_object($value)) {
             $instance->object = $value;
         }
 
-        if(is_array($value) || $value instanceof Arrayable) {
+        if (is_array($value) || $value instanceof Arrayable) {
             $instance->array(is_array($value) ? $value : $value->toArray());
-        }else{
+        } else {
             $instance->string(is_string($value) ? $value : (string) $value);
         }
 
@@ -43,7 +43,8 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
         return $this;
     }
 
-    public function object($value) {
+    public function object($value)
+    {
         $this->object = $value;
 
         return $this;
@@ -61,7 +62,7 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
 
     public function getIterator(): \Traversable
     {
-        if(is_object($this->array) && method_exists($this->array, 'getIterator')) {
+        if (is_object($this->array) && method_exists($this->array, 'getIterator')) {
             return $this->array->getIterator();
         }
 
@@ -128,7 +129,7 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
 
     public function __get($key)
     {
-        if(array_key_exists($key, (array) $this->array)) {
+        if (array_key_exists($key, (array) $this->array)) {
             return $this->array[$key];
         }
 
@@ -140,9 +141,8 @@ class FieldtypeOutput implements \IteratorAggregate, \ArrayAccess
         return array_key_exists($key, (array) $this->array);
     }
 
-    public function __call($method, $arguments) {
+    public function __call($method, $arguments)
+    {
         return $this->object->{$method}(...$arguments);
     }
-
-
 }

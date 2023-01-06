@@ -10,6 +10,7 @@ use Expressionengine\Coilpack\Model;
 class Action extends Model
 {
     protected $primaryKey = 'action_id';
+
     protected $table = 'actions';
 
     // Available as a replacement to ee()->functions->fetch_action_id
@@ -17,7 +18,4 @@ class Action extends Model
     {
         return static::select('action_id')->where('class', $class)->where('method', $method)->first()->action_id;
     }
-
 }
-
-

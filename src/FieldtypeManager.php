@@ -2,31 +2,35 @@
 
 namespace Expressionengine\Coilpack;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
-
-class FieldtypeManager {
-
+class FieldtypeManager
+{
     private $booted = false;
+
     private $classMap = [];
+
     private $fields = [];
+
     private $fieldtypes;
+
     private $channels;
+
     private $categoryGroups;
 
     public function boot()
     {
-        if($this->booted) {
+        if ($this->booted) {
             return $this;
         }
 
         // Load fields - constrain selects on relations, do not need full models
         $fields = Models\Channel\ChannelField::with([
-            'channels' => function($query) {
+            'channels' => function ($query) {
                 $query->select('channels.channel_id');
             },
-            'fieldGroups.channels' => function($query) {
+            'fieldGroups.channels' => function ($query) {
                 $query->select('channels.channel_id');
             },
             'gridColumns',
@@ -36,11 +40,11 @@ class FieldtypeManager {
         // $gridColumns = Models\Addon\Grid\Column::get();
 
         // Group fields by channel
-        $channels = $fields->reduce(function($carry, $field) {
+        $channels = $fields->reduce(function ($carry, $field) {
             $field->fieldGroups->map->channels
                 ->merge($field->channels)
                 ->flatten()
-                ->each(function($channel) use($field, $carry) {
+                ->each(function ($channel) use ($field, $carry) {
                     $carry->getOrPut($channel->channel_id, new Collection)->push($field);
                 });
 
@@ -65,7 +69,7 @@ class FieldtypeManager {
 
     public function loadMemberFields()
     {
-        if(array_key_exists('member', $this->fields) && !empty($this->fields['member'])) {
+        if (array_key_exists('member', $this->fields) && ! empty($this->fields['member'])) {
             return $this;
         }
 
@@ -77,7 +81,7 @@ class FieldtypeManager {
 
     public function loadCategoryFields()
     {
-        if (array_key_exists('category', $this->fields) && !empty($this->fields['category'])) {
+        if (array_key_exists('category', $this->fields) && ! empty($this->fields['category'])) {
             return $this;
         }
 
@@ -87,6 +91,7 @@ class FieldtypeManager {
         // Group fields by category group
         $this->categoryGroups = $categoryFields->reduce(function ($carry, $field) {
             $carry->getOrPut($field->group_id, new Collection)->push($field);
+
             return $carry;
         }, new Collection);
 
@@ -115,7 +120,7 @@ class FieldtypeManager {
 
     public function fieldsForChannel($channel)
     {
-        if($channel instanceof \Expressionengine\Coilpack\Models\Channel\Channel) {
+        if ($channel instanceof \Expressionengine\Coilpack\Models\Channel\Channel) {
             $channel = $channel->getKey();
         }
 
@@ -131,7 +136,6 @@ class FieldtypeManager {
         return $this->categoryGroups->get($group) ?: collect([]);
     }
 
-
     public function register($fieldtype, $class)
     {
         $fieldtype = strtolower($fieldtype);
@@ -142,10 +146,10 @@ class FieldtypeManager {
     {
         $name = strtolower($name);
 
-        if(array_key_exists($name, $this->classMap)) {
-            $class =  $this->classMap[$name];
+        if (array_key_exists($name, $this->classMap)) {
+            $class = $this->classMap[$name];
 
-            if(!class_exists($class)) {
+            if (! class_exists($class)) {
                 throw new \Exception("Fieldtype class '$class' was registered for '$name' but does not exist.");
             }
 
@@ -156,13 +160,12 @@ class FieldtypeManager {
         // If a specific binding does not exist look for a fallback
         // First, a Coilpack specific implementation for the field
         // And then finally our generic fieldtype class
-        $class = __NAMESPACE__ . '\Fieldtypes\\' . Str::studly($name);
-        $generic = __NAMESPACE__ . '\Fieldtypes\Generic';
+        $class = __NAMESPACE__.'\Fieldtypes\\'.Str::studly($name);
+        $generic = __NAMESPACE__.'\Fieldtypes\Generic';
 
         $instance = (class_exists($class)) ? new $class($name, $id) : new $generic($name, $id);
         $this->classMap[$name] = get_class($instance);
 
         return $instance;
     }
-
 }

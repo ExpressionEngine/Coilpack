@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Consent;
 
 use Expressionengine\Coilpack\Model;
@@ -11,6 +10,7 @@ use Expressionengine\Coilpack\Model;
 class ConsentAuditLog extends Model
 {
     protected $primaryKey = 'consent_audit_id';
+
     protected $table = 'consent_audit_log';
 
     protected $casts = [
@@ -23,16 +23,13 @@ class ConsentAuditLog extends Model
 
     protected static $_relationships = [
         'ConsentRequest' => [
-            'type' => 'belongsTo'
+            'type' => 'belongsTo',
         ],
         'ConsentRequestVersion' => [
-            'type' => 'belongsTo'
+            'type' => 'belongsTo',
         ],
         'Member' => [
-            'type' => 'belongsTo'
-        ]
+            'type' => 'belongsTo',
+        ],
     ];
-
 }
-
-

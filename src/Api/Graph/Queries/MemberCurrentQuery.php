@@ -25,7 +25,7 @@ class MemberCurrentQuery extends Query
 
     public function resolve($root, $args)
     {
-        $user = auth('coilpack')->user() ?: tap(new Member, function($member) {
+        $user = auth('coilpack')->user() ?: tap(new Member, function ($member) {
             $member->screen_name = 'Guest';
             $member->member_id = null;
         });

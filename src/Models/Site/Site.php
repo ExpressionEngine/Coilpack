@@ -3,6 +3,7 @@
  * ExpressionEngine (https://expressionengine.com)
  *
  * @link      https://expressionengine.com/
+ *
  * @copyright Copyright (c) 2003-2021, Packet Tide, LLC (https://www.packettide.com)
  * @license   https://expressionengine.com/license Licensed under Apache License, Version 2.0
  */
@@ -21,109 +22,115 @@ use Expressionengine\Coilpack\Model;
 class Site extends Model
 {
     protected $primaryKey = 'site_id';
+
     protected $table = 'sites';
 
     protected static $_hook_id = 'site';
 
-    protected static $_type_classes = array(
+    protected static $_type_classes = [
         'ChannelPreferences' => 'ExpressionEngine\Model\Site\Column\ChannelPreferences',
         'MemberPreferences' => 'ExpressionEngine\Model\Site\Column\MemberPreferences',
         'SystemPreferences' => 'ExpressionEngine\Model\Site\Column\SystemPreferences',
         'TemplatePreferences' => 'ExpressionEngine\Model\Site\Column\TemplatePreferences',
-    );
+    ];
 
-    protected $casts = array(
+    protected $casts = [
         'site_bootstrap_checksums' => 'base64Serialized',
         'site_pages' => 'base64Serialized',
-    );
+    ];
 
-    protected static $_relationships = array(
-        'GlobalVariables' => array(
+    protected static $_relationships = [
+        'GlobalVariables' => [
             'model' => 'GlobalVariable',
-            'type' => 'hasMany'
-        ),
-        'Stats' => array(
-            'type' => 'HasOne'
-        ),
-        'TemplateGroups' => array(
-            'model' => 'TemplateGroup',
-            'type' => 'hasMany'
-        ),
-        'Templates' => array(
-            'model' => 'Template',
-            'type' => 'hasMany'
-        ),
-        'SpecialtyTemplates' => array(
-            'model' => 'SpecialtyTemplate',
-            'type' => 'hasMany'
-        ),
-        'SearchLogs' => array(
-            'model' => 'SearchLog',
-            'type' => 'hasMany'
-        ),
-        'CpLogs' => array(
-            'model' => 'CpLog',
-            'type' => 'hasMany'
-        ),
-        'Channels' => array(
-            'model' => 'Channel',
-            'type' => 'hasMany'
-        ),
-        'ChannelEntries' => array(
-            'model' => 'ChannelEntry',
-            'type' => 'hasMany'
-        ),
-        'Comments' => array(
             'type' => 'hasMany',
-            'model' => 'Comment'
-        ),
-        'Files' => array(
+        ],
+        'Stats' => [
+            'type' => 'HasOne',
+        ],
+        'TemplateGroups' => [
+            'model' => 'TemplateGroup',
+            'type' => 'hasMany',
+        ],
+        'Templates' => [
+            'model' => 'Template',
+            'type' => 'hasMany',
+        ],
+        'SpecialtyTemplates' => [
+            'model' => 'SpecialtyTemplate',
+            'type' => 'hasMany',
+        ],
+        'SearchLogs' => [
+            'model' => 'SearchLog',
+            'type' => 'hasMany',
+        ],
+        'CpLogs' => [
+            'model' => 'CpLog',
+            'type' => 'hasMany',
+        ],
+        'Channels' => [
+            'model' => 'Channel',
+            'type' => 'hasMany',
+        ],
+        'ChannelEntries' => [
+            'model' => 'ChannelEntry',
+            'type' => 'hasMany',
+        ],
+        'Comments' => [
+            'type' => 'hasMany',
+            'model' => 'Comment',
+        ],
+        'Files' => [
             'model' => 'File',
-            'type' => 'hasMany'
-        ),
-        'UploadDestinations' => array(
+            'type' => 'hasMany',
+        ],
+        'UploadDestinations' => [
             'model' => 'UploadDestination',
-            'type' => 'hasMany'
-        ),
-        'Permissions' => array(
+            'type' => 'hasMany',
+        ],
+        'Permissions' => [
             'model' => 'Permission',
-            'type' => 'hasMany'
-        ),
-        'HTMLButtons' => array(
+            'type' => 'hasMany',
+        ],
+        'HTMLButtons' => [
             'model' => 'HTMLButton',
-            'type' => 'hasMany'
-        ),
-        'Snippets' => array(
+            'type' => 'hasMany',
+        ],
+        'Snippets' => [
             'model' => 'Snippet',
-            'type' => 'hasMany'
-        ),
-        'Configs' => array(
+            'type' => 'hasMany',
+        ],
+        'Configs' => [
             'model' => 'Config',
-            'type' => 'hasMany'
-        ),
-        'RoleSettings' => array(
+            'type' => 'hasMany',
+        ],
+        'RoleSettings' => [
             'model' => 'RoleSetting',
-            'type' => 'hasMany'
-        ),
-    );
+            'type' => 'hasMany',
+        ],
+    ];
 
-    protected static $_validation_rules = array(
+    protected static $_validation_rules = [
         'site_name' => 'required|validateShortName|unique',
         'site_label' => 'required',
-    );
+    ];
 
-    protected static $_events = array(
+    protected static $_events = [
         'beforeInsert',
         'afterInsert',
-        'afterSave'
-    );
+        'afterSave',
+    ];
 
     // Properties
     protected $site_id;
+
     protected $site_label;
+
     protected $site_name;
+
     protected $site_description;
+
     protected $site_bootstrap_checksums;
+
     protected $site_pages;
 
     public function validateShortName($key, $value, $params, $rule)
@@ -143,7 +150,7 @@ class Site extends Model
             ->canAddSites($current_number_of_sites);
 
         if (! $can_add) {
-            throw new \Exception("Site limit reached.");
+            throw new \Exception('Site limit reached.');
         }
     }
 
@@ -171,7 +178,7 @@ class Site extends Model
      * Given a type loops through config's divination method and sets the
      * default property values as indicated.
      *
-     * @param string $type The type of preference ('system', 'channel', 'template', or 'member')
+     * @param  string  $type The type of preference ('system', 'channel', 'template', or 'member')
      * @return void
      */
     protected function setDefaultPreferences($type)
@@ -180,7 +187,7 @@ class Site extends Model
             $this->getModelFacade()->make('Config', [
                 'site_id' => $this->site_id,
                 'key' => $key,
-                'value' => ee()->config->item($key)
+                'value' => ee()->config->item($key),
             ])->save();
         }
     }
@@ -193,9 +200,9 @@ class Site extends Model
      */
     protected function createNewStats()
     {
-        $data = array(
-            'site_id' => $this->site_id
-        );
+        $data = [
+            'site_id' => $this->site_id,
+        ];
 
         if ($this->site_id != 1) {
             $stats = $this->getModelFacade()->get('Stats')
@@ -293,5 +300,3 @@ class Site extends Model
         }
     }
 }
-
-

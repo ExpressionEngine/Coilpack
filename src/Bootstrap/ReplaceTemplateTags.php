@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\View;
 
 class ReplaceTemplateTags
 {

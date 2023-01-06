@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content\Display;
 
-use ExpressionEngine\Service\Validation\Result;
 use ExpressionEngine\Service\Alert\Alert;
+use ExpressionEngine\Service\Validation\Result;
 
 /**
  * Display Layout Tab
@@ -12,13 +11,16 @@ use ExpressionEngine\Service\Alert\Alert;
 class LayoutTab
 {
     public $id;
+
     public $title;
 
     protected $fields;
+
     protected $visible = true;
+
     protected $alert;
 
-    public function __construct($id, $title, array $fields = array())
+    public function __construct($id, $title, array $fields = [])
     {
         $this->id = $id;
         $this->title = $title;

@@ -2,13 +2,12 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Queries;
 
-use GraphQL\Type\Definition\Type;
+use Expressionengine\Coilpack\Models\Category\Category;
 use GraphQL\Type\Definition\ResolveInfo;
-use Rebing\GraphQL\Support\SelectFields;
+use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-
-use Expressionengine\Coilpack\Models\Category\Category;
+use Rebing\GraphQL\Support\SelectFields;
 
 class CategoriesQuery extends Query
 {
@@ -25,14 +24,14 @@ class CategoriesQuery extends Query
     {
         return [
             'channel' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'status' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'limit' => [
-                'type' => Type::int()
-            ]
+                'type' => Type::int(),
+            ],
 
         ];
     }

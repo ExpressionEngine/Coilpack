@@ -39,6 +39,6 @@ class BooleanString implements CastsAttributes
      */
     private function isTruthy($value)
     {
-        return ($value === true || $value === 'y' || $value === 1);
+        return $value === true || $value === 'y' || $value === 1;
     }
 }

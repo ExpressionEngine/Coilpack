@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Message;
 
 use Expressionengine\Coilpack\Model;
@@ -13,23 +12,24 @@ use Expressionengine\Coilpack\Model;
 class Copy extends Model
 {
     protected $primaryKey = 'copy_id';
+
     protected $table = 'message_copies';
 
     protected static $_relationships = [
         'Message' => [
             'type' => 'belongsTo',
-            'model' => 'Message'
+            'model' => 'Message',
         ],
         'Sender' => [
             'type' => 'belongsTo',
             'model' => 'Member',
-            'from_key' => 'sender_id'
+            'from_key' => 'sender_id',
         ],
         'Recipient' => [
             'type' => 'belongsTo',
             'model' => 'Member',
-            'from_key' => 'recipient_id'
-        ]
+            'from_key' => 'recipient_id',
+        ],
     ];
 
     protected $casts = [
@@ -43,10 +43,6 @@ class Copy extends Model
         'attachment_downloaded' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'message_authcode' => 'string',
         'message_deleted' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-        'message_status' => 'string'
+        'message_status' => 'string',
     ];
-
 }
-
-
-

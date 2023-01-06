@@ -7,7 +7,6 @@ use Traversable;
 
 class TagBuilder extends Tag implements \IteratorAggregate
 {
-
     /**
      * The name of the module
      *
@@ -68,7 +67,7 @@ class TagBuilder extends Tag implements \IteratorAggregate
      * parameters or possible method names we will just always return true
      *
      * @param [type] $key
-     * @return boolean
+     * @return bool
      */
     public function __isset($key)
     {
@@ -94,7 +93,7 @@ class TagBuilder extends Tag implements \IteratorAggregate
         $output = $this->run();
 
         // Automatically unwrap an array with single item when converting to string
-        if($output instanceof \Countable && count($output) === 1) {
+        if ($output instanceof \Countable && count($output) === 1) {
             return (string) $output[0];
         }
 
@@ -103,30 +102,30 @@ class TagBuilder extends Tag implements \IteratorAggregate
 
     public function run()
     {
-        $output = Coilpack::isolateTemplateLibrary(function($template) {
+        $output = Coilpack::isolateTemplateLibrary(function ($template) {
             $output = $this->getInstanceClass()->{$this->method}();
             // If the Tag stored data for us in the template library that is preferable to the generated output
             return $template->get_data() ?: $output;
         }, $this->parameters);
 
-        return is_array($output) && is_array(current($output)) ? collect($output)->map(function($row) {
+        return is_array($output) && is_array(current($output)) ? collect($output)->map(function ($row) {
             return \Expressionengine\Coilpack\FieldtypeOutput::make($row);
         }) : \Expressionengine\Coilpack\FieldtypeOutput::make($output);
     }
 
     private function getInstanceClass()
     {
-        $class = '\\' . ltrim($this->instance->getFrontendClass(), '\\');
+        $class = '\\'.ltrim($this->instance->getFrontendClass(), '\\');
 
         return new $class;
     }
 
     private function processArguments($value)
     {
-        if(is_array($value)) {
-            if(count($value) > 1) {
+        if (is_array($value)) {
+            if (count($value) > 1) {
                 return $value;
-            }else{
+            } else {
                 $value = current($value);
             }
         }
@@ -138,11 +137,10 @@ class TagBuilder extends Tag implements \IteratorAggregate
     {
         $output = $this->run();
 
-        if($output instanceof \IteratorAggregate) {
+        if ($output instanceof \IteratorAggregate) {
             return $output->getIterator();
         }
 
         return new \ArrayIterator(is_array($output) ? $output : []);
     }
-
 }

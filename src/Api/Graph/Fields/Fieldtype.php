@@ -2,11 +2,10 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Fields;
 
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Field;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Field;
 
 class Fieldtype extends Field
 {
@@ -24,12 +23,13 @@ class Fieldtype extends Field
     public function setField($field)
     {
         $this->attributes['field'] = $field;
+
         return $this;
     }
 
     public function type(): Type
     {
-        if($this->attributes['type'] ?? false) {
+        if ($this->attributes['type'] ?? false) {
             return $this->attributes['type'];
         }
 
@@ -40,9 +40,9 @@ class Fieldtype extends Field
 
     protected function getFieldtype()
     {
-        if($this->attributes['field'] ?? false) {
+        if ($this->attributes['field'] ?? false) {
             return $this->attributes['field']->getFieldtype();
-        }elseif($this->attributes['fieldtype'] ?? false) {
+        } elseif ($this->attributes['fieldtype'] ?? false) {
             return $this->attributes['fieldtype'];
         }
 
@@ -54,7 +54,7 @@ class Fieldtype extends Field
         $fieldtype = $this->getFieldtype();
         $modifiers = ($fieldtype) ? $fieldtype->modifiers() : [];
 
-        $args = collect($modifiers)->transform(function($modifier) {
+        $args = collect($modifiers)->transform(function ($modifier) {
             return $modifier->toGraphQL();
         });
 
@@ -63,15 +63,15 @@ class Fieldtype extends Field
 
     protected function resolve($root, array $args)
     {
-        if($this->attributes['resolve'] ?? false && is_callable($this->attributes['resolve'])) {
+        if ($this->attributes['resolve'] ?? false && is_callable($this->attributes['resolve'])) {
             $data = $this->attributes['resolve']($root, $args);
         } else {
             $data = $root->{$this->getProperty()};
         }
 
         // apply modifiers;
-        if (!empty($args)) {
-            foreach($args as $key => $value) {
+        if (! empty($args)) {
+            foreach ($args as $key => $value) {
                 return $data->callModifier($key, $value);
             }
         }

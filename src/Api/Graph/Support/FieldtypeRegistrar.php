@@ -2,19 +2,21 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Support;
 
-use Expressionengine\Coilpack\Fieldtypes\Fieldtype;
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
-use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Contracts\GeneratesGraphType;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
+use Expressionengine\Coilpack\FieldtypeManager;
+use Expressionengine\Coilpack\Fieldtypes\Fieldtype;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
-use Rebing\GraphQL\Support\Facades\GraphQL;
+use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class FieldtypeRegistrar {
-
+class FieldtypeRegistrar
+{
     protected $types = [];
+
     protected $inputs = [];
+
     protected $booted = false;
 
     public function __construct(FieldtypeManager $manager)
@@ -24,7 +26,7 @@ class FieldtypeRegistrar {
 
     public function boot()
     {
-        if($this->booted) {
+        if ($this->booted) {
             return;
         }
 
@@ -56,10 +58,10 @@ class FieldtypeRegistrar {
     {
         $fieldtypes = $this->fieldtypeManager->allFieldtypes();
 
-        foreach($fieldtypes as $fieldtype) {
+        foreach ($fieldtypes as $fieldtype) {
             $fieldtype = app(FieldtypeManager::class)->make($fieldtype->name);
             $this->registerFieldtype($fieldtype);
-            foreach($fieldtype->modifiers() as $modifier) {
+            foreach ($fieldtype->modifiers() as $modifier) {
                 $this->registerModifier($modifier);
             }
         }
@@ -69,11 +71,11 @@ class FieldtypeRegistrar {
     {
         $name = $modifier->getQualifiedName();
 
-        if(array_key_exists($name, $this->inputs)) {
+        if (array_key_exists($name, $this->inputs)) {
             return GraphQL::type($name);
         }
 
-        if(empty($modifier->parameters)) {
+        if (empty($modifier->parameters)) {
             return null;
         }
 
@@ -81,7 +83,7 @@ class FieldtypeRegistrar {
             'name' => $name,
             'fields' => function () use ($modifier) {
                 return $modifier->parameters;
-            }
+            },
         ]);
 
         GraphQL::addType($typeDefinition, $name);
@@ -98,11 +100,11 @@ class FieldtypeRegistrar {
     {
         $fieldtype = $field->getFieldType();
 
-        if($type = $this->registerFieldtype($fieldtype)) {
+        if ($type = $this->registerFieldtype($fieldtype)) {
             return $type;
         }
 
-        if(array_key_exists($field->field_name, $this->types)) {
+        if (array_key_exists($field->field_name, $this->types)) {
             return $this->types[$field->field_name];
         }
 
@@ -110,9 +112,9 @@ class FieldtypeRegistrar {
 
         $typeDefinition = new GeneratedType([
             'name' => $name,
-            'fields' => function() use($fieldtype, $field) {
+            'fields' => function () use ($fieldtype, $field) {
                 return $fieldtype->generateGraphType($field);
-            }
+            },
         ]);
 
         GraphQL::addType($typeDefinition, $name);
@@ -131,7 +133,7 @@ class FieldtypeRegistrar {
             return $this->types[$fieldtype->name];
         }
 
-        if(! $fieldtype instanceof GeneratesGraphType) {
+        if (! $fieldtype instanceof GeneratesGraphType) {
             $type = $fieldtype->graphType();
             $this->types[$fieldtype->name] = $type;
 
@@ -143,7 +145,7 @@ class FieldtypeRegistrar {
     {
         $type = $this->getType($field->field_name);
         $type = $type ?: $this->getType($field->field_type);
-        if($type === null) {
+        if ($type === null) {
             dd($field->field_name, $field->field_type, $field->getFieldType(), $this->types);
         }
 
@@ -158,6 +160,7 @@ class FieldtypeRegistrar {
 
         if (array_key_exists($field, $this->types)) {
             $type = $this->types[$field];
+
             return (is_string($type)) ? GraphQL::type($type) : $this->types[$field];
         }
 
@@ -173,6 +176,4 @@ class FieldtypeRegistrar {
     {
         dd($this->allTypes(), GraphQL::getTypes());
     }
-
-
 }

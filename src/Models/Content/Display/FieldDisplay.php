@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content\Display;
 
 /**
@@ -9,7 +8,9 @@ namespace Expressionengine\Coilpack\Models\Content\Display;
 class FieldDisplay
 {
     protected $field;
+
     protected $collapsed = false;
+
     protected $visible = true;
 
     public function __construct($field)
@@ -92,6 +93,7 @@ class FieldDisplay
     {
         return $this->collapsed;
     }
+
     public function hide()
     {
         $this->visible = false;
@@ -125,5 +127,3 @@ class FieldDisplay
         return $this;
     }
 }
-
-

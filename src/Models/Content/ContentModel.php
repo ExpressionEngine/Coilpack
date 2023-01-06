@@ -1,13 +1,12 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Service\Model\VariableColumnModel;
 use ExpressionEngine\Model\Content\Display\DefaultLayout;
 use ExpressionEngine\Model\Content\Display\FieldDisplay;
 use ExpressionEngine\Model\Content\Display\LayoutInterface;
+use ExpressionEngine\Service\Model\VariableColumnModel;
 
 /**
  * create: new ChannelEntry()->getForm();
@@ -17,15 +16,17 @@ use ExpressionEngine\Model\Content\Display\LayoutInterface;
  */
 abstract class ContentModel extends VariableColumnModel
 {
-    protected static $_events = array(
+    protected static $_events = [
         'afterSave',
         'afterInsert',
         'afterUpdate',
-        'beforeDelete'
-    );
+        'beforeDelete',
+    ];
 
     protected $_field_facades;
-    protected $_field_was_saved = array();
+
+    protected $_field_was_saved = [];
+
     protected $_custom_fields_loaded = false;
 
     /**
@@ -40,7 +41,7 @@ abstract class ContentModel extends VariableColumnModel
      * Get the prefix for custom fields. Typically custom fields are
      * stored as 'field_id_#' where # is the field id.
      *
-     * @return String Custom field column prefix
+     * @return string Custom field column prefix
      */
     public function getCustomFieldPrefix()
     {
@@ -54,7 +55,7 @@ abstract class ContentModel extends VariableColumnModel
      */
     protected function getDefaultFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -67,7 +68,7 @@ abstract class ContentModel extends VariableColumnModel
             $field->postSave();
         }
 
-        $this->_field_was_saved = array();
+        $this->_field_was_saved = [];
     }
 
     public function onAfterInsert()
@@ -123,7 +124,7 @@ abstract class ContentModel extends VariableColumnModel
     {
         $this->usesCustomFields();
 
-        return $this->_field_facades ?: array();
+        return $this->_field_facades ?: [];
     }
 
     /**
@@ -137,8 +138,8 @@ abstract class ContentModel extends VariableColumnModel
     }
 
     /**
-    * Get a list of all custom field names
-    */
+     * Get a list of all custom field names
+     */
     public function getCustomFieldNames()
     {
         $this->usesCustomFields();
@@ -171,10 +172,10 @@ abstract class ContentModel extends VariableColumnModel
      * Safely updates any properties that might exist,
      * passing them through the getters along the way.
      *
-     * @param array $data Data to update
+     * @param  array  $data Data to update
      * @return $this
      */
-    public function set(array $data = array())
+    public function set(array $data = [])
     {
         $this->usesCustomFields();
 
@@ -184,7 +185,7 @@ abstract class ContentModel extends VariableColumnModel
     /**
      * Make sure that calls to fill() also apply to custom fields
      */
-    public function fill(array $data = array())
+    public function fill(array $data = [])
     {
         parent::fill($data);
 
@@ -265,7 +266,7 @@ abstract class ContentModel extends VariableColumnModel
                 $rules[$name] .= 'required|';
             }
 
-            $rules[$name] .= "validateCustomField";
+            $rules[$name] .= 'validateCustomField';
         }
 
         return $rules;
@@ -297,12 +298,12 @@ abstract class ContentModel extends VariableColumnModel
     /**
      * Populate the custom fields on fill()
      */
-    protected function fillCustomFields(array $data = array())
+    protected function fillCustomFields(array $data = [])
     {
         $this->setDataOnCustomFields($data);
     }
 
-    protected function setDataOnCustomFields(array $data = array())
+    protected function setDataOnCustomFields(array $data = [])
     {
         foreach ($data as $name => $value) {
             // Optimization, skip if null
@@ -341,7 +342,7 @@ abstract class ContentModel extends VariableColumnModel
      */
     protected function initializeCustomFields()
     {
-        $this->_field_facades = array();
+        $this->_field_facades = [];
         $default_fields = $this->getDefaultFields();
 
         foreach ($default_fields as $id => $field) {
@@ -384,16 +385,16 @@ abstract class ContentModel extends VariableColumnModel
      */
     protected function addFacade($id, $info, $name_prefix = '')
     {
-        $name = $name_prefix . $id;
+        $name = $name_prefix.$id;
         $format = null;
 
         if (array_key_exists('field_fmt', $info)) {
             $format = $info['field_fmt'];
         }
 
-        if ($this->hasProperty('field_ft_' . $id)) {
-            $format = $this->getProperty('field_ft_' . $id) ?: $format;
-            $this->setProperty('field_ft_' . $id, $format);
+        if ($this->hasProperty('field_ft_'.$id)) {
+            $format = $this->getProperty('field_ft_'.$id) ?: $format;
+            $this->setProperty('field_ft_'.$id, $format);
         }
 
         $facade = new FieldFacade($id, $info);
@@ -413,7 +414,7 @@ abstract class ContentModel extends VariableColumnModel
      * tables. If the list of changed properties is not supplied we will get
      * the list of dirty properties.
      *
-     * @param array $changed An associative array of class properties that have changed
+     * @param  array  $changed An associative array of class properties that have changed
      */
     public function saveFieldData($changed = null)
     {
@@ -430,7 +431,7 @@ abstract class ContentModel extends VariableColumnModel
                 continue;
             }
 
-            $values = array();
+            $values = [];
 
             foreach ($field->getColumnNames() as $column) {
                 if (array_key_exists($column, $dirty)) {
@@ -479,7 +480,7 @@ abstract class ContentModel extends VariableColumnModel
      */
     protected function deleteFieldData()
     {
-        $tables = array();
+        $tables = [];
 
         foreach ($this->getStructure()->getAllCustomFields() as $field) {
             // Skip this field if it is in `exp_channel_data`
@@ -497,5 +498,3 @@ abstract class ContentModel extends VariableColumnModel
         }
     }
 }
-
-

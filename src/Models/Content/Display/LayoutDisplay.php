@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content\Display;
 
 use InvalidArgumentException;
@@ -11,14 +10,14 @@ use InvalidArgumentException;
 class LayoutDisplay
 {
     /**
-     * @var $tabs An array of LayouTab objects
+     * @var An array of LayouTab objects
      */
-    protected $tabs = array();
+    protected $tabs = [];
 
     /**
      * Adds a LayoutTab to the display
      *
-     * @param LayoutTab $tab The LayoutTab to add
+     * @param  LayoutTab  $tab The LayoutTab to add
      * @return void
      */
     public function addTab(LayoutTab $tab)
@@ -29,7 +28,7 @@ class LayoutDisplay
     /**
      * Sets the tabs (in bulk) to the display
      *
-     * @param array $tab An array of LayoutTabs
+     * @param  array  $tab An array of LayoutTabs
      * @return void
      */
     public function setTabs(array $tabs)
@@ -42,14 +41,15 @@ class LayoutDisplay
     /**
      * Fetches a LayoutTab based on its tab id.
      *
-     * @throws InvalidArgumentException When no tab with the given id is available
-     * @param mixed $tab_id The id of the tab
+     * @param  mixed  $tab_id The id of the tab
      * @return LayoutTab The requested LayoutTab
+     *
+     * @throws InvalidArgumentException When no tab with the given id is available
      */
     public function getTab($tab_id)
     {
         if (! array_key_exists($tab_id, $this->tabs)) {
-            throw new InvalidArgumentException("No such tab: '{$tab_id}' on " . get_called_class());
+            throw new InvalidArgumentException("No such tab: '{$tab_id}' on ".get_called_class());
         }
 
         return $this->tabs[$tab_id];
@@ -72,7 +72,7 @@ class LayoutDisplay
      */
     public function getFields()
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($this->getTabs() as $tab) {
             $fields = array_merge($fields, $tab->getFields());
@@ -85,7 +85,7 @@ class LayoutDisplay
      * Sets a flag to let fieldtypes know whether or not they are in a modal
      * view so they can enable/disable certain functionality
      *
-     * @param boolean TRUE if in modal, FALSE if not
+     * @param bool TRUE if in modal, FALSE if not
      */
     public function setIsInModalContext($in_modal)
     {
@@ -94,5 +94,3 @@ class LayoutDisplay
         }
     }
 }
-
-

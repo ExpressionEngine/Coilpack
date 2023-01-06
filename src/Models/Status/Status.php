@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Status;
 
 use Expressionengine\Coilpack\Model;
-use Mexitek\PHPColors\Color;
 
 /**
  * Status Model
@@ -12,44 +10,42 @@ use Mexitek\PHPColors\Color;
 class Status extends Model
 {
     protected $primaryKey = 'status_id';
+
     protected $table = 'statuses';
 
     protected static $_hook_id = 'status';
 
-    protected $casts = array(
+    protected $casts = [
         'site_id' => 'integer',
         'group_id' => 'integer',
-        'status_order' => 'integer'
-    );
+        'status_order' => 'integer',
+    ];
 
-    protected static $_relationships = array(
-        'Channels' => array(
+    protected static $_relationships = [
+        'Channels' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Channel',
-            'pivot' => array(
-                'table' => 'channels_statuses'
-            ),
+            'pivot' => [
+                'table' => 'channels_statuses',
+            ],
             'weak' => true,
-        ),
+        ],
         'ChannelEntries' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntry',
-            'weak' => true
+            'weak' => true,
         ],
-        'Site' => array(
-            'type' => 'BelongsTo'
-        ),
-        'Roles' => array(
+        'Site' => [
+            'type' => 'BelongsTo',
+        ],
+        'Roles' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Role',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'statuses_roles',
                 'left' => 'status_id',
-                'right' => 'role_id'
-            )
-        )
-    );
-
+                'right' => 'role_id',
+            ],
+        ],
+    ];
 }
-
-

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Role;
 
 use Expressionengine\Coilpack\Model;
@@ -12,6 +11,7 @@ use Expressionengine\Coilpack\Models\Member\Member;
 class MemberRole extends Model
 {
     protected $primaryKey = 'member_id';
+
     protected $table = 'members_roles';
 
     public function members()

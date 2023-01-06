@@ -4,11 +4,11 @@ namespace Expressionengine\Coilpack\Api\Graph\Types;
 
 // use Expressionengine\Coilpack\Api\Graph\Fields\FormattableDate;
 use Expressionengine\Coilpack\Api\Graph\Fields;
-use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry as ChannelEntryModel;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class ChannelEntry extends GraphQLType
@@ -16,9 +16,8 @@ class ChannelEntry extends GraphQLType
     protected $attributes = [
         'name' => 'ChannelEntry',
         'description' => 'Collection of channel entries',
-        'model' => ChannelEntryModel::class
+        'model' => ChannelEntryModel::class,
     ];
-
 
     public function fields(): array
     {
@@ -99,17 +98,17 @@ class ChannelEntry extends GraphQLType
     {
         $fields = app(FieldtypeManager::class)->allFields('channel');
 
-        return $fields->flatMap(function($field) {
+        return $fields->flatMap(function ($field) {
             return [
                 $field->field_name => new Fields\Fieldtype([
-                        'type' => app(FieldtypeRegistrar::class)->getTypeForField($field) ?: \GraphQL\Type\Definition\Type::string(),
-                        'field' => $field,
-                        'selectable' => false,
-                        'is_relation' => false,
-                        'resolve' => function ($root, array $args) use($field) {
-                            return $root->{$field->field_name};
-                        }
-                    ])
+                    'type' => app(FieldtypeRegistrar::class)->getTypeForField($field) ?: \GraphQL\Type\Definition\Type::string(),
+                    'field' => $field,
+                    'selectable' => false,
+                    'is_relation' => false,
+                    'resolve' => function ($root, array $args) use ($field) {
+                        return $root->{$field->field_name};
+                    },
+                ]),
             ];
         })->toArray();
     }

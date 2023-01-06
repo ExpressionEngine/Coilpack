@@ -2,9 +2,9 @@
 
 namespace Expressionengine\Coilpack\View\Tags\Email;
 
-use Expressionengine\Coilpack\View\FormTag;
-use Expressionengine\Coilpack\Traits\InteractsWithAddon;
 use Expressionengine\Coilpack\Models\Addon\Action;
+use Expressionengine\Coilpack\Traits\InteractsWithAddon;
+use Expressionengine\Coilpack\View\FormTag;
 
 class ContactForm extends FormTag
 {
@@ -29,11 +29,11 @@ class ContactForm extends FormTag
         ee()->load->library('session');
 
         // Conditionals
-        $data = array(
+        $data = [
             'logged_in' => (ee()->session->userdata('member_id') != 0),
             'logged_out' => (ee()->session->userdata('member_id') == 0),
             'captcha' => null,
-        );
+        ];
 
         if ($this->addonInstance->use_captchas == 'y' && ee()->config->item('use_recaptcha') == 'y') {
             $captcha = ee('Captcha')->create();
@@ -42,7 +42,7 @@ class ContactForm extends FormTag
 
         // Process default variables
         $postVars = ['message', 'name', 'to', 'from', 'subject', 'required'];
-        foreach($postVars as $key ) {
+        foreach ($postVars as $key) {
             // Adding slashes since they removed in _setup_form
             $var = addslashes(
                 \form_prep(
@@ -62,7 +62,7 @@ class ContactForm extends FormTag
             'member_email' => (ee()->session->userdata['email'] == '') ? '' : ee()->session->userdata['email'],
         ];
 
-        foreach($memberVars as $key => $value) {
+        foreach ($memberVars as $key => $value) {
             $data[$key] = \form_prep(ee()->functions->encode_ee_tags($value, true));
         }
 
@@ -81,11 +81,12 @@ class ContactForm extends FormTag
         $this->attributes = $data;
     }
 
-    public function setUserRecipientsParameter($enable) {
+    public function setUserRecipientsParameter($enable)
+    {
         return \get_bool_from_string($enable);
     }
 
-    public function open($data = array())
+    public function open($data = [])
     {
         // Recipient Email Checking
         $this->_user_recipients = \get_bool_from_string(
@@ -113,7 +114,7 @@ class ContactForm extends FormTag
             'recipients' => $this->encrypt($recipients),
             'user_recipients' => $this->encrypt(($this->_user_recipients) ? 'y' : 'n'),
             'replyto' => $this->replyTo,
-            'markdown' => $this->encrypt(($this->markdown) ? 'y' : 'n')
+            'markdown' => $this->encrypt(($this->markdown) ? 'y' : 'n'),
         ];
 
         if ($this->name && preg_match("#^[a-zA-Z0-9_\-]+$#i", $this->name, $match)) {
@@ -138,10 +139,10 @@ class ContactForm extends FormTag
                 ee()->functions->ar_andor_string($channel, 'c.channel_name');
             }
 
-            $table = (!is_numeric($entry_id)) ? 'ct.url_title' : 'ct.entry_id';
+            $table = (! is_numeric($entry_id)) ? 'ct.url_title' : 'ct.entry_id';
 
             $query = ee()->db->select('m.username, m.email, m.screen_name')
-            ->from(array('channel_titles ct', 'members m'))
+            ->from(['channel_titles ct', 'members m'])
             ->where('m.member_id = ct.author_id', '', false)
             ->where($table, $entry_id)
                 ->get();
@@ -160,5 +161,4 @@ class ContactForm extends FormTag
     {
         return (array_key_exists($key, $this->attributes)) ? $this->attributes[$key] : null;
     }
-
 }

@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Service\Model\Collection;
 
 /**
  * Channel Model
@@ -12,6 +10,7 @@ use ExpressionEngine\Service\Model\Collection;
 class Channel extends Model
 {
     protected $primaryKey = 'channel_id';
+
     protected $table = 'channels';
 
     // Properties
@@ -41,7 +40,7 @@ class Channel extends Model
         'allow_preview' => true,
     ];
 
-    protected $casts = array(
+    protected $casts = [
         'deft_comments' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'channel_require_membership' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'channel_allow_img_urls' => \Expressionengine\Coilpack\Casts\BooleanString::class,
@@ -57,17 +56,17 @@ class Channel extends Model
         'comment_notify' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'comment_notify_authors' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'enable_versioning' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-        'search_excerpt' => 'integer'
-    );
+        'search_excerpt' => 'integer',
+    ];
 
     public function fieldGroups()
     {
-        return $this->belongsToMany(ChannelFieldGroup::class, 'channels_channel_field_groups', 'channel_id', 'group_id', 'channel_id','group_id');
+        return $this->belongsToMany(ChannelFieldGroup::class, 'channels_channel_field_groups', 'channel_id', 'group_id', 'channel_id', 'group_id');
     }
 
     public function allFields()
     {
-        if(!$this->exists) {
+        if (! $this->exists) {
             return ChannelField::all()->keyBy('field_id');
         }
 
@@ -95,7 +94,4 @@ class Channel extends Model
     {
         return $this->hasMany(ChannelEntry::class, 'channel_id', 'channel_id');
     }
-
 }
-
-

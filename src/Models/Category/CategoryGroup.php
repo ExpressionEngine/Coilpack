@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Category;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Model\Content\StructureModel;
 
 /**
  * Category Group Model
@@ -12,6 +10,7 @@ use ExpressionEngine\Model\Content\StructureModel;
 class CategoryGroup extends Model
 {
     protected $primaryKey = 'group_id';
+
     protected $table = 'category_groups';
 
     public function categories()
@@ -23,8 +22,4 @@ class CategoryGroup extends Model
     {
         return $this->hasMany(CategoryField::class);
     }
-
-
 }
-
-

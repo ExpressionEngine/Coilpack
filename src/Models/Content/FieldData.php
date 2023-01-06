@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Content;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Service\Model\VariableColumnModel;
 use ExpressionEngine\Model\Content\FieldModel;
+use ExpressionEngine\Service\Model\VariableColumnModel;
 
 /**
  * ExpressionEngine FieldData Model
@@ -13,9 +12,11 @@ use ExpressionEngine\Model\Content\FieldModel;
 class FieldData extends VariableColumnModel
 {
     protected $primaryKey = 'id';
+
     protected $table = 'channel_data_field_';
 
     protected $id;
+
     protected $entry_id;
 
     public function forField(FieldModel $field)
@@ -25,5 +26,3 @@ class FieldData extends VariableColumnModel
         return $this;
     }
 }
-
-

@@ -4,7 +4,6 @@ namespace Expressionengine\Coilpack\View;
 
 class FilteredParameterValue
 {
-
     protected $attributes;
 
     public function __construct($value)
@@ -17,12 +16,12 @@ class FilteredParameterValue
 
     public function hasIncludes()
     {
-        return !empty($this->includes());
+        return ! empty($this->includes());
     }
 
     public function hasExcludes()
     {
-        return !empty($this->excludes());
+        return ! empty($this->excludes());
     }
 
     public function includes()
@@ -64,10 +63,10 @@ class FilteredParameterValue
 
     protected function categorize(array $values)
     {
-        return array_reduce($values, function($carry, $value) {
-            if(strpos($value, 'not ') === 0) {
+        return array_reduce($values, function ($carry, $value) {
+            if (strpos($value, 'not ') === 0) {
                 array_push($carry['exclude'], substr($value, 4));
-            }else{
+            } else {
                 array_push($carry['include'], $value);
             }
 
@@ -77,8 +76,4 @@ class FilteredParameterValue
             'exclude' => [],
         ]);
     }
-
-
-
-
 }

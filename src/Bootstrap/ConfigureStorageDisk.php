@@ -2,12 +2,8 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Exception;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Str;
-
 
 class ConfigureStorageDisk
 {
@@ -23,7 +19,7 @@ class ConfigureStorageDisk
         $absolute = (Str::startsWith($path, DIRECTORY_SEPARATOR));
         $basePath = Str::finish($absolute ? $path : base_path($path), DIRECTORY_SEPARATOR);
 
-        if (!realpath($basePath)) {
+        if (! realpath($basePath)) {
             return;
             // throw new \Exception('ExpressionEngine folder missing.');
         }

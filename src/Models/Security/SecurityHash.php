@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Security;
 
 use Expressionengine\Coilpack\Model;
@@ -11,14 +10,12 @@ use Expressionengine\Coilpack\Model;
 class SecurityHash extends Model
 {
     protected $primaryKey = 'hash_id';
+
     protected $table = 'security_hashes';
 
-    protected static $_relationships = array(
-        'Session' => array(
-            'type' => 'belongsTo'
-        )
-    );
-
+    protected static $_relationships = [
+        'Session' => [
+            'type' => 'belongsTo',
+        ],
+    ];
 }
-
-

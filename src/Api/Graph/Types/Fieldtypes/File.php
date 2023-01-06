@@ -2,7 +2,6 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes;
 
-use Expressionengine\Coilpack\Api\Graph\Fields\FormattableDate;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
@@ -14,67 +13,65 @@ class File extends GraphQLType
         // 'model' => ChannelModel::class
     ];
 
-
     public function fields(): array
     {
         return [
             'file_name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
 
             // Set additional data based on what we've gathered
             'raw_output' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'raw_content' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'extension' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'filename' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
-
 
             'path' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'url' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
 
             'file_hw_original' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
 
             'width' => [
-                'type' => Type::int()
+                'type' => Type::int(),
             ],
             'height' => [
-                'type' => Type::int()
+                'type' => Type::int(),
             ],
 
             // Pre and post formatting
             'image_pre_format' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'image_post_format' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'file_pre_format' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'file_post_format' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
 
             // Image/file properties
             'image_properties' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
             'file_properties' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
 
             'file_size_human' => [
@@ -91,10 +88,10 @@ class File extends GraphQLType
             ],
 
             'directory_id' => [
-                'type' => Type::int()
+                'type' => Type::int(),
             ],
             'directory_title' => [
-                'type' => Type::string()
+                'type' => Type::string(),
             ],
         ];
     }

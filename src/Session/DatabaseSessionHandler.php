@@ -6,11 +6,11 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Session\ExistenceAwareInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\InteractsWithTime;
 use SessionHandlerInterface;
-use Illuminate\Session\ExistenceAwareInterface;
 
 class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerInterface
 {
@@ -112,7 +112,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
             return base64_decode($session->payload);
         }
 
-        return serialize((array)$session);
+        return serialize((array) $session);
 
         return '';
     }
@@ -139,7 +139,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     {
         $payload = $this->getDefaultPayload($data);
 
-        if (!$this->exists) {
+        if (! $this->exists) {
             $this->read($sessionId);
         }
 
@@ -193,7 +193,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
             'last_activity' => $this->currentTime(),
         ];
 
-        if (!$this->container) {
+        if (! $this->container) {
             return $payload;
         }
 

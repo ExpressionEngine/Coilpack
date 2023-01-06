@@ -3,14 +3,13 @@
 namespace Expressionengine\Coilpack\View;
 
 // use ExpressionEngine\Service\Template\EE_Template;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-use TwigBridge\Facade\Twig;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
+use TwigBridge\Facade\Twig;
 
-class TemplateStub extends \EE_Template {
-
+class TemplateStub extends \EE_Template
+{
     protected $data_capture = [];
 
     public function __construct()
@@ -18,7 +17,7 @@ class TemplateStub extends \EE_Template {
         parent::__construct();
 
         $this->tagparams = [
-            'dynamic' => 'no'
+            'dynamic' => 'no',
         ];
 
         $this->site_ids = [ee()->config->item('site_id')];
@@ -30,7 +29,7 @@ class TemplateStub extends \EE_Template {
 
         $this->process_data = false;
 
-        if(!isset($this->template_engine)) {
+        if (! isset($this->template_engine)) {
             $this->template_engine = '';
         }
     }
@@ -62,6 +61,7 @@ class TemplateStub extends \EE_Template {
     {
         $str = str_replace('{!-- template:twig --}', '{# template:twig #}', $str);
         $str = str_replace('{!-- template:blade --}', '{{-- template:blade --}}', $str);
+
         return parent::remove_ee_comments($str);
     }
 
@@ -75,17 +75,17 @@ class TemplateStub extends \EE_Template {
         $data = (method_exists(get_parent_class($this), 'get_data')) ? parent::get_data() : null;
 
         // Prefer any data that was set explicitly with set_data()
-        if(!is_null($data)) {
+        if (! is_null($data)) {
             return $data;
         }
 
         // Use data captured from a call to parse_variables()
-        if(!empty($this->data_capture['parse_variables'])) {
+        if (! empty($this->data_capture['parse_variables'])) {
             return $this->data_capture['parse_variables'];
         }
 
         // Use data captured from a call to parse_variables_row()
-        if (!empty($this->data_capture['parse_variables_row'])) {
+        if (! empty($this->data_capture['parse_variables_row'])) {
             return count($this->data_capture['parse_variables_row']) > 1
                 ? $this->data_capture['parse_variables_row']
                 : $this->data_capture['parse_variables_row'][0];
@@ -103,19 +103,20 @@ class TemplateStub extends \EE_Template {
      */
     public function parse(&$str, $is_embed = false, $site_id = '', $is_layout = false)
     {
-        $templateName = "ee::" . $this->group_name . "." . $this->template_name;
-        if($this->template_engine === 'twig' || Str::startsWith($this->template, '{# template:twig #}')){
+        $templateName = 'ee::'.$this->group_name.'.'.$this->template_name;
+        if ($this->template_engine === 'twig' || Str::startsWith($this->template, '{# template:twig #}')) {
             // $engine = app('view')->getEngineResolver()->resolve('twig');
             // Tell Laravel's View Factory to render html files with Twig
             // this is necessary for any includes or layouts referenced in this template
             app('view')->addExtension('html', 'twig');
             $template = Twig::createTemplate(str_replace('{# template:twig #}', '', $str), $templateName);
             $rendered = $template->render($this->getData($is_embed));
-            if($is_embed) {
+            if ($is_embed) {
                 $this->template = $rendered;
-            }else{
+            } else {
                 $this->final_template = $rendered;
             }
+
             return;
         }
 
@@ -136,11 +137,11 @@ class TemplateStub extends \EE_Template {
             } else {
                 $this->final_template = $rendered;
             }
+
             return;
         }
 
         return parent::parse($str, $is_embed, $site_id, $is_layout);
-
     }
 
     protected function createView($name, $language, $context)
@@ -161,7 +162,6 @@ class TemplateStub extends \EE_Template {
         return $view->getData();
     }
 
-
     protected function getData($is_embed = false)
     {
         $shared = View::getShared();
@@ -170,31 +170,32 @@ class TemplateStub extends \EE_Template {
         return array_merge(
             $shared,
             $globals,
-            ($is_embed) ? ['embed' => $this->embed_vars]: []
+            ($is_embed) ? ['embed' => $this->embed_vars] : []
         );
     }
 
-
     protected function render($__php, $__data)
     {
-        if (!array_key_exists('__env', $__data)) {
+        if (! array_key_exists('__env', $__data)) {
             $__data['__env'] = app(\Illuminate\View\Factory::class);
         }
         $obLevel = ob_get_level();
         ob_start();
         extract($__data, EXTR_SKIP);
         try {
-            eval('?' . '>' . $__php);
+            eval('?'.'>'.$__php);
         } catch (\Exception $e) {
-            while (ob_get_level() > $obLevel) ob_end_clean();
+            while (ob_get_level() > $obLevel) {
+                ob_end_clean();
+            }
             throw $e;
         } catch (\Throwable $e) {
-            while (ob_get_level() > $obLevel) ob_end_clean();
+            while (ob_get_level() > $obLevel) {
+                ob_end_clean();
+            }
             throw new \Error($e);
         }
+
         return ob_get_clean();
     }
-
-
-
 }

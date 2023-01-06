@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Template;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Service\Model\FileSyncedModel;
 
 /**
  * Template Model
@@ -16,53 +14,51 @@ use ExpressionEngine\Service\Model\FileSyncedModel;
 class Template extends Model
 {
     protected $primaryKey = 'template_id';
+
     protected $table = 'templates';
 
-    protected $casts = array(
+    protected $casts = [
         'cache' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'enable_http_auth' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'allow_php' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'protect_javascript' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'refresh' => 'integer',
         'hits' => 'integer',
-    );
+    ];
 
-    protected static $_relationships = array(
-        'Site' => array(
-            'type' => 'BelongsTo'
-        ),
-        'TemplateGroup' => array(
-            'type' => 'BelongsTo'
-        ),
-        'LastAuthor' => array(
+    protected static $_relationships = [
+        'Site' => [
+            'type' => 'BelongsTo',
+        ],
+        'TemplateGroup' => [
+            'type' => 'BelongsTo',
+        ],
+        'LastAuthor' => [
             'type' => 'BelongsTo',
             'model' => 'Member',
             'from_key' => 'last_author_id',
-            'weak' => true
-        ),
-        'Roles' => array(
+            'weak' => true,
+        ],
+        'Roles' => [
             'type' => 'HasAndBelongsToMany',
             'model' => 'Role',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'templates_roles',
                 'left' => 'template_id',
-                'right' => 'role_id'
-            )
-        ),
-        'TemplateRoute' => array(
-            'type' => 'HasOne'
-        ),
-        'DeveloperLogItems' => array(
+                'right' => 'role_id',
+            ],
+        ],
+        'TemplateRoute' => [
+            'type' => 'HasOne',
+        ],
+        'DeveloperLogItems' => [
             'type' => 'hasMany',
-            'model' => 'DeveloperLog'
-        ),
-        'Versions' => array(
+            'model' => 'DeveloperLog',
+        ],
+        'Versions' => [
             'type' => 'hasMany',
             'model' => 'RevisionTracker',
             'to_key' => 'item_id',
-        )
-    );
-
+        ],
+    ];
 }
-
-

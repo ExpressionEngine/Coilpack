@@ -22,10 +22,10 @@ trait ForwardsAttributes
         try {
             $value = $object->{$attribute};
             $usingTrait = in_array(static::class, class_uses($object));
+
             return $value;
-        } catch (Error | BadMethodCallException $e) {
+        } catch (Error|BadMethodCallException $e) {
             return null;
         }
     }
-
 }

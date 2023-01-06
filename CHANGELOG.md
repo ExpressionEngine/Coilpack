@@ -9,6 +9,7 @@
 
 - Filesystem errors on some Windows environments when running coilpack install command
 - GraphQL fieldtype modifier registration bug
+- Use coding standard
 
 ## [0.0.1] - 2022-12-29
 

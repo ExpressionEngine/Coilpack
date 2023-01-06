@@ -1,24 +1,15 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Member;
 
-use DateTimeZone;
-use ExpressionEngine\Model\Content\ContentModel;
-use ExpressionEngine\Model\Member\Display\MemberFieldLayout;
-use ExpressionEngine\Model\Content\Display\LayoutInterface;
-use ExpressionEngine\Service\Model\Collection;
-use Expressionengine\Coilpack\Models\Role;
-use Expressionengine\Coilpack\Models\Permission\Permission;
-
+use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\FieldtypeManager;
-
+use Expressionengine\Coilpack\Models\Permission\Permission;
+use Expressionengine\Coilpack\Models\Role;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-
 
 /**
  * Member
@@ -32,109 +23,110 @@ class Member extends Model implements AuthorizableContract
     use Authorizable;
 
     protected $primaryKey = 'member_id';
+
     protected $table = 'members';
 
-    protected $casts = array(
-        'cp_homepage_channel' => 'json'
-    );
+    protected $casts = [
+        'cp_homepage_channel' => 'json',
+    ];
 
-    protected static $_relationships = array(
-        'PrimaryRole' => array(
+    protected static $_relationships = [
+        'PrimaryRole' => [
             'type' => 'belongsTo',
             'model' => 'Role',
             'to_key' => 'role_id',
             'from_key' => 'role_id',
-        ),
-        'Roles' => array(
+        ],
+        'Roles' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Role',
-            'pivot' => array(
-                'table' => 'members_roles'
-            ),
-            'weak' => true
-        ),
-        'RoleGroups' => array(
+            'pivot' => [
+                'table' => 'members_roles',
+            ],
+            'weak' => true,
+        ],
+        'RoleGroups' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'RoleGroup',
-            'pivot' => array(
-                'table' => 'members_role_groups'
-            ),
-            'weak' => true
-        ),
-        'AuthoredChannelEntries' => array(
+            'pivot' => [
+                'table' => 'members_role_groups',
+            ],
+            'weak' => true,
+        ],
+        'AuthoredChannelEntries' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntry',
-            'to_key' => 'author_id'
-        ),
+            'to_key' => 'author_id',
+        ],
 
-        'UploadedFiles' => array(
+        'UploadedFiles' => [
             'type' => 'hasMany',
             'model' => 'File',
             'to_key' => 'uploaded_by_member_id',
-            'weak' => true
-        ),
-        'ModifiedFiles' => array(
+            'weak' => true,
+        ],
+        'ModifiedFiles' => [
             'type' => 'hasMany',
             'model' => 'File',
             'to_key' => 'modified_by_member_id',
-            'weak' => true
-        ),
-        'VersionedChannelEntries' => array(
+            'weak' => true,
+        ],
+        'VersionedChannelEntries' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntryVersion',
-            'to_key' => 'author_id'
-        ),
-        'ChannelEntryAutosaves' => array(
+            'to_key' => 'author_id',
+        ],
+        'ChannelEntryAutosaves' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntryAutosave',
-            'to_key' => 'author_id'
-        ),
-        'Comments' => array(
+            'to_key' => 'author_id',
+        ],
+        'Comments' => [
             'type' => 'hasMany',
             'model' => 'Comment',
-            'to_key' => 'author_id'
-        ),
+            'to_key' => 'author_id',
+        ],
 
-        'SiteStatsIfLastMember' => array(
+        'SiteStatsIfLastMember' => [
             'type' => 'hasOne',
             'model' => 'Stats',
             'to_key' => 'recent_member_id',
-            'weak' => true
-        ),
-        'CommentSubscriptions' => array(
+            'weak' => true,
+        ],
+        'CommentSubscriptions' => [
             'type' => 'hasMany',
-            'model' => 'CommentSubscription'
-        ),
-        'NewsView' => array(
+            'model' => 'CommentSubscription',
+        ],
+        'NewsView' => [
             'type' => 'hasOne',
-            'model' => 'MemberNewsView'
-        ),
-        'AuthoredConsentRequests' => array(
+            'model' => 'MemberNewsView',
+        ],
+        'AuthoredConsentRequests' => [
             'type' => 'hasMany',
             'model' => 'ConsentRequestVersion',
             'to_key' => 'author_id',
-            'weak' => true
-        ),
-        'ConsentAuditLogs' => array(
+            'weak' => true,
+        ],
+        'ConsentAuditLogs' => [
             'type' => 'hasMany',
-            'model' => 'ConsentAuditLog'
-        ),
-        'Consents' => array(
+            'model' => 'ConsentAuditLog',
+        ],
+        'Consents' => [
             'type' => 'hasMany',
-            'model' => 'Consent'
-        ),
+            'model' => 'Consent',
+        ],
 
         'RememberMe' => [
-            'type' => 'hasMany'
+            'type' => 'hasMany',
         ],
         'Session' => [
-            'type' => 'hasMany'
+            'type' => 'hasMany',
         ],
         'Online' => [
             'type' => 'hasMany',
-            'model' => 'OnlineMember'
-        ]
-    );
+            'model' => 'OnlineMember',
+        ],
+    ];
 
     public function channelEntries()
     {
@@ -196,16 +188,13 @@ class Member extends Model implements AuthorizableContract
 
         if (is_null($value) && app(FieldtypeManager::class)->hasField($key, 'member')) {
             $this->getRelationValue('data');
-            $value = ($this->data && $this->data->fields()->has($key)) ?  $this->data->fields()->get($key) : new FieldContent([
+            $value = ($this->data && $this->data->fields()->has($key)) ? $this->data->fields()->get($key) : new FieldContent([
                 'field' => app(FieldtypeManager::class)->getField($key, 'member'),
                 'data' => null,
-                'entry' => $this
+                'entry' => $this,
             ]);
         }
 
         return $value;
     }
-
 }
-
-

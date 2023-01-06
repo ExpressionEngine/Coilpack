@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
 use Expressionengine\Coilpack\Model;
@@ -10,11 +8,12 @@ use Expressionengine\Coilpack\Models\Member\Member;
 class ChannelEntryAutosave extends Model
 {
     protected $primaryKey = 'entry_id';
+
     protected $table = 'channel_entries_autosave';
 
-    protected $casts = array(
-        'entry_data' => 'json'
-    );
+    protected $casts = [
+        'entry_data' => 'json',
+    ];
 
     public function entry()
     {
@@ -31,5 +30,3 @@ class ChannelEntryAutosave extends Model
         return $this->belongsTo(Member::class, 'author_id');
     }
 }
-
-

@@ -3,15 +3,14 @@
 namespace Expressionengine\Coilpack\Routing;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
-class TemplateRoute {
-
+class TemplateRoute
+{
     public function __construct()
     {
-
     }
 
     // public function templates($segment, $path, callable $callback = null)
@@ -36,13 +35,13 @@ class TemplateRoute {
             }
 
             $viewPath = str_replace(
-                $namespace . $viewFinder::HINT_PATH_DELIMITER,
-                realpath($namespacePaths[0]) . DIRECTORY_SEPARATOR,
+                $namespace.$viewFinder::HINT_PATH_DELIMITER,
+                realpath($namespacePaths[0]).DIRECTORY_SEPARATOR,
                 $path
             );
         }
 
-        if (!$viewPath) {
+        if (! $viewPath) {
             foreach (array_merge(Arr::flatten(array_values($namespacePaths)), config('view.paths')) as $vp) {
                 $vp = realpath($vp);
                 if (strpos($path, $vp) === 0) {
@@ -61,19 +60,18 @@ class TemplateRoute {
         });
 
         // travel the $path and create routes
-        $templates = array();
+        $templates = [];
         $directoryIterator = new \RecursiveDirectoryIterator($viewPath, \RecursiveDirectoryIterator::SKIP_DOTS);
         $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
         foreach ($iterator as $item) {
             // Note SELF_FIRST, so array keys are in place before values are pushed.
 
             $subPath = $iterator->getSubPathName();
-            $hiddenFile = (Str::startsWith($subPath, '_') || Str::contains($subPath, [DIRECTORY_SEPARATOR . '_']));
+            $hiddenFile = (Str::startsWith($subPath, '_') || Str::contains($subPath, [DIRECTORY_SEPARATOR.'_']));
             $hiddenFolder = Str::startsWith($subPath, ['layouts/']);
             $supportedExtension = in_array($item->getExtension(), $extensions);
 
-            if ($supportedExtension && !$hiddenFile && !$hiddenFolder) {
-
+            if ($supportedExtension && ! $hiddenFile && ! $hiddenFolder) {
                 $directory = str_replace('\\', '/', dirname($subPath));
 
                 $filename = $item->getBasename();
@@ -85,7 +83,7 @@ class TemplateRoute {
                 $view = str_replace('/', '.', implode('.', array_filter([
                     $path,
                     $directory,
-                    $filename
+                    $filename,
                 ])));
 
                 if (in_array($directory, ['home'])) {
@@ -99,13 +97,13 @@ class TemplateRoute {
                 $url = str_replace('//', '/', implode('/', array_filter([
                     $segment,
                     $directory,
-                    $filename
+                    $filename,
                 ])));
 
                 $templates[$url] = [
                     'path' => $subPath,
                     'file' => $item,
-                    'view' => $view
+                    'view' => $view,
                 ];
             }
         }
@@ -117,7 +115,7 @@ class TemplateRoute {
             $bDepth = substr_count($b, DIRECTORY_SEPARATOR);
             if ($aDepth > $bDepth) {
                 return -1;
-            } else if ($bDepth > $aDepth) {
+            } elseif ($bDepth > $aDepth) {
                 return 1;
             } else {
                 return (strlen($a) >= strlen($b)) ? -1 : 1;
@@ -125,11 +123,11 @@ class TemplateRoute {
         });
 
         foreach ($templates as $url => $template) {
-
             Route::any("$url/{any?}", function () use ($template, $callback) {
                 if ($callback) {
                     $callback();
                 }
+
                 return view($template['view']);
             })
             ->where('any', '^(?!themes\/|admin\.php|images\/).*');

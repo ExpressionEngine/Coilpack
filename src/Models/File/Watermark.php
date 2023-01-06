@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\File;
 
 use Expressionengine\Coilpack\Model;
@@ -14,9 +13,10 @@ use Expressionengine\Coilpack\Model;
 class Watermark extends Model
 {
     protected $primaryKey = 'wm_id';
+
     protected $table = 'file_watermarks';
 
-    protected $casts = array(
+    protected $casts = [
         'wm_use_font' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'wm_use_drop_shadow' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         //'wm_font_size'       => 'integer',
@@ -27,16 +27,13 @@ class Watermark extends Model
         //'wm_x_transp'        => 'integer',
         //'wm_y_transp'        => 'integer',
         //'wm_shadow_distance' => 'integer'
-    );
+    ];
 
-    protected static $_relationships = array(
-        'FileDimension' => array(
+    protected static $_relationships = [
+        'FileDimension' => [
             'type' => 'belongsTo',
             'from_key' => 'wm_id',
-            'to_key' => 'watermark_id'
-        )
-    );
-
+            'to_key' => 'watermark_id',
+        ],
+    ];
 }
-
-

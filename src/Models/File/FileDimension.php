@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\File;
 
 use Expressionengine\Coilpack\Model;
@@ -14,26 +13,24 @@ use Expressionengine\Coilpack\Model;
 class FileDimension extends Model
 {
     protected $primaryKey = 'id';
+
     protected $table = 'file_dimensions';
 
-    protected $casts = array(
+    protected $casts = [
         //'width'  => 'integer',
         //'height' => 'integer'
         'quality' => 'integer',
-    );
+    ];
 
-    protected static $_relationships = array(
-        'UploadDestination' => array(
+    protected static $_relationships = [
+        'UploadDestination' => [
             'type' => 'belongsTo',
-            'from_key' => 'upload_location_id'
-        ),
-        'Watermark' => array(
+            'from_key' => 'upload_location_id',
+        ],
+        'Watermark' => [
             'type' => 'hasOne',
             'from_key' => 'watermark_id',
-            'to_key' => 'wm_id'
-        )
-    );
-
+            'to_key' => 'wm_id',
+        ],
+    ];
 }
-
-

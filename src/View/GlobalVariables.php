@@ -3,16 +3,16 @@
 namespace Expressionengine\Coilpack\View;
 
 use ArrayAccess;
-use ArrayIterator;
-use Traversable;
 use Illuminate\Support\Str;
 use IteratorAggregate;
+use Traversable;
 
 class GlobalVariables implements ArrayAccess, IteratorAggregate
 {
-
     protected $variables = [];
+
     protected $reservedCharacters = [':', '->', '.', '-'];
+
     protected $separator = ':';
 
     public function __construct($variables = [])
@@ -23,7 +23,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Find a variable for the given key
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed
      */
     public function find($key)
@@ -32,18 +32,18 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
         $segments = array_reverse(explode($this->separator, $key));
         $variables = $this->variables;
 
-        while (!empty($segments)) {
+        while (! empty($segments)) {
             $segment = array_pop($segments);
 
-            if(!isset($variables[$segment])) {
+            if (! isset($variables[$segment])) {
                 throw new \Exception("Global variable '$key' not defined.");
-            };
+            }
 
-            if(!is_array($variables[$segment])) {
+            if (! is_array($variables[$segment])) {
                 return $variables[$segment];
             }
 
-            if(isset($variables[$segment]['_value']) && empty($segments)) {
+            if (isset($variables[$segment]['_value']) && empty($segments)) {
                 return $variables[$segment]['_value'];
             }
 
@@ -77,22 +77,22 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
                 $pieces = array_reverse(explode($this->separator, $variable));
                 $array = &$carry;
 
-                while (!empty($pieces)) {
+                while (! empty($pieces)) {
                     $key = array_pop($pieces);
 
                     if (empty($key)) {
                         continue;
                     }
 
-                    if (!isset($array[$key])) {
+                    if (! isset($array[$key])) {
                         $array[$key] = [];
-                    }elseif(!is_array($array[$key])) {
+                    } elseif (! is_array($array[$key])) {
                         $array[$key] = [
                             '_value' => $array[$key],
                         ];
                     }
 
-                    if (!empty($pieces)) {
+                    if (! empty($pieces)) {
                         $array = &$array[$key];
                     }
                 }
@@ -109,7 +109,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Normalize any reserved characters into a single separator
      *
-     * @param string $variable
+     * @param  string  $variable
      * @return string
      */
     protected function normalizeSeparators($variable)
@@ -120,7 +120,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Determine if an item exists at an offset.
      *
-     * @param  $key
+     * @param    $key
      * @return bool
      */
     public function offsetExists($key): bool
@@ -131,16 +131,16 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Get an item at a given offset.
      *
-     * @param  $key
+     * @param    $key
      * @return mixed
      */
     public function offsetGet($key): mixed
     {
-        if(!is_array($this->variables[$key])) {
+        if (! is_array($this->variables[$key])) {
             return $this->variables[$key];
-        }else if (isset($this->variables[$key]['_value']) && count($this->variables[$key]) == 1) {
+        } elseif (isset($this->variables[$key]['_value']) && count($this->variables[$key]) == 1) {
             return $this->variables[$key]['_value'];
-        } else if(is_array($this->variables[$key])) {
+        } elseif (is_array($this->variables[$key])) {
             return (new static)->setItems($this->variables[$key]);
         }
 
@@ -150,8 +150,8 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Set the item at a given offset.
      *
-     * @param  $key
-     * @param  $value
+     * @param    $key
+     * @param    $value
      * @return void
      */
     public function offsetSet($key, $value): void
@@ -166,7 +166,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Unset the item at a given offset.
      *
-     * @param  $key
+     * @param    $key
      * @return void
      */
     public function offsetUnset($key): void
@@ -200,6 +200,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     public function __call($method, $parameters)
     {
         $variable = implode($this->separator, array_merge([$method], $parameters));
+
         return $this->find($variable);
     }
 

@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Category;
 
-use ExpressionEngine\Model\Content\FieldModel;
-use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\FieldtypeManager;
+use Expressionengine\Coilpack\Model;
 
 /**
  * Category Field Model
@@ -13,9 +11,10 @@ use Expressionengine\Coilpack\FieldtypeManager;
 class CategoryField extends Model
 {
     protected $primaryKey = 'field_id';
+
     protected $table = 'category_fields';
 
-    protected $casts = array(
+    protected $casts = [
         'field_ta_rows' => 'integer',
         'field_maxl' => 'integer',
         'field_required' => \Expressionengine\Coilpack\Casts\BooleanString::class,
@@ -23,7 +22,7 @@ class CategoryField extends Model
         'field_order' => 'integer',
         'field_settings' => 'json',
         'legacy_field_data' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-    );
+    ];
 
     public function group()
     {
@@ -40,7 +39,4 @@ class CategoryField extends Model
         // cache this
         return app(FieldtypeManager::class)->make($this->field_type, $this->field_id);
     }
-
 }
-
-

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Site;
 
 use Expressionengine\Coilpack\Model;
@@ -11,20 +10,18 @@ use Expressionengine\Coilpack\Model;
 class Stats extends Model
 {
     protected $primaryKey = 'stat_id';
+
     protected $table = 'stats';
 
-    protected static $_relationships = array(
-        'Site' => array(
-            'type' => 'BelongsTo'
-        ),
-        'RecentMember' => array(
+    protected static $_relationships = [
+        'Site' => [
+            'type' => 'BelongsTo',
+        ],
+        'RecentMember' => [
             'type' => 'BelongsTo',
             'model' => 'Member',
             'from_key' => 'recent_member_id',
-            'weak' => true
-        )
-    );
-
+            'weak' => true,
+        ],
+    ];
 }
-
-

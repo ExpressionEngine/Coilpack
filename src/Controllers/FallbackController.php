@@ -2,11 +2,9 @@
 
 namespace Expressionengine\Coilpack\Controllers;
 
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Storage;
-use ExpressionEngine\Core;
 use Expressionengine\Coilpack\Bootstrap;
+use ExpressionEngine\Core;
+use Illuminate\Support\Facades\Request;
 
 class FallbackController
 {
@@ -14,13 +12,14 @@ class FallbackController
     {
         $assetFolders = [
             'themes',
-            'images'
+            'images',
         ];
 
         if (in_array(Request::segment(1), $assetFolders)) {
             (new Bootstrap\LoadExpressionEngine)->asset()->bootstrapDependencies(app());
+
             return (new AssetController)();
-        }else{
+        } else {
             $core = (new Bootstrap\LoadExpressionEngine)->page()->bootstrap(app());
 
             $request = Core\Request::fromGlobals();
@@ -31,5 +30,4 @@ class FallbackController
             return $core->runGlobal();
         }
     }
-
 }

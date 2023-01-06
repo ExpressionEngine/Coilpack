@@ -2,12 +2,7 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Exception;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Str;
-
 
 class CreateDatabaseConnection
 {
@@ -19,7 +14,7 @@ class CreateDatabaseConnection
      */
     public function bootstrap(Application $app)
     {
-        if (!$config = config('coilpack.expressionengine.database')) {
+        if (! $config = config('coilpack.expressionengine.database')) {
             // throw new \Exception('ExpressionEngine database configuration missing.');
             $config = [];
         }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Role;
 
 use Expressionengine\Coilpack\Model;
@@ -12,6 +11,7 @@ use Expressionengine\Coilpack\Model\Site\Site;
 class RoleSetting extends Model
 {
     protected $primaryKey = 'id';
+
     protected $table = 'role_settings';
 
     protected $casts = [
@@ -36,7 +36,4 @@ class RoleSetting extends Model
     {
         return $this->belongsTo(Site::class);
     }
-
 }
-
-

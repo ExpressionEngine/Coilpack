@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Member;
 
 use Expressionengine\Coilpack\Model;
@@ -11,15 +10,16 @@ use Expressionengine\Coilpack\Model;
 class Online extends Model
 {
     protected $primaryKey = 'online_id';
+
     protected $table = 'online_users';
 
     protected static $_relationships = [
         'Member' => [
-            'type' => 'belongsTo'
+            'type' => 'belongsTo',
         ],
         'Site' => [
-            'type' => 'belongsTo'
-        ]
+            'type' => 'belongsTo',
+        ],
     ];
 
     protected $casts = [
@@ -32,8 +32,4 @@ class Online extends Model
         'date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
         'anon' => \Expressionengine\Coilpack\Casts\BooleanString::class,
     ];
-
 }
-
-
-

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Message;
 
 use Expressionengine\Coilpack\Model;
@@ -14,17 +13,18 @@ use Expressionengine\Coilpack\Model;
 class ListedMember extends Model
 {
     protected $primaryKey = 'listed_id';
+
     protected $table = 'message_listed';
 
     protected static $_relationships = [
         'ListedByMember' => [
             'type' => 'belongsTo',
-            'model' => 'Member'
+            'model' => 'Member',
         ],
         'Member' => [
             'type' => 'belongsTo',
-            'from_key' => 'listed_member'
-        ]
+            'from_key' => 'listed_member',
+        ],
     ];
 
     protected $casts = [
@@ -32,10 +32,6 @@ class ListedMember extends Model
         'member_id' => 'integer',
         'listed_member' => 'integer',
         'listed_description' => 'string',
-        'listed_type' => 'string'
+        'listed_type' => 'string',
     ];
-
 }
-
-
-

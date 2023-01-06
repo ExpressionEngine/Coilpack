@@ -8,7 +8,6 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class MemberWithPermission
 {
-
     /**
      * The authentication factory instance.
      *
@@ -32,14 +31,14 @@ class MemberWithPermission
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string $permission
+     * @param  string  $permission
      * @return mixed
      */
     public function handle($request, Closure $next, ...$permissions)
     {
         $this->authenticate($request);
 
-        if($request->user()->permissions->whereIn('permission', $permissions)->isEmpty()) {
+        if ($request->user()->permissions->whereIn('permission', $permissions)->isEmpty()) {
             throw new \Exception('Member not authorized');
         }
 

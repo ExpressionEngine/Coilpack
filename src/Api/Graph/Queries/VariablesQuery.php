@@ -2,7 +2,6 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Queries;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
@@ -22,8 +21,8 @@ class VariablesQuery extends Query
     {
         return [
             'site' => [
-                'type' => Type::int()
-            ]
+                'type' => Type::int(),
+            ],
         ];
     }
 

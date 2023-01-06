@@ -4,12 +4,11 @@ namespace Expressionengine\Coilpack;
 
 class Response
 {
-
     /**
      * Transform ee()->output data to a Laravel response.
      * This code is taken from EE_Output::_display() with some modifications
      *
-     * @param integer $status
+     * @param  int  $status
      * @return Illuminate\Http\Response
      */
     public static function fromOutput($status = 200)
@@ -21,16 +20,16 @@ class Response
         if (ee()->config->item('send_headers') == 'y' && ee()->output->out_type != 'feed' && ee()->output->out_type != '404' && ee()->output->out_type != 'cp_asset') {
             ee()->output->set_status_header($status);
 
-            if (!ee('Response')->hasHeader('Expires')) {
-                ee()->output->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            if (! ee('Response')->hasHeader('Expires')) {
+                ee()->output->set_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             }
 
-            if (!ee('Response')->hasHeader('Last-Modified')) {
-                ee()->output->set_header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            if (! ee('Response')->hasHeader('Last-Modified')) {
+                ee()->output->set_header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
             }
 
-            if (!ee('Response')->hasHeader('Pragma')) {
-                ee()->output->set_header("Pragma: no-cache");
+            if (! ee('Response')->hasHeader('Pragma')) {
+                ee()->output->set_header('Pragma: no-cache');
             }
         }
 
@@ -39,32 +38,32 @@ class Response
 
         switch (ee()->output->out_type) {
             case 'webpage':
-                if (!ee('Response')->hasHeader('Content-Type')) {
-                    ee()->output->set_header("Content-Type: text/html; charset=" . ee()->config->item('charset'));
+                if (! ee('Response')->hasHeader('Content-Type')) {
+                    ee()->output->set_header('Content-Type: text/html; charset='.ee()->config->item('charset'));
                 }
 
                 break;
             case 'css':
-                if (!ee('Response')->hasHeader('Content-Type')) {
-                    ee()->output->set_header("Content-type: text/css");
+                if (! ee('Response')->hasHeader('Content-Type')) {
+                    ee()->output->set_header('Content-type: text/css');
                 }
 
                 break;
             case 'js':
-                if (!ee('Response')->hasHeader('Content-Type')) {
-                    ee()->output->set_header("Content-type: text/javascript");
+                if (! ee('Response')->hasHeader('Content-Type')) {
+                    ee()->output->set_header('Content-type: text/javascript');
                 }
                 ee()->output->enable_profiler = false;
 
                 break;
             case '404':
                 ee()->output->set_status_header(404);
-                ee()->output->set_header("Date: " . gmdate("D, d M Y H:i:s") . " GMT");
+                ee()->output->set_header('Date: '.gmdate('D, d M Y H:i:s').' GMT');
 
                 break;
             case 'xml':
-                if (!ee('Response')->hasHeader('Content-Type')) {
-                    ee()->output->set_header("Content-Type: text/xml");
+                if (! ee('Response')->hasHeader('Content-Type')) {
+                    ee()->output->set_header('Content-Type: text/xml');
                 }
                 $output = trim($output);
 
@@ -78,7 +77,7 @@ class Response
                 // 'template_types' hook.
                 //  - Provide information for custom template types.
                 //
-                $template_types = ee()->extensions->call('template_types', array());
+                $template_types = ee()->extensions->call('template_types', []);
                 //
                 // -------------------------------------------
 
@@ -104,12 +103,12 @@ class Response
 
         // Send FLOC headers
         if (REQ == 'PAGE' && ee()->config->item('enable_floc') !== 'y') {
-            ee()->output->set_header("Permissions-Policy: interest-cohort=()");
+            ee()->output->set_header('Permissions-Policy: interest-cohort=()');
         }
 
         // Parse query count
         if (REQ != 'CP') {
-            $output = str_replace(LD . 'total_queries' . RD, ee()->db->query_count, $output);
+            $output = str_replace(LD.'total_queries'.RD, ee()->db->query_count, $output);
         }
 
         // Note:  We use globals because we can't use $CI =& get_instance()
@@ -139,7 +138,7 @@ class Response
         $elapsed = $BM->elapsed_time('total_execution_time_start', 'total_execution_time_end');
 
         if (ee()->output->parse_exec_vars === true) {
-            $memory = (!function_exists('memory_get_usage')) ? '0' : round(memory_get_usage() / 1024 / 1024, 2) . 'MB';
+            $memory = (! function_exists('memory_get_usage')) ? '0' : round(memory_get_usage() / 1024 / 1024, 2).'MB';
 
             $output = str_replace('{elapsed_time}', $elapsed, $output);
             $output = str_replace('{memory_usage}', $memory, $output);
@@ -175,8 +174,8 @@ class Response
 
         // --------------------------------------------------------------------
         // Include PRO stuff
-        $inEEInstallMode = is_dir(SYSPATH . 'ee/installer/') && (!defined('INSTALL_MODE') or INSTALL_MODE != false);
-        if (!$inEEInstallMode) {
+        $inEEInstallMode = is_dir(SYSPATH.'ee/installer/') && (! defined('INSTALL_MODE') or INSTALL_MODE != false);
+        if (! $inEEInstallMode) {
             $output = ee('pro:Dock')->buildOutput($output);
         }
         if (REQ == 'PAGE' || (REQ == 'ACTION' && ee('LivePreview')->hasEntryData())) {
@@ -189,22 +188,22 @@ class Response
 
         // Do we need to generate profile data?
         // If so, load the Profile service and run it.
-        if (ee()->output->enable_profiler == true && (!(AJAX_REQUEST or ee('LivePreview')->hasEntryData()))) {
-            $performance = array(
+        if (ee()->output->enable_profiler == true && (! (AJAX_REQUEST or ee('LivePreview')->hasEntryData()))) {
+            $performance = [
                 'database' => number_format(ee('Database')->currentExecutionTime(), 4),
-                'benchmarks' => ee()->benchmark->getBenchmarkTimings()
-            );
+                'benchmarks' => ee()->benchmark->getBenchmarkTimings(),
+            ];
 
             $profiler = ee('Profiler')
             ->addSection('performance', $performance)
-                ->addSection('variables', array(
+                ->addSection('variables', [
                     'server' => $_SERVER,
                     'cookie' => $_COOKIE,
                     'get' => $_GET,
                     'post' => $_POST,
-                    'userdata' => ee()->session->all_userdata()
-                ))
-                ->addSection('database', array(ee('Database')));
+                    'userdata' => ee()->session->all_userdata(),
+                ])
+                ->addSection('database', [ee('Database')]);
 
             // Add the template debugger to the output
 
@@ -239,7 +238,7 @@ class Response
                 ee()->config->item('debug') == 0 &&
                 ee()->output->remove_unparsed_variables === true
             ) {
-                $output = preg_replace("/" . LD . "[^;\n]+?" . RD . "/", '', $output);
+                $output = preg_replace('/'.LD."[^;\n]+?".RD.'/', '', $output);
             }
 
             // Garbage Collection
@@ -248,9 +247,8 @@ class Response
 
         // --------------------------------------------------------------------
 
-        log_message('debug', "Final output sent to browser");
-        log_message('debug', "Total execution time: " . $elapsed);
-
+        log_message('debug', 'Final output sent to browser');
+        log_message('debug', 'Total execution time: '.$elapsed);
 
         // This is a list of headers that we will not pass along
         // - Content-Length may have changed by the time we output
@@ -258,10 +256,10 @@ class Response
 
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
-        $headers = array_reduce(headers_list(), function($carry, $header) use($exclude) {
+        $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
             $pieces = explode(': ', $header);
 
-            if(!in_array(strtolower($pieces[0]), $exclude)) {
+            if (! in_array(strtolower($pieces[0]), $exclude)) {
                 $carry[$pieces[0]] = $pieces[1];
             }
 
@@ -273,19 +271,16 @@ class Response
 
         // Transform and set headers that have been assigned to the Output class
         // but not yet set on the request to be ["header_name" => "value"]
-        foreach(ee()->output->headers as $row) {
+        foreach (ee()->output->headers as $row) {
             $header = explode(': ', $row[0]);
             $replace = $row[1];
 
             // If this header has not already been set, or if we are replacing it set the value
-            if(!in_array(strtolower($header[0]), $exclude) && (!array_key_exists($header[0], $headers) || $replace) ) {
+            if (! in_array(strtolower($header[0]), $exclude) && (! array_key_exists($header[0], $headers) || $replace)) {
                 $headers[$header[0]] = $header[1];
             }
         }
 
         return new \Illuminate\Http\Response($output, $status, $headers);
     }
-
-
-
 }

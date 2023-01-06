@@ -8,5 +8,4 @@ namespace Expressionengine\Coilpack;
 class Model extends \Illuminate\Database\Eloquent\Model
 {
     protected $connection = 'coilpack';
-
 }

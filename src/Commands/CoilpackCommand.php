@@ -2,12 +2,11 @@
 
 namespace Expressionengine\Coilpack\Commands;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\File;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Symfony\Component\Finder\Finder;
 
 class CoilpackCommand extends Command
 {
@@ -19,18 +18,18 @@ class CoilpackCommand extends Command
 
     public function handle(): int
     {
-        if (!$this->option('force') && config('coilpack.expressionengine.app_version') !== null) {
+        if (! $this->option('force') && config('coilpack.expressionengine.app_version') !== null) {
             $this->info(vsprintf('ExpressionEngine %s already installed at %s.', [
                 config('coilpack.expressionengine.app_version'),
-                config('coilpack.base_path')
+                config('coilpack.base_path'),
             ]));
 
-            if(version_compare(config('coilpack.expressionengine.app_version'), $this->minimumVersionSupported, '<')) {
+            if (version_compare(config('coilpack.expressionengine.app_version'), $this->minimumVersionSupported, '<')) {
                 $this->warn(vsprintf(
                     'You are using a version of ExpressionEngine that is lower than the recommended version %s.'
                     .' Please upgrade as soon as possible.',
                     [
-                        $this->minimumVersionSupported
+                        $this->minimumVersionSupported,
                     ]
                 ));
             }
@@ -38,7 +37,7 @@ class CoilpackCommand extends Command
             return self::SUCCESS;
         }
 
-        if (!file_exists(config_path('coilpack.php'))) {
+        if (! file_exists(config_path('coilpack.php'))) {
             $this->call('vendor:publish', ['--tag' => 'coilpack-config']);
         }
 
@@ -50,7 +49,7 @@ class CoilpackCommand extends Command
 
         if ($type == 'install') {
             $this->install();
-        }else{
+        } else {
             $this->choose();
         }
 
@@ -61,31 +60,34 @@ class CoilpackCommand extends Command
 
     public function choose()
     {
-        $path = $this->ask('Enter the path where your ExpressionEngine installation is located (Default: '. config('coilpack.base_path') .')') ?: config('coilpack.base_path');
+        $path = $this->ask('Enter the path where your ExpressionEngine installation is located (Default: '.config('coilpack.base_path').')') ?: config('coilpack.base_path');
         $basePath = realpath($path);
 
-        if(!file_exists($path)) {
+        if (! file_exists($path)) {
             $this->error("Path does not exist: $path");
+
             return self::FAILURE;
         }
 
         // Locate ExpressionEngine System folder
-        $system = $this->ask('Enter the relative path to your system folder (Default: '. config('coilpack.system_path') .')') ?: config('coilpack.system_path');
-        $systemPath = Str::finish($path, DIRECTORY_SEPARATOR) . ltrim($system, DIRECTORY_SEPARATOR);
+        $system = $this->ask('Enter the relative path to your system folder (Default: '.config('coilpack.system_path').')') ?: config('coilpack.system_path');
+        $systemPath = Str::finish($path, DIRECTORY_SEPARATOR).ltrim($system, DIRECTORY_SEPARATOR);
 
-        if (!realpath($systemPath) || !file_exists(realpath($systemPath))) {
+        if (! realpath($systemPath) || ! file_exists(realpath($systemPath))) {
             $this->error("Cannot find system folder at: $systemPath");
+
             return self::FAILURE;
         }
 
         $systemPath = realpath($systemPath);
 
         // Locate ExpressionEngine Config folder
-        $config = $this->ask('Enter the relative path to your config folder (Default: '. config('coilpack.config_path') .')') ?: config('coilpack.config_path');
-        $configPath = Str::finish($path, DIRECTORY_SEPARATOR) . ltrim($config, DIRECTORY_SEPARATOR);
+        $config = $this->ask('Enter the relative path to your config folder (Default: '.config('coilpack.config_path').')') ?: config('coilpack.config_path');
+        $configPath = Str::finish($path, DIRECTORY_SEPARATOR).ltrim($config, DIRECTORY_SEPARATOR);
 
-        if(!realpath($configPath) || !file_exists(realpath($configPath))) {
+        if (! realpath($configPath) || ! file_exists(realpath($configPath))) {
             $this->error("Cannot find config folder at: $configPath");
+
             return self::FAILURE;
         }
 
@@ -103,7 +105,7 @@ class CoilpackCommand extends Command
     {
         $content = file_get_contents(config_path('coilpack.php'));
         $search = "/'$key' => '.*',$/m";
-        $replace = "'$key' => '" . $value . "',";
+        $replace = "'$key' => '".$value."',";
         file_put_contents(config_path('coilpack.php'), preg_replace($search, $replace, $content));
     }
 
@@ -113,10 +115,10 @@ class CoilpackCommand extends Command
         $content = file_get_contents($routesFile);
 
         $search = "Route::get('/', function () {\n"
-        . "    return view('welcome');\n"
-        . "});\n";
+        ."    return view('welcome');\n"
+        ."});\n";
 
-        if(!str_contains($content, $search)) {
+        if (! str_contains($content, $search)) {
             return;
         }
 
@@ -127,23 +129,23 @@ class CoilpackCommand extends Command
         file_put_contents($routesFile, str_replace($search, $replace, $content));
 
         $this->info("Coilpack has disabled the Laravel 'welcome' route to avoid routing conflicts.");
-        $this->info("You may enable it at any time by uncommenting the route in `routes/web.php`.");
+        $this->info('You may enable it at any time by uncommenting the route in `routes/web.php`.');
     }
 
     public function install()
     {
-        if($this->option('source')) {
+        if ($this->option('source')) {
             $releases = $this->branches();
-        }else{
+        } else {
             $releases = $this->availableReleases();
 
-            if(!$this->option('dev')) {
-                $releases = $releases->filter(function($release) {
-                    return !$release['prerelease'];
+            if (! $this->option('dev')) {
+                $releases = $releases->filter(function ($release) {
+                    return ! $release['prerelease'];
                 });
             }
 
-            $releases = $releases->slice(0,10);
+            $releases = $releases->slice(0, 10);
         }
 
         $this->comment('Coilpack supports the following ExpressionEngine Versions');
@@ -158,9 +160,9 @@ class CoilpackCommand extends Command
     {
         $url = 'https://api.github.com/repos/expressionengine/expressionengine/releases';
 
-        return collect(Http::get($url)->json())->map(function($release) {
+        return collect(Http::get($url)->json())->map(function ($release) {
             $fields = ['tag_name', 'name', 'prerelease', 'published_at'];
-            $asset = current(array_filter($release['assets'], function($asset) {
+            $asset = current(array_filter($release['assets'], function ($asset) {
                 return Str::endsWith($asset['browser_download_url'], '.zip');
             }));
 
@@ -168,7 +170,7 @@ class CoilpackCommand extends Command
                 Arr::only($release, $fields),
                 ['download_url' => $asset['browser_download_url']]
             );
-        })->filter(function($release) {
+        })->filter(function ($release) {
             return version_compare($release['tag_name'], $this->minimumVersionSupported, '>=');
         })->keyBy('tag_name');
     }
@@ -181,7 +183,7 @@ class CoilpackCommand extends Command
             return [
                 'name' => $branch['name'],
                 'tag_name' => $branch['name'],
-                'download_url' => "http://github.com/expressionengine/expressionengine/archive/{$branch['name']}.zip"
+                'download_url' => "http://github.com/expressionengine/expressionengine/archive/{$branch['name']}.zip",
             ];
         })->keyBy('tag_name');
     }
@@ -192,17 +194,17 @@ class CoilpackCommand extends Command
         $localPath = storage_path("install/{$release['tag_name']}");
         $installPath = base_path(config('coilpack.base_path', 'ee'));
 
-        if (!File::exists("{$localPath}/unpacked")) {
+        if (! File::exists("{$localPath}/unpacked")) {
             File::makeDirectory("{$localPath}/unpacked", 0777, true, true);
         }
 
-        if (!File::exists($installPath)) {
+        if (! File::exists($installPath)) {
             File::makeDirectory($installPath, 0777, true);
         }
 
         // Download
         $this->info("Downloading {$release['name']}...");
-        if (!File::exists("{$localPath}/download.zip")) {
+        if (! File::exists("{$localPath}/download.zip")) {
             copy($release['download_url'], "{$localPath}/download.zip");
         }
 
@@ -232,7 +234,7 @@ class CoilpackCommand extends Command
             ];
 
             // Recursively set permissions on directories
-            foreach($permissionsMap as $path => $permission) {
+            foreach ($permissionsMap as $path => $permission) {
                 $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator("$installPath/$path"));
                 foreach ($iterator as $item) {
                     @chmod($item, $permission);

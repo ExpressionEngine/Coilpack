@@ -2,10 +2,9 @@
 
 namespace Expressionengine\Coilpack\View\Tags\Channel;
 
-use Illuminate\Support\Arr;
-use Expressionengine\Coilpack\View\ModelTag;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\View\FilteredParameterValue;
+use Expressionengine\Coilpack\View\ModelTag;
 
 class Entries extends ModelTag
 {
@@ -85,9 +84,9 @@ class Entries extends ModelTag
 
         $this->setLimitParameter(1);
 
-        $this->when(is_integer($lastSegment), function($query) use($lastSegment) {
+        $this->when(is_int($lastSegment), function ($query) use ($lastSegment) {
             $query->where('entry_id', (int) $lastSegment);
-        }, function($query) use($lastSegment) {
+        }, function ($query) use ($lastSegment) {
             $query->where('url_title', $lastSegment);
         });
 
@@ -97,7 +96,7 @@ class Entries extends ModelTag
     public function setFixedOrderParameter($order = [])
     {
         $this->query->whereIn('entry_id', $order);
-        $this->query->orderByRaw('FIELD(entry_id, '.implode(',', $order) .')');
+        $this->query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
 
         return $order;
     }
@@ -106,7 +105,7 @@ class Entries extends ModelTag
     {
         $this->query->take($count);
 
-        if($count == 1) {
+        if ($count == 1) {
             $this->takeFirst = true;
         }
 
@@ -116,5 +115,4 @@ class Entries extends ModelTag
     public function setDisableParameter($str)
     {
     }
-
 }

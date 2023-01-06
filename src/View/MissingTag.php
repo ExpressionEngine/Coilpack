@@ -4,7 +4,6 @@ namespace Expressionengine\Coilpack\View;
 
 class MissingTag
 {
-
     public function __construct($tags)
     {
         $this->tags = $tags;
@@ -19,7 +18,6 @@ class MissingTag
     {
         return $this;
     }
-
 
     public function __isset($key)
     {

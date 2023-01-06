@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Config;
 
 use Expressionengine\Coilpack\Model;
@@ -12,6 +11,7 @@ use Expressionengine\Coilpack\Models\Site\Site;
 class Config extends Model
 {
     protected $primaryKey = 'config_id';
+
     protected $table = 'config';
 
     protected $casts = [
@@ -39,5 +39,3 @@ class Config extends Model
         return parse_config_variables($this->getRawProperty('value'));
     }
 }
-
-

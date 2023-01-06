@@ -1,18 +1,9 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
-use InvalidArgumentException;
-use ExpressionEngine\Library\Data\Collection;
-use ExpressionEngine\Model\Content\ContentModel;
-use ExpressionEngine\Model\Content\Display\FieldDisplay;
-use ExpressionEngine\Model\Content\Display\LayoutInterface;
-use ExpressionEngine\Service\Validation\Result as ValidationResult;
-
-use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\FieldtypeManager;
+use Expressionengine\Coilpack\Model;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -28,6 +19,7 @@ use Illuminate\Support\Facades\Schema;
 class ChannelField extends Model
 {
     protected $primaryKey = 'field_id';
+
     protected $table = 'channel_fields';
 
     protected $casts = [

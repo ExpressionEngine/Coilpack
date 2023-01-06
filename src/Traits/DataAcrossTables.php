@@ -2,18 +2,15 @@
 
 namespace Expressionengine\Coilpack\Traits;
 
-use BadMethodCallException;
-use Error;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use Expressionengine\Coilpack\Models\FieldContent;
-
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait DataAcrossTables
 {
     public function scopeCustomFields($query, $fields = null)
     {
-        if (!$fields || $fields->isEmpty()) {
+        if (! $fields || $fields->isEmpty()) {
             return $query;
         }
 
@@ -45,18 +42,18 @@ trait DataAcrossTables
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'field_');
         })->reduce(function ($carry, $key) use ($fields) {
-            list($name, $id) = array_slice(explode('_', $key), 1);
+            [$name, $id] = array_slice(explode('_', $key), 1);
 
-            if (!$fields->has($id)) {
+            if (! $fields->has($id)) {
                 return $carry;
             }
 
-            if (!$carry->has($id)) {
+            if (! $carry->has($id)) {
                 $carry->put($id, new FieldContent(array_merge(
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'entry' => $this->entry
+                        'entry' => $this->entry,
                     ],
                     Arr::only($this->attributes, ['entry_id', 'site_id', 'channel_id'])
                 )));
@@ -64,7 +61,7 @@ trait DataAcrossTables
 
             $nameMap = [
                 'id' => 'data',
-                'ft' => 'format'
+                'ft' => 'format',
             ];
 
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);

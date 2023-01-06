@@ -2,7 +2,6 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
-use Expressionengine\Coilpack\Api\Graph\Fields\FormattableDate;
 use Expressionengine\Coilpack\Models\Channel\Channel as ChannelModel;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
@@ -12,9 +11,8 @@ class Channel extends GraphQLType
     protected $attributes = [
         'name' => 'Channel',
         'description' => 'Collection of channels',
-        'model' => ChannelModel::class
+        'model' => ChannelModel::class,
     ];
-
 
     public function fields(): array
     {

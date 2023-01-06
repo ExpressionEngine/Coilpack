@@ -2,14 +2,15 @@
 
 namespace Expressionengine\Coilpack\View;
 
-use Illuminate\Support\Arr;
 use Expressionengine\Coilpack\Models\Addon;
+use Illuminate\Support\Arr;
 
 class Exp
 {
-
     protected static $booted = false;
+
     protected static $tags = [];
+
     protected static $addons;
 
     public static function boot()
@@ -30,7 +31,8 @@ class Exp
         static::$booted = true;
     }
 
-    public function encode() {
+    public function encode()
+    {
         // Email encode: {encode="you@yoursite.com" title="click Me"}
         // if (strpos($str, LD . 'encode=') !== false) {
         //     if ($this->encode_email == true) {
@@ -73,7 +75,6 @@ class Exp
         return ee()->functions->create_route($str);
     }
 
-
     public function __get($key)
     {
         static::boot();
@@ -86,13 +87,12 @@ class Exp
         }
 
         // give precedence to directly registered tags
-        if(array_key_exists($key, static::$tags)) {
-            if(is_array(static::$tags[$key])) {
+        if (array_key_exists($key, static::$tags)) {
+            if (is_array(static::$tags[$key])) {
                 return new TagProxy(static::$tags[$key], $fallback);
-            }else{
+            } else {
                 return static::$tags[$key];
             }
-
         }
 
         return $fallback;
@@ -102,6 +102,6 @@ class Exp
     {
         static::boot();
 
-        return (array_key_exists(strtolower($key), static::$tags)) || (array_key_exists(strtolower($key), static::$addons));
+        return array_key_exists(strtolower($key), static::$tags) || (array_key_exists(strtolower($key), static::$addons));
     }
 }

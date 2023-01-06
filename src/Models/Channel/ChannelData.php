@@ -1,15 +1,12 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
+use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
+use Expressionengine\Coilpack\Models\FieldContent;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\FieldtypeManager;
-use ExpressionEngine\Service\Model\Collection;
 
 /**
  * Channel Data Model
@@ -17,6 +14,7 @@ use ExpressionEngine\Service\Model\Collection;
 class ChannelData extends Model
 {
     protected $primaryKey = 'entry_id';
+
     protected $table = 'channel_data';
 
     public function entry()
@@ -26,16 +24,16 @@ class ChannelData extends Model
 
     public function scopeCustomFields($query, $fields = null)
     {
-        if(!$fields || $fields->isEmpty()) {
+        if (! $fields || $fields->isEmpty()) {
             return $query;
         }
 
         $this->fields = $fields;
 
         // Get a set of table names for fields that do not store data on the legacy table
-        $fieldtypeTables = $fields->filter(function($field) {
+        $fieldtypeTables = $fields->filter(function ($field) {
             return $field->legacy_field_data == 'n' || $field->legacy_field_data === false;
-        })->map(function($field) {
+        })->map(function ($field) {
             return $field->data_table_name;
         });
 
@@ -57,19 +55,19 @@ class ChannelData extends Model
 
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'field_');
-        })->reduce(function ($carry, $key) use($fields) {
-            list($name, $id) = array_slice(explode('_', $key), 1);
+        })->reduce(function ($carry, $key) use ($fields) {
+            [$name, $id] = array_slice(explode('_', $key), 1);
 
-            if(!$fields->has($id)) {
+            if (! $fields->has($id)) {
                 return $carry;
             }
 
-            if (!$carry->has($id)) {
+            if (! $carry->has($id)) {
                 $carry->put($id, new FieldContent(array_merge(
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'entry' => $this->entry
+                        'entry' => $this->entry,
                     ],
                     Arr::only($this->attributes, ['entry_id', 'site_id', 'channel_id'])
                 )));
@@ -84,7 +82,7 @@ class ChannelData extends Model
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);
 
             return $carry;
-        }, collect([]))->keyBy(function($content) {
+        }, collect([]))->keyBy(function ($content) {
             return $content->field->field_name;
         });
     }

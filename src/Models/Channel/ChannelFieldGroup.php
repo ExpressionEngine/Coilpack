@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\Channel;
 
 use Expressionengine\Coilpack\Model;
@@ -11,6 +10,7 @@ use Expressionengine\Coilpack\Model;
 class ChannelFieldGroup extends Model
 {
     protected $primaryKey = 'group_id';
+
     protected $table = 'field_groups';
 
     public function channels()
@@ -23,5 +23,3 @@ class ChannelFieldGroup extends Model
         return $this->belongsToMany(ChannelField::class, 'channel_field_groups_fields', 'group_id', 'field_id', 'group_id', 'field_id');
     }
 }
-
-

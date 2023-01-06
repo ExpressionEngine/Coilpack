@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Data extends Model
 {
     protected $primaryKey = 'entry_id';
+
     protected $table = 'fluid_field_data';
 
     public function fluidField()
@@ -28,7 +29,7 @@ class Data extends Model
 
     public function scopeCustomFields($query, $fields = null)
     {
-        if (!$fields || $fields->isEmpty()) {
+        if (! $fields || $fields->isEmpty()) {
             return $query;
         }
 
@@ -43,7 +44,7 @@ class Data extends Model
         // https://www.quora.com/How-do-I-override-a-max-limit-of-61-joins-in-a-MySQL-query
         foreach ($fields as $field) {
             $table = $field->data_table_name;
-            $query->leftJoin($table, function($join) use($table, $field) {
+            $query->leftJoin($table, function ($join) use ($table, $field) {
                 $join->on("$table.entry_id", '=', DB::raw(0)); // Fluid fields store their data in entry_id=0
                 $join->on("$table.id", '=', $this->qualifyColumn('field_data_id'));
                 $join->on($this->qualifyColumn('field_id'), '=', DB::raw($field->field_id));

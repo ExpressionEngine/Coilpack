@@ -3,14 +3,14 @@
 namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
-use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\FieldtypeOutput;
+use Expressionengine\Coilpack\Models\FieldContent;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
-abstract class Modifier {
-
+abstract class Modifier
+{
     protected $attributes;
+
     protected $fieldtype;
 
     public function __construct(Fieldtype $fieldtype, $attributes = [])
@@ -38,8 +38,8 @@ abstract class Modifier {
     /**
      * Modify the content
      *
-     * @param FieldContent $content
-     * @param array $parameters
+     * @param  FieldContent  $content
+     * @param  array  $parameters
      * @return FieldtypeOutput
      */
     abstract public function handle(FieldContent $content, $parameters = []);
@@ -48,9 +48,9 @@ abstract class Modifier {
     {
         $type = Type::boolean();
 
-        if($this->parameters) {
+        if ($this->parameters) {
             $type = app(FieldtypeRegistrar::class)->registerModifier($this);
-            if(is_null($type)) {
+            if (is_null($type)) {
                 dd($this, $this->parameters);
             }
         }
@@ -71,9 +71,8 @@ abstract class Modifier {
 
     public function __get($name)
     {
-        if(array_key_exists($name, $this->attributes)) {
+        if (array_key_exists($name, $this->attributes)) {
             return $this->attributes[$name];
         }
-
     }
 }

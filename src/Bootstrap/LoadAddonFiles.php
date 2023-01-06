@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack\Bootstrap;
 
-use Illuminate\Contracts\Foundation\Application;
 use Expressionengine\Coilpack\FieldtypeManager;
+use Illuminate\Contracts\Foundation\Application;
 
 class LoadAddonFiles
 {
@@ -20,7 +20,7 @@ class LoadAddonFiles
         }
 
         $coilpackProviders = array_filter(ee('App')->getProviders(), function ($provider) {
-            return !empty($provider->get('coilpack'));
+            return ! empty($provider->get('coilpack'));
         });
 
         foreach ($coilpackProviders as $provider) {
@@ -31,6 +31,6 @@ class LoadAddonFiles
             foreach ($bindings['tags'] ?? [] as $name => $class) {
                 app(\Expressionengine\Coilpack\View\Exp::class)->registerTag($name, $class);
             }
-        };
+        }
     }
 }

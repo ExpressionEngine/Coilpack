@@ -4,8 +4,8 @@ namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
-use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasRelationships;
+use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 
 class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 {
@@ -31,7 +31,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 
     public function getFieldtype()
     {
-        if(isset($this->attributes['fieldtype'])) {
+        if (isset($this->attributes['fieldtype'])) {
             return $this->fieldtype;
         }
 
@@ -50,7 +50,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         $fieldtype = $this->getFieldtype();
 
         $value = $fieldtype->apply($this, $parameters);
-        if(empty($parameters)) {
+        if (empty($parameters)) {
             $this->attributes['value'] = $value;
         }
 
@@ -159,7 +159,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetExists($offset): bool
     {
-        return !is_null($this->getAttribute($offset));
+        return ! is_null($this->getAttribute($offset));
     }
 
     /**

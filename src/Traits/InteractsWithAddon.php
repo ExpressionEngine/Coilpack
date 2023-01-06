@@ -2,23 +2,19 @@
 
 namespace Expressionengine\Coilpack\Traits;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-
 trait InteractsWithAddon
 {
-
     public function getAddonInstance($addon)
     {
-        $addonClass = '\\' . \ee('Addon')->get($addon)->getFrontendClass();
+        $addonClass = '\\'.\ee('Addon')->get($addon)->getFrontendClass();
+
         return new $addonClass;
     }
 
     public function getAddonModuleInstance($addon)
     {
-        $module = '\\' . ltrim(\ee('Addon')->get($addon)->getModuleClass(), '\\');
+        $module = '\\'.ltrim(\ee('Addon')->get($addon)->getModuleClass(), '\\');
+
         return new $module;
     }
-
-
 }

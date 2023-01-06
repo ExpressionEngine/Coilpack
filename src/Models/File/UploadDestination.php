@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\File;
 
 use Expressionengine\Coilpack\Model;
-use ExpressionEngine\Model\Member\Member;
 
 /**
  * File Upload Location Model
@@ -18,38 +16,36 @@ use ExpressionEngine\Model\Member\Member;
 class UploadDestination extends Model
 {
     protected $primaryKey = 'id';
+
     protected $table = 'upload_prefs';
 
-    protected static $_relationships = array(
-        'Site' => array(
-            'type' => 'belongsTo'
-        ),
-        'Roles' => array(
+    protected static $_relationships = [
+        'Site' => [
+            'type' => 'belongsTo',
+        ],
+        'Roles' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Role',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'upload_prefs_roles',
                 'left' => 'upload_id',
-                'right' => 'role_id'
-            )
-        ),
-        'Module' => array(
+                'right' => 'role_id',
+            ],
+        ],
+        'Module' => [
             'type' => 'belongsTo',
             'model' => 'Module',
-            'to_key' => 'module_id'
-        ),
-        'Files' => array(
+            'to_key' => 'module_id',
+        ],
+        'Files' => [
             'type' => 'hasMany',
             'model' => 'File',
-            'to_key' => 'upload_location_id'
-        ),
-        'FileDimensions' => array(
+            'to_key' => 'upload_location_id',
+        ],
+        'FileDimensions' => [
             'type' => 'hasMany',
             'model' => 'FileDimension',
-            'to_key' => 'upload_location_id'
-        )
-    );
-
+            'to_key' => 'upload_location_id',
+        ],
+    ];
 }
-
-

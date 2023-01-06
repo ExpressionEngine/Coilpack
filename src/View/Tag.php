@@ -23,13 +23,13 @@ abstract class Tag
     /**
      * Set the parameters to be used by the tag
      *
-     * @param array $parameters
+     * @param  array  $parameters
      * @return static
      */
     public function parameters($parameters = [])
     {
-        foreach($parameters as $key => $value) {
-            if($this->hasParameterMutator($key)) {
+        foreach ($parameters as $key => $value) {
+            if ($this->hasParameterMutator($key)) {
                 $value = $this->setMutatedParameterValue($key, $value);
             }
 
@@ -75,7 +75,7 @@ abstract class Tag
     /**
      * Process this tag with the provided parameters
      *
-     * @param array $parameters
+     * @param  array  $parameters
      * @return mixed
      */
     public function __invoke($parameters = [])
@@ -92,5 +92,4 @@ abstract class Tag
     {
         return $this->run();
     }
-
 }

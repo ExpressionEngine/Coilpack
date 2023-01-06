@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Expressionengine\Coilpack\Models\File;
 
 use Expressionengine\Coilpack\Model;
@@ -17,38 +16,36 @@ use Expressionengine\Coilpack\Model;
 class File extends Model
 {
     protected $primaryKey = 'file_id';
+
     protected $table = 'files';
 
-    protected static $_relationships = array(
-        'Site' => array(
-            'type' => 'belongsTo'
-        ),
-        'UploadDestination' => array(
+    protected static $_relationships = [
+        'Site' => [
+            'type' => 'belongsTo',
+        ],
+        'UploadDestination' => [
             'type' => 'belongsTo',
             'to_key' => 'id',
             'from_key' => 'upload_location_id',
-        ),
-        'UploadAuthor' => array(
+        ],
+        'UploadAuthor' => [
             'type' => 'BelongsTo',
             'model' => 'Member',
-            'from_key' => 'uploaded_by_member_id'
-        ),
-        'ModifyAuthor' => array(
+            'from_key' => 'uploaded_by_member_id',
+        ],
+        'ModifyAuthor' => [
             'type' => 'BelongsTo',
             'model' => 'Member',
-            'from_key' => 'modified_by_member_id'
-        ),
-        'Categories' => array(
+            'from_key' => 'modified_by_member_id',
+        ],
+        'Categories' => [
             'type' => 'hasAndBelongsToMany',
             'model' => 'Category',
-            'pivot' => array(
+            'pivot' => [
                 'table' => 'file_categories',
                 'left' => 'file_id',
-                'right' => 'cat_id'
-            )
-        ),
-    );
-
+                'right' => 'cat_id',
+            ],
+        ],
+    ];
 }
-
-

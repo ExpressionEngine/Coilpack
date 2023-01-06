@@ -2,9 +2,8 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
-use Expressionengine\Coilpack\Api\Graph\Fields\FormattableDate;
-use Expressionengine\Coilpack\Models\Member\Member as MemberModel;
 use Expressionengine\Coilpack\FieldtypeManager;
+use Expressionengine\Coilpack\Models\Member\Member as MemberModel;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
@@ -13,9 +12,8 @@ class Member extends GraphQLType
     protected $attributes = [
         'name' => 'Member',
         'description' => 'Collection of members',
-        'model' => MemberModel::class
+        'model' => MemberModel::class,
     ];
-
 
     public function fields(): array
     {
@@ -43,8 +41,8 @@ class Member extends GraphQLType
                     'is_relation' => false,
                     'resolve' => function ($root, array $args) use ($field) {
                         return $root->{$field->m_field_name} ?? null;
-                    }
-                ]
+                    },
+                ],
             ];
         })->toArray();
     }

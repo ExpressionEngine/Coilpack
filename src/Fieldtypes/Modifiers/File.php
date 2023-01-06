@@ -3,9 +3,9 @@
 namespace Expressionengine\Coilpack\Fieldtypes\Modifiers;
 
 use Expressionengine\Coilpack\Facades\Coilpack;
-use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
+use Expressionengine\Coilpack\Models\FieldContent;
 
 class File extends Modifier
 {
@@ -14,8 +14,9 @@ class File extends Modifier
         $handler = $this->fieldtype->getHandler();
         $data = $handler->pre_process($content->data);
 
-        $modified = Coilpack::isolateTemplateLibrary(function($template) use($data, $parameters) {
+        $modified = Coilpack::isolateTemplateLibrary(function ($template) use ($data, $parameters) {
             $output = $this->callHandler($data, $parameters);
+
             return $template->get_data() ?: $output;
         });
 
@@ -27,7 +28,7 @@ class File extends Modifier
 
     protected function callHandler($data, $parameters)
     {
-        $method = "replace_" . $this->attributes['name'];
+        $method = 'replace_'.$this->attributes['name'];
         $handler = $this->fieldtype->getHandler();
 
         // Sending fake tagdata to force a call to template parser so we can get more data back

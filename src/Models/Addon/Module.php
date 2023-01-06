@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Expressionengine\Coilpack\Models\Addon;
 
 use Expressionengine\Coilpack\Model;
@@ -12,12 +10,13 @@ use Expressionengine\Coilpack\Model;
 class Module extends Model
 {
     protected $primaryKey = 'module_id';
+
     protected $table = 'modules';
 
-    protected $casts = array(
+    protected $casts = [
         'has_cp_backend' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'has_publish_fields' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-    );
+    ];
 
     public function AssignedRoles()
     {
@@ -40,5 +39,3 @@ class Module extends Model
         // )
     }
 }
-
-

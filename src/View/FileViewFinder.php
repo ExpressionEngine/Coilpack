@@ -2,12 +2,10 @@
 
 namespace Expressionengine\Coilpack\View;
 
-use Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
 
 class FileViewFinder extends \Illuminate\View\FileViewFinder
 {
-
     /**
      * Get the path to a template with a named path.
      *
@@ -20,7 +18,7 @@ class FileViewFinder extends \Illuminate\View\FileViewFinder
 
         // We are treating the 'ee' namespace specially to avoid adding extra
         // file options and lookups on non-expressionengine view files
-        if($namespace === 'ee') {
+        if ($namespace === 'ee') {
             return $this->findInPathsForEE($view, $this->hints[$namespace]);
         }
 
@@ -40,7 +38,7 @@ class FileViewFinder extends \Illuminate\View\FileViewFinder
     {
         foreach ((array) $paths as $path) {
             foreach ($this->getPossibleViewFilesForEE($name) as $file) {
-                if ($this->files->exists($viewPath = $path . '/' . $file)) {
+                if ($this->files->exists($viewPath = $path.'/'.$file)) {
                     return $viewPath;
                 }
             }
@@ -48,7 +46,6 @@ class FileViewFinder extends \Illuminate\View\FileViewFinder
 
         throw new InvalidArgumentException("View [{$name}] not found.");
     }
-
 
     /**
      * Get an array of possible view files.
@@ -64,27 +61,27 @@ class FileViewFinder extends \Illuminate\View\FileViewFinder
             $extensions = array_keys(ee()->api_template_structure->all_file_extensions());
         } else {
             $extensions = array_map(function ($extension) {
-                return '.' . $extension;
+                return '.'.$extension;
             }, $this->extensions);
         }
 
         // Replace all dots with forward slashes unless the dot is part of .group
         $files = array_map(function ($extension) use ($name) {
-            return preg_replace('/[.](?!group)/', '/', $name)  . $extension;
+            return preg_replace('/[.](?!group)/', '/', $name).$extension;
         }, $extensions);
 
         // The second to last segment could be a group folder
-        if(!str_contains($name, '.group')) {
-            $files = array_merge($files, array_map(function($path) {
+        if (! str_contains($name, '.group')) {
+            $files = array_merge($files, array_map(function ($path) {
                 return substr_replace($path, '.group/', strrpos($path, '/'), 1);
             }, $files));
         }
 
         // Allow site short name to be omitted from the name
         $siteShortName = ee()->config->item('site_short_name');
-        if (!str_contains($name, $siteShortName)) {
+        if (! str_contains($name, $siteShortName)) {
             $files = array_merge($files, array_map(function ($path) use ($siteShortName) {
-                return $siteShortName .'/'. $path;
+                return $siteShortName.'/'.$path;
             }, $files));
         }
 
