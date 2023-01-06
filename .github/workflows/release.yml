@@ -1,0 +1,65 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch for release'
+        required: true
+        default: 'main'
+      releaseType:
+        description: 'Type of release'
+        type: choice
+        required: true
+        default: 'patch'
+        options:
+        - patch
+        - minor
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0
+
+      - name: Update changelog
+        id: update_changelog
+        uses: release-flow/keep-a-changelog-action/prepare-release@v1
+        with:
+          release-type: ${{ github.event.inputs.releaseType }}
+          tag-prefix: ''
+
+      - name: Display version number
+        run: |
+          echo "New release version: ${{ steps.update_changelog.outputs.release-version }}"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: json, dom, curl, libxml, mbstring
+          coverage: none
+
+      - name: Install Pint
+        run: composer global require laravel/pint
+
+      - name: Run Pint
+        run: pint
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.inputs.branch }}
+          commit_message: Prepare Release ${{ steps.update_changelog.outputs.release-version }}
+
+      - name: Create the tag
+        run: git tag ${{ steps.update_changelog.outputs.release-version }}
+
+      - name: Create the release
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          tag: ${{ steps.update_changelog.outputs.release-version }}
+          body: ${{ steps.update_changelog.outputs.release-notes }}
