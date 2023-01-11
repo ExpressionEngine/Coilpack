@@ -154,6 +154,46 @@ class ChannelEntriesTest extends TestCase
         ->assertJsonFragment(['type' => 'soundcloud']);
     }
 
+    public function test_entries_fluid()
+    {
+        /**
+         * {
+                channel_entries(title:"Test Fieldtypes" limit:1){
+                    entry_id
+                    test_fluid {
+                        ... on test_fluid_test_date {
+                            __typename
+                            value
+                        }
+                        ... on test_fluid_test_checkboxes {
+                            __typename
+                            value
+                        }
+                    }
+                }
+            }
+         */
+        $this->postJson('graphql', [
+            'query' => <<<'GQL'
+            {
+                channel_entries(title:"Test Fieldtypes" limit:1){
+                    entry_id
+                    title
+                    test_fluid {
+                        __field_name
+                        __field_type
+                        test_date
+                        test_checkboxes
+                    }
+                }
+            }
+          GQL
+        ])
+            ->assertJsonFragment(['title' => 'Test Fieldtypes'])
+            ->assertJsonFragment(['test_date' => '1664639700'])
+            ->assertJsonFragment(['test_checkboxes' => 'one']);
+    }
+
     public function test_entries_text_field_modifier()
     {
         $this->postJson('graphql', [

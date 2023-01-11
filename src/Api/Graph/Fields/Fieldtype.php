@@ -70,7 +70,7 @@ class Fieldtype extends Field
         }
 
         // apply modifiers;
-        if (! empty($args)) {
+        if (! empty($args) && ! is_null($data)) {
             foreach ($args as $key => $value) {
                 return $data->callModifier($key, $value);
             }

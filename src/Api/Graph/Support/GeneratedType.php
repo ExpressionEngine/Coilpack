@@ -6,11 +6,6 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class GeneratedType extends GraphQLType
 {
-    // protected $attributes = [
-    //     'name' => 'Grid',
-    //     'description' => 'Collection of channel entries',
-    // ];
-
     public function __construct($attributes)
     {
         $this->attributes = $attributes;

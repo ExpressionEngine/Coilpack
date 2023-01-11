@@ -10,6 +10,7 @@ use Expressionengine\Coilpack\Fieldtypes\Modifier;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class FieldtypeRegistrar
 {
@@ -109,19 +110,12 @@ class FieldtypeRegistrar
         }
 
         $name = "Field\\{$field->field_name}";
-
-        $typeDefinition = new GeneratedType([
-            'name' => $name,
-            'fields' => function () use ($fieldtype, $field) {
-                return $fieldtype->generateGraphType($field);
-            },
-        ]);
+        $typeDefinition = $fieldtype->generateGraphType($field);
+        $typeDefinition->name = $name;
 
         GraphQL::addType($typeDefinition, $name);
 
-        // $type = GraphQL::type($name);
         $type = $name;
-
         $this->types[$field->field_name] = $type;
 
         return $type;
@@ -135,6 +129,14 @@ class FieldtypeRegistrar
 
         if (! $fieldtype instanceof GeneratesGraphType) {
             $type = $fieldtype->graphType();
+
+            if ($type instanceof GraphQLType) {
+                $name = "Fieldtype\\{$fieldtype->name}";
+                $type->name = $name;
+                GraphQL::addType($type, $name);
+                $type = $name;
+            }
+
             $this->types[$fieldtype->name] = $type;
 
             return $type;

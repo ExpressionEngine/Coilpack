@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- GraphQL support for Fluid fieldtype
+
 ## [0.0.2] - 2023-01-06
 
 ### Added

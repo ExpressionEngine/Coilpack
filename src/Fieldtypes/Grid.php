@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use Expressionengine\Coilpack\Contracts\GeneratesGraphType;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
 use Expressionengine\Coilpack\FieldtypeManager;
@@ -90,21 +91,25 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
 
     public function generateGraphType(ChannelField $field)
     {
-        return $field->gridColumns->flatmap(function ($column) {
-            return [
-                $column->col_name => new \Expressionengine\Coilpack\Api\Graph\Fields\Fieldtype([
-                    'description' => $column->col_instructions,
-                    'fieldtype' => app(FieldtypeManager::class)->make($column->col_type),
-                    'type' => app(FieldtypeRegistrar::class)->getType($column->col_type) ?: \GraphQL\Type\Definition\Type::string(),
-                    'selectable' => false,
-                    // 'is_relation' => false,
-                    'resolve' => function ($root, array $args) use ($column) {
-                        $value = $root->{$column->col_name}; //->value();
+        return new GeneratedType([
+            'fields' => function () use ($field) {
+                return $field->gridColumns->flatmap(function ($column) {
+                    return [
+                        $column->col_name => new \Expressionengine\Coilpack\Api\Graph\Fields\Fieldtype([
+                            'description' => $column->col_instructions,
+                            'fieldtype' => app(FieldtypeManager::class)->make($column->col_type),
+                            'type' => app(FieldtypeRegistrar::class)->getType($column->col_type) ?: \GraphQL\Type\Definition\Type::string(),
+                            'selectable' => false,
+                            // 'is_relation' => false,
+                            'resolve' => function ($root, array $args) use ($column) {
+                                $value = $root->{$column->col_name}; //->value();
 
-                        return $value;
-                    },
-                ]),
-            ];
-        })->toArray();
+                                return $value;
+                            },
+                        ]),
+                    ];
+                })->toArray();
+            },
+        ]);
     }
 }
