@@ -7,8 +7,8 @@ use Expressionengine\Coilpack\Models\FieldContent;
 
 abstract class Fieldtype
 {
-
     public $name;
+
     public $id;
 
     public function __construct(string $name, $id = null)
@@ -33,9 +33,9 @@ abstract class Fieldtype
     /**
      * Call a modifier on the given field content
      *
-     * @param FieldContent $content
-     * @param string $name
-     * @param array $parameters
+     * @param  FieldContent  $content
+     * @param  string  $name
+     * @param  array  $parameters
      * @return FieldtypeOutput
      */
     public function callModifier(FieldContent $content, string $name, array $parameters = [])

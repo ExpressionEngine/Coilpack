@@ -109,7 +109,7 @@ class FieldtypeRegistrar
             return $this->types[$field->field_name];
         }
 
-        $name = "Field\\{$field->field_name}";
+        $name = "Field__{$field->field_name}";
         $typeDefinition = $fieldtype->generateGraphType($field);
         $typeDefinition->name = $name;
 
@@ -131,7 +131,7 @@ class FieldtypeRegistrar
             $type = $fieldtype->graphType();
 
             if ($type instanceof GraphQLType) {
-                $name = "Fieldtype\\{$fieldtype->name}";
+                $name = "Fieldtype__{$fieldtype->name}";
                 $type->name = $name;
                 GraphQL::addType($type, $name);
                 $type = $name;

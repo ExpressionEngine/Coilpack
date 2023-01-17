@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'route' => [
+    'route' => config('coilpack.graphql.enabled', false) ? [
         // The prefix for routes; do NOT use a leading slash!
         'prefix' => 'graphql',
 
@@ -22,7 +22,7 @@ return [
         // 'group_attributes' => ['guard' => 'api']
         //
         'group_attributes' => [],
-    ],
+    ] : [],
 
     // The name of the default schema
     // Used when the route group is directly accessed
@@ -154,7 +154,10 @@ return [
         'controller' => \Rebing\GraphQL\GraphQLController::class.'@graphiql',
         'middleware' => [],
         'view' => 'graphql::graphiql',
-        'display' => env('ENABLE_GRAPHIQL', true),
+        'display' => env(
+            'ENABLE_GRAPHIQL',
+            config('coilpack.graphql.enabled', false) && config('coilpack.graphql.graphiql', false)
+        ),
     ],
 
     /*

@@ -5,10 +5,15 @@
 ### Added
 
 - GraphQL support for Fluid fieldtype
+- Ability to enabled/disable GraphQL integration
 
 ### Fixed
 
 - GraphQL validation issues
+
+### Changed
+
+- GraphQL integration is disabled by default
 
 ## [0.0.2] - 2023-01-06
 

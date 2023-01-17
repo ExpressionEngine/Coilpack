@@ -13,7 +13,6 @@ use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\Addon\Fluid\Data as FluidData;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Illuminate\Support\Facades\DB;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType

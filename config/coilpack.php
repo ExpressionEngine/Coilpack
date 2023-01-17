@@ -30,6 +30,21 @@ return [
     'member_model' => null,
 
     /**
+     * Settings to control the behavior of the built-in GraphQL integration
+     */
+    'graphql' => [
+        /**
+         * Flag to enable the GraphQL API route at /graphql
+         */
+        'enabled' => false,
+        /**
+         * Flag to enable the Graphiql interactive GraphQL explorer at /graphiql
+         * Note that in order to use this tool you must also enable graphql above
+         */
+        'graphiql' => false,
+    ],
+
+    /**
      * Placeholder for config values read from ExpressionEngine install
      */
     'expressionengine' => [

@@ -4,7 +4,6 @@ namespace Expressionengine\Coilpack;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Commands\CoilpackCommand;
-use Expressionengine\Coilpack\View\Composers;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 // use Illuminate\Contracts\Support\DeferrableProvider;
@@ -39,21 +38,9 @@ class CoilpackServiceProvider extends ServiceProvider
         }
 
         Route::macro('templates', new Routing\TemplateRoute);
-        // $this->callAfterResolving('view', function() {
-        // $this->registerRouteMacros();
-        // });
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
-        // Event::listen('*', function ($event) {
-        //     echo $event . "\n";
-        // });
-
-        // App::before(function($request) {
-        //     View::composer('*', Composers\GlobalComposer::class);
-        // });
-
-        // Event::listen('bootstrapped: Illuminate\Foundation\Bootstrap\BootProviders', function() {
         Event::listen(function (\Illuminate\Routing\Events\RouteMatched $event) {
             // Prevent Coilpack from finishing the boot process if we're handling the request with EE
             if ($event->route->isFallback || $event->route->uri == config('coilpack.admin_url', 'admin.php')) {
