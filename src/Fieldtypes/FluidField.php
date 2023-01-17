@@ -80,14 +80,14 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
                     ];
                 })->toArray();
 
-                $fields['__field_name'] = [
+                $fields['_field_name'] = [
                     'type' => \GraphQL\Type\Definition\Type::string(),
                     'resolve' => function ($root, array $args) {
                         return $root->field->field_name;
                     },
                 ];
 
-                $fields['__field_type'] = [
+                $fields['_field_type'] = [
                     'type' => \GraphQL\Type\Definition\Type::string(),
                     'resolve' => function ($root, array $args) {
                         return $root->field->field_type;

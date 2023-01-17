@@ -29,7 +29,7 @@ class Variables extends GraphQLType
     protected function addField($name, $key, $value)
     {
         if (is_array($value)) {
-            $name = "$name\\$key";
+            $name = "{$name}__{$key}";
 
             $typeDefinition = new GeneratedType([
                 'name' => $name,

@@ -30,6 +30,10 @@ class ChannelEntry extends GraphQLType
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The title of the entry',
             ],
+            'url_title' => [
+                'type' => Type::nonNull(Type::string()),
+                'description' => 'The url title of the entry',
+            ],
             'site_id' => [
                 'type' => Type::nonNull(Type::int()),
                 'description' => 'Id of a site',

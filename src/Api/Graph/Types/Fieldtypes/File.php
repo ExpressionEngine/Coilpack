@@ -8,7 +8,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class File extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'Fieldtypes\\File',
+        'name' => 'Fieldtypes__File',
         'description' => 'File attributes',
         // 'model' => ChannelModel::class
     ];

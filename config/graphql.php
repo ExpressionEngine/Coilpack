@@ -96,8 +96,8 @@ return [
         'Member' => Expressionengine\Coilpack\Api\Graph\Types\Member::class,
         'Status' => Expressionengine\Coilpack\Api\Graph\Types\Status::class,
         'Variables' => Expressionengine\Coilpack\Api\Graph\Types\Variables::class,
-        // 'Fieldtypes\\Grid' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\Grid::class,
-        'Fieldtypes\\File' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\File::class,
+        // 'Fieldtypes__Grid' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\Grid::class,
+        'Fieldtypes__File' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\File::class,
     ],
 
     // The types will be loaded on demand. Default is to load all types on each request

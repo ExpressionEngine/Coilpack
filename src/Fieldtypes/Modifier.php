@@ -26,7 +26,7 @@ abstract class Modifier
 
     public function getQualifiedName()
     {
-        return implode('\\', [
+        return implode('__', [
             'Fieldtype',
             (new \ReflectionClass($this->fieldtype))->getShortName(),
             'Modifier',

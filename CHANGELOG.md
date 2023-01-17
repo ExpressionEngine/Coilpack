@@ -6,6 +6,10 @@
 
 - GraphQL support for Fluid fieldtype
 
+### Fixed
+
+- GraphQL validation issues
+
 ## [0.0.2] - 2023-01-06
 
 ### Added

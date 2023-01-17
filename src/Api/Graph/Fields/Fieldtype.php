@@ -76,7 +76,7 @@ class Fieldtype extends Field
             }
         }
         // return !empty($root->{$this->field->field_name}) ?: new FieldContent(['fieldtype' => $this->field->field_type]);
-        return $data;
+        return $data->value();
     }
 
     protected function getProperty(): string

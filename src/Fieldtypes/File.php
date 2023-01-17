@@ -182,6 +182,6 @@ class File extends Generic
 
     public function graphType()
     {
-        return 'Fieldtypes\\File';
+        return 'Fieldtypes__File';
     }
 }

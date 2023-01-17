@@ -36,7 +36,7 @@ class Member extends GraphQLType
         return $fields->flatMap(function ($field) {
             return [
                 $field->m_field_name => [
-                    'type' => $field->m_field_type == 'grid' ? Type::listOf(GraphQL::type("Field\\$field->m_field_name")) : Type::string(),
+                    'type' => $field->m_field_type == 'grid' ? Type::listOf(GraphQL::type("Field__$field->m_field_name")) : Type::string(),
                     'selectable' => false,
                     'is_relation' => false,
                     'resolve' => function ($root, array $args) use ($field) {

@@ -104,6 +104,7 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
+            ->assertJsonFragment(['url' => url('themes/user/site/default/asset/img/common/common.jpg')])
             ->assertJsonFragment(['caption' => 'Dharmafrog, 2014']);
     }
 
@@ -180,8 +181,8 @@ class ChannelEntriesTest extends TestCase
                     entry_id
                     title
                     test_fluid {
-                        __field_name
-                        __field_type
+                        _field_name
+                        _field_type
                         test_date
                         test_checkboxes
                     }
