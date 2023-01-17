@@ -27,14 +27,16 @@ jobs:
 
       - name: Update changelog
         id: update_changelog
-        uses: release-flow/keep-a-changelog-action/prepare-release@v1
+        uses: release-flow/keep-a-changelog-action@v2
         with:
-          release-type: ${{ github.event.inputs.releaseType }}
+          command: bump
+          version: ${{ github.event.inputs.releaseType }}
           tag-prefix: ''
+          keep-unreleased-section: true
 
       - name: Display version number
         run: |
-          echo "New release version: ${{ steps.update_changelog.outputs.release-version }}"
+          echo "New release version: ${{ steps.update_changelog.outputs.version }}"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -53,13 +55,13 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: ${{ github.event.inputs.branch }}
-          commit_message: Prepare Release ${{ steps.update_changelog.outputs.release-version }}
+          commit_message: Prepare Release ${{ steps.update_changelog.outputs.version }}
 
       - name: Create the tag
-        run: git tag ${{ steps.update_changelog.outputs.release-version }}
+        run: git tag ${{ steps.update_changelog.outputs.version }}
 
       - name: Create the release
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.update_changelog.outputs.release-version }}
+          tag: ${{ steps.update_changelog.outputs.version }}
           body: ${{ steps.update_changelog.outputs.release-notes }}
