@@ -13,12 +13,11 @@ class CheckboxesTest extends TestCase
 
         $output = $entry->test_checkboxes->value();
 
-        $this->assertEquals([
-            'One',
-            'Three',
-        ], $output->toArray());
-
+        $this->assertEquals(['One', 'Three'], $output->toArray());
         $this->assertEquals('One, Three', (string) $output);
+
+        $this->assertEquals(['One', 'Two', 'Three'], array_values($output->options));
+        $this->assertEquals(['one', 'two', 'three'], array_keys($output->options));
     }
 
     public function test_checkboxes_parameters()

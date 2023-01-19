@@ -69,8 +69,12 @@ class Fieldtype extends Field
             $data = $root->{$this->getProperty()};
         }
 
+        if (is_null($data)) {
+            return $data;
+        }
+
         // apply modifiers;
-        if (! empty($args) && ! is_null($data)) {
+        if (! empty($args)) {
             foreach ($args as $key => $value) {
                 return $data->callModifier($key, $value);
             }

@@ -98,7 +98,9 @@ class ChannelEntriesTest extends TestCase
                             file_size_human
                         }
                         caption
-                        align
+                        align {
+                            value
+                        }
                     }
                 }
             }
@@ -122,7 +124,9 @@ class ChannelEntriesTest extends TestCase
                             height
                         }
                         caption
-                        align
+                        align {
+                            value
+                        }
                     }
                 }
             }
@@ -143,7 +147,9 @@ class ChannelEntriesTest extends TestCase
                         title
                         blog_audio {
                             id
-                            type
+                            type {
+                                value
+                            }
                         }
                     }
                 }
@@ -152,7 +158,7 @@ class ChannelEntriesTest extends TestCase
         ])
         ->assertJsonFragment(['title' => 'Entry with SoundCloud audio'])
         ->assertJsonFragment(['id' => '164768245'])
-        ->assertJsonFragment(['type' => 'soundcloud']);
+        ->assertJsonFragment(['type' => ['value' => 'soundcloud']]);
     }
 
     public function test_entries_fluid()
@@ -184,7 +190,9 @@ class ChannelEntriesTest extends TestCase
                         _field_name
                         _field_type
                         test_date
-                        test_checkboxes
+                        test_checkboxes {
+                            value
+                        }
                     }
                 }
             }
@@ -192,7 +200,7 @@ class ChannelEntriesTest extends TestCase
         ])
             ->assertJsonFragment(['title' => 'Test Fieldtypes'])
             ->assertJsonFragment(['test_date' => '1664639700'])
-            ->assertJsonFragment(['test_checkboxes' => 'one']);
+            ->assertJsonFragment(['test_checkboxes' => ['value' => 'One']]);
     }
 
     public function test_entries_text_field_modifier()

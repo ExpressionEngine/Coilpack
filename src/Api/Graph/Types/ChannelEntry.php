@@ -2,7 +2,6 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
-// use Expressionengine\Coilpack\Api\Graph\Fields\FormattableDate;
 use Expressionengine\Coilpack\Api\Graph\Fields;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\FieldtypeManager;
@@ -44,7 +43,7 @@ class ChannelEntry extends GraphQLType
             ],
             'channel' => [
                 'type' => Type::nonNull(GraphQL::type('Channel')),
-                'description' => 'Id of a channel',
+                'description' => 'Channel for this entry',
             ],
             'author_id' => [
                 'type' => Type::nonNull(Type::int()),
@@ -52,7 +51,7 @@ class ChannelEntry extends GraphQLType
             ],
             'author' => [
                 'type' => Type::nonNull(GraphQL::type('Member')),
-                'description' => 'Id of a author',
+                'description' => 'Author for this entry',
             ],
             'status_id' => [
                 'type' => Type::nonNull(Type::int()),
@@ -60,7 +59,7 @@ class ChannelEntry extends GraphQLType
             ],
             'status' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'Id of a site',
+                'description' => 'Status for this entry',
             ],
             'entry_date' => new Fields\FormattableDate,
             'year' => [

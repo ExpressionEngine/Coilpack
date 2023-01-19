@@ -6,6 +6,8 @@
 
 - GraphQL support for Fluid fieldtype
 - Ability to enabled/disable GraphQL integration
+- Full GraphQL support for default modifiers and parameters
+- Ability to retrieve options from OptionFieldtypes (select, checkbox, etc...)
 
 ### Fixed
 
@@ -14,6 +16,7 @@
 ### Changed
 
 - GraphQL integration is disabled by default
+- GraphQL return type for OptionFieldtypes
 
 ## [0.0.2] - 2023-01-06
 

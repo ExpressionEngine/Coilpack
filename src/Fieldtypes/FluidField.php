@@ -44,7 +44,7 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
                     'data' => $row->{'field_id_'.$row->field_id},
                     'format' => $row->{'field_ft_'.$row->field_id},
                     // Fieldtype should be optional, filled in by FieldContent
-                    'fieldtype' => app(FieldtypeManager::class)->make($row->field->field_type),
+                    'fieldtype' => $row->field->getFieldtype(),
                 ])
             );
         });

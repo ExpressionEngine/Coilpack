@@ -2,8 +2,10 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
+use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\FieldContent;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class OptionFieldtype extends Generic
 {
@@ -30,19 +32,22 @@ class OptionFieldtype extends Generic
         }
 
         $pairs = $handler->get_setting('value_label_pairs');
+        $selected = [];
 
         if (! empty($pairs)) {
             foreach ($data as $key => $value) {
                 if (isset($pairs[$value])) {
-                    $data[$key] = $pairs[$value];
+                    $selected[$value] = $pairs[$value];
                 }
             }
+        } else {
+            $selected = $data;
         }
 
         if (isset($parameters['markup']) && ($parameters['markup'] == 'ol' or $parameters['markup'] == 'ul')) {
             $string = '<'.$parameters['markup'].'>';
 
-            foreach ($data as $dv) {
+            foreach ($selected as $dv) {
                 $string .= '<li>';
                 $string .= $dv;
                 $string .= '</li>';
@@ -50,11 +55,52 @@ class OptionFieldtype extends Generic
 
             $string .= '</'.$parameters['markup'].'>';
         } else {
-            $string = implode(', ', $data);
+            $string = implode(', ', $selected);
         }
 
         // $string = $handler->processTypograpghy($string);
+        return FieldtypeOutput::make($string)
+            ->array(array_values($selected))
+            ->object((object) [
+                'options' => $pairs,
+                'selected' => $selected,
+            ]);
+    }
 
-        return FieldtypeOutput::make($string)->array($data);
+    public function modifiers()
+    {
+        return [];
+    }
+
+    public function graphType()
+    {
+        return new GeneratedType([
+            'fields' => function () {
+                return [
+                    'value' => [
+                        'type' => \GraphQL\Type\Definition\Type::string(),
+                        'resolve' => function ($root, array $args) {
+                            return $root;
+                        },
+                    ],
+                    'selected' => [
+                        'type' => \GraphQL\Type\Definition\Type::listOf(GraphQL::type('KeyedValue')),
+                        'resolve' => function ($root, array $args) {
+                            return array_map(function ($value, $key) {
+                                return compact('key', 'value');
+                            }, $root->selected, array_keys($root->selected));
+                        },
+                    ],
+                    'options' => [
+                        'type' => \GraphQL\Type\Definition\Type::listOf(GraphQL::type('KeyedValue')),
+                        'resolve' => function ($root, array $args) {
+                            return array_map(function ($value, $key) {
+                                return compact('key', 'value');
+                            }, $root->options, array_keys($root->options));
+                        },
+                    ],
+                ];
+            },
+        ]);
     }
 }

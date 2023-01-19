@@ -10,7 +10,6 @@ class File extends GraphQLType
     protected $attributes = [
         'name' => 'Fieldtypes__File',
         'description' => 'File attributes',
-        // 'model' => ChannelModel::class
     ];
 
     public function fields(): array

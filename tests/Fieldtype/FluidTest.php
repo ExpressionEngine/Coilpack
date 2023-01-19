@@ -12,9 +12,10 @@ class FluidTest extends TestCase
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
 
         $output = $entry->test_fluid->value();
+
         $this->assertEquals([
-            'one',
-            'two',
+            'One',
+            'Two',
             '1664639700',
         ], array_map(function ($row) {
             return (string) $row->value();

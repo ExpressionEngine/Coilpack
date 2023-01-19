@@ -96,6 +96,7 @@ return [
         'Member' => Expressionengine\Coilpack\Api\Graph\Types\Member::class,
         'Status' => Expressionengine\Coilpack\Api\Graph\Types\Status::class,
         'Variables' => Expressionengine\Coilpack\Api\Graph\Types\Variables::class,
+        'KeyedValue' => Expressionengine\Coilpack\Api\Graph\Types\KeyedValue::class,
         // 'Fieldtypes__Grid' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\Grid::class,
         'Fieldtypes__File' => Expressionengine\Coilpack\Api\Graph\Types\Fieldtypes\File::class,
     ],
