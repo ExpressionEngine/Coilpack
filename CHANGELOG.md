@@ -8,6 +8,7 @@
 - Ability to enabled/disable GraphQL integration
 - Full GraphQL support for default modifiers and parameters
 - Ability to retrieve options from OptionFieldtypes (select, checkbox, etc...)
+- Method on Coilpack facade for adding a Twig Extension
 
 ### Fixed
 

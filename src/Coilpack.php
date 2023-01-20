@@ -54,4 +54,17 @@ class Coilpack
     {
         return app(FieldtypeManager::class)->register($name, $class);
     }
+
+    /**
+     * Register an extension for the Twig template engine
+     *
+     * @param  \Twig\Extension\ExtensionInterface  $extensionClass
+     * @return void
+     */
+    public function addTwigExtension($extensionClass)
+    {
+        $extensionClass = (is_string($extensionClass)) ? new $extensionClass : $extensionClass;
+
+        return \TwigBridge\Facade\Twig::addExtension($extensionClass);
+    }
 }
