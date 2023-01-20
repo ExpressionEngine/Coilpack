@@ -77,6 +77,7 @@ return [
             'query' => [
                 'channel_entry' => Expressionengine\Coilpack\Api\Graph\Queries\ChannelEntryQuery::class,
                 'channel_entries' => Expressionengine\Coilpack\Api\Graph\Queries\ChannelEntriesQuery::class,
+                'category' => Expressionengine\Coilpack\Api\Graph\Queries\CategoryQuery::class,
                 'categories' => Expressionengine\Coilpack\Api\Graph\Queries\CategoriesQuery::class,
                 'members' => Expressionengine\Coilpack\Api\Graph\Queries\MembersQuery::class,
                 'me' => Expressionengine\Coilpack\Api\Graph\Queries\MemberCurrentQuery::class,

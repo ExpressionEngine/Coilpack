@@ -9,6 +9,7 @@
 - Full GraphQL support for default modifiers and parameters
 - Ability to retrieve options from OptionFieldtypes (select, checkbox, etc...)
 - Method on Coilpack facade for adding a Twig Extension
+- Single category query to GraphQL schema
 
 ### Fixed
 
