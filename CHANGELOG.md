@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.0.3] - 2023-01-25
+
 ### Added
 
 - GraphQL support for Fluid fieldtype
@@ -43,6 +45,10 @@
 ### Added
 
 - Initial Beta Release
+
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/0.0.3...HEAD
+
+[0.0.3]: https://github.com/ExpressionEngine/Coilpack/compare/0.0.2...0.0.3
 
 [0.0.2]: https://github.com/ExpressionEngine/Coilpack/compare/0.0.1...0.0.2
 
