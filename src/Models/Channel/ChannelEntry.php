@@ -140,6 +140,12 @@ class ChannelEntry extends Model
         return $this->hasManyThrough(ChannelField::class, Channel::class);
     }
 
+    public function hiddenFields()
+    {
+        return $this->belongsToMany(ChannelField::class,
+            'channel_entry_hidden_fields', 'entry_id', 'field_id');
+    }
+
     public function grids()
     {
     }

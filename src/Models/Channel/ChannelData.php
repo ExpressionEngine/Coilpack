@@ -58,7 +58,9 @@ class ChannelData extends Model
         })->reduce(function ($carry, $key) use ($fields) {
             [$name, $id] = array_slice(explode('_', $key), 1);
 
-            if (! $fields->has($id)) {
+            // Do not add the field if it isn't part of the entry's channel
+            // or if it has been conditionally hidden for this entry
+            if (! $fields->has($id) || $this->entry->hiddenFields->contains($id)) {
                 return $carry;
             }
 

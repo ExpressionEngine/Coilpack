@@ -4,6 +4,8 @@ namespace Expressionengine\Coilpack\View;
 
 abstract class ModelTag extends IterableTag
 {
+    protected $query;
+
     protected $takeFirst = false;
     // abstract protected function query
 

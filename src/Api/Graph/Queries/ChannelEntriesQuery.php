@@ -44,7 +44,7 @@ class ChannelEntriesQuery extends Query
         /** @var SelectFields $fields */
         $fields = $getSelectFields();
         $select = $fields->getSelect();
-        $with = array_merge(['data', 'channel'], $fields->getRelations());
+        $with = array_merge(['data', 'channel', 'hiddenFields'], $fields->getRelations());
 
         $entries = ChannelEntry::select($select)->with($with);
 

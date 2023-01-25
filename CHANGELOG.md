@@ -14,6 +14,7 @@
 ### Fixed
 
 - GraphQL validation issues
+- Remove conditionally hidden fields from Channel Entry data
 
 ### Changed
 
