@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Option for basic token authentication in GraphQL
+- New artisan command for generating tokens `coilpack:graphql --generate-token`
+- The ability for third parties to define GraphQL queries in the coilpack schema
+- Extra options for configuring Coilpack's GraphQL behavior
+
+### Changed
+
+- GraphQL schema configuration. Coilpack now creates a separate schema named 'coilpack'
+
 ## [0.0.3] - 2023-01-25
 
 ### Added

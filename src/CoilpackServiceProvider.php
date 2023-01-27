@@ -3,13 +3,13 @@
 namespace Expressionengine\Coilpack;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
-use Expressionengine\Coilpack\Commands\CoilpackCommand;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
-// use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Route;
+// use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class CoilpackServiceProvider extends ServiceProvider
 {
@@ -28,7 +28,8 @@ class CoilpackServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                CoilpackCommand::class,
+                Commands\CoilpackCommand::class,
+                Commands\GraphQLCommand::class,
             ]);
         }
 
@@ -69,15 +70,10 @@ class CoilpackServiceProvider extends ServiceProvider
             ee()->legacy_api->instantiate('channel_fields');
 
             // Only boot the GraphQL fieldtype registrar when needed
-            if ($event->route->uri == 'graphql') {
+            if (\Illuminate\Support\Str::startsWith($event->route->uri, config('graphql.route.prefix'))) {
                 app(FieldtypeRegistrar::class)->boot();
             }
         });
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/graphql.php',
-            'graphql'
-        );
     }
 
     /**
@@ -87,7 +83,7 @@ class CoilpackServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(
+        $this->recursiveMergeConfigFrom(
             __DIR__.'/../config/coilpack.php',
             'coilpack'
         );
@@ -143,11 +139,49 @@ class CoilpackServiceProvider extends ServiceProvider
 
         // Bind the implementation for Coilpack's facade
         $this->app->bind('coilpack', function ($app) {
-            return new Coilpack();
+            return new Coilpack;
+        });
+
+        $this->app->bind('coilpack.graphql', function ($app) {
+            return new Api\Graph\SchemaManager;
         });
 
         // Register Middleware
         $this->app->make('router')->aliasMiddleware('member_with_role', Middleware\MemberWithRole::class);
         $this->app->make('router')->aliasMiddleware('member_with_permission', Middleware\MemberWithPermission::class);
+
+        // Configure the behavior of the GraphQL schema based on package config
+        $this->app->booting(function () {
+            if (config('coilpack.graphql.enabled', false)) {
+                app('coilpack.graphql')->enable();
+            }
+
+            if (config('coilpack.graphql.is_default_schema', true)) {
+                app('coilpack.graphql')->setAsDefault();
+            }
+
+            if (is_null(env('ENABLE_GRAPHIQL')) && ! config('coilpack.graphql.graphiql', false)) {
+                app('coilpack.graphql')->disableGraphiQL();
+            }
+        });
+    }
+
+    /**
+     * Merge the given configuration with the existing configuration.
+     *
+     * @param  string  $path
+     * @param  string  $key
+     * @return void
+     */
+    protected function recursiveMergeConfigFrom($path, $key)
+    {
+        if (! ($this->app instanceof \Illuminate\Contracts\Foundation\CachesConfiguration && $this->app->configurationIsCached())) {
+            $config = $this->app->make('config');
+
+            $config->set($key, array_replace_recursive(
+                require $path,
+                $config->get($key, [])
+            ));
+        }
     }
 }

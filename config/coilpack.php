@@ -36,12 +36,40 @@ return [
         /**
          * Flag to enable the GraphQL API route at /graphql
          */
-        'enabled' => false,
+        'enabled' => env('COILPACK_GRAPHQL_ENABLED', false),
+
         /**
          * Flag to enable the Graphiql interactive GraphQL explorer at /graphiql
          * Note that in order to use this tool you must also enable graphql above
          */
-        'graphiql' => false,
+        'graphiql' => env('COILPACK_GRAPHIQL_ENABLED', false),
+
+        /**
+         * Flag to set the 'coilpack' schema as your default schema
+         */
+        'is_default_schema' => true,
+
+        /**
+         * Settings to control how requests to the GraphQL API should be authenticated
+         */
+        'auth' => [
+            /**
+             * Flag to control whether or not authentication is enabled
+             */
+            'enabled' => env('COILPACK_GRAPHQL_AUTH_ENABLED', true),
+
+            /**
+             * The driver that should be used for authenticating requests
+             *
+             * Supported drivers: 'token'
+             */
+            'driver' => env('COILPACK_GRAPHQL_AUTH_DRIVER', 'token'),
+
+            /**
+             * When using the 'token' driver it will be stored here
+             */
+            'token' => env('COILPACK_GRAPHQL_TOKEN', null)
+        ]
     ],
 
     /**
