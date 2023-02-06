@@ -109,8 +109,8 @@ class TagBuilder extends Tag implements \IteratorAggregate
         }, $this->parameters);
 
         return is_array($output) && is_array(current($output)) ? collect($output)->map(function ($row) {
-            return \Expressionengine\Coilpack\FieldtypeOutput::make($row);
-        }) : \Expressionengine\Coilpack\FieldtypeOutput::make($output);
+            return \Expressionengine\Coilpack\TemplateOutput::make()->value($row);
+        }) : \Expressionengine\Coilpack\TemplateOutput::make()->value($output);
     }
 
     private function getInstanceClass()
