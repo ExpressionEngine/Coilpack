@@ -4,7 +4,9 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use Expressionengine\Coilpack\FieldtypeOutput;
+use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
+use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class OptionFieldtype extends Generic
@@ -59,7 +61,7 @@ class OptionFieldtype extends Generic
         }
 
         // $string = $handler->processTypograpghy($string);
-        return FieldtypeOutput::make($string)
+        return FieldtypeOutput::for($this)->value($string)
             ->array(array_values($selected))
             ->object((object) [
                 'options' => $pairs,
@@ -67,9 +69,20 @@ class OptionFieldtype extends Generic
             ]);
     }
 
-    public function modifiers()
+    public function parameters(ChannelField $field = null)
     {
-        return [];
+        return [
+            new Parameter([
+                'name' => 'limit',
+                'type' => 'integer',
+                'description' => 'Limits the number of selected items',
+            ]),
+            new Parameter([
+                'name' => 'markup',
+                'type' => 'string',
+                'description' => 'Output value as an HTML list, you can use "ul" or "ol"',
+            ]),
+        ];
     }
 
     public function graphType()

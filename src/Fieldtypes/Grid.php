@@ -10,6 +10,7 @@ use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
+use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Expressionengine\Coilpack\View\FilteredParameterValue;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
     {
         $data = $this->loadData($content, $parameters);
 
-        return FieldtypeOutput::make($data);
+        return FieldtypeOutput::for($this)->value($data);
     }
 
     protected function loadData(FieldContent $content, array $parameters = [])
@@ -111,5 +112,58 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
                 })->toArray();
             },
         ]);
+    }
+
+    public function parameters(ChannelField $field = null)
+    {
+        return [
+            new Parameter([
+                'name' => 'fixed_order',
+                'type' => 'string',
+                'description' => 'Order rows in a fixed order of row IDs',
+            ]),
+            new Parameter([
+                'name' => 'limit',
+                'type' => 'integer',
+                'description' => 'Limits the number of rows',
+            ]),
+            new Parameter([
+                'name' => 'offset',
+                'type' => 'integer',
+                'description' => 'Offsets the number of rows',
+            ]),
+            new Parameter([
+                'name' => 'orderby',
+                'type' => 'string',
+                'description' => 'Order rows by a specific column',
+            ]),
+            new Parameter([
+                'name' => 'row_id',
+                'type' => 'string',
+                'description' => 'Only rows for the given IDs. Multiple rows may be specified by separating them with a pipe character',
+            ]),
+            new Parameter([
+                'name' => 'search',
+                'prefix' => $field->field_name,
+                'description' => 'Search for rows matching a certain criteria',
+                'type' => function () use ($field) {
+                    return $field->gridColumns->flatmap(function ($column) {
+                        return [
+                            new Parameter([
+                                'name' => $column->col_name,
+                                'type' => 'string',
+                                'description' => $column->col_instructions,
+                            ]),
+                        ];
+                    })->toArray();
+                },
+            ]),
+            new Parameter([
+                'name' => 'sort',
+                'type' => 'string',
+                'description' => 'Specifies the direction of the sorting',
+                'defaultValue' => 'asc',
+            ]),
+        ];
     }
 }

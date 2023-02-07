@@ -8,10 +8,13 @@
 - New artisan command for generating tokens `coilpack:graphql --generate-token`
 - The ability for third parties to define GraphQL queries in the coilpack schema
 - Extra options for configuring Coilpack's GraphQL behavior
+- Support for chaining multiple modifiers
+- Typed parameter definitions for fieldtypes to support GraphQL
 
 ### Changed
 
 - GraphQL schema configuration. Coilpack now creates a separate schema named 'coilpack'
+- Modifier registration moved to new function, makes use of new Typed parameters
 
 ## [0.0.3] - 2023-01-25
 

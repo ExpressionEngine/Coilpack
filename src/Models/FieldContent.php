@@ -63,13 +63,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         return $value;
     }
 
-    public function callModifier(string $name, $parameters = [])
-    {
-        $fieldtype = $this->getFieldtype();
-
-        return $fieldtype->callModifier($this, $name, is_array($parameters) ? $parameters : []);
-    }
-
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->value()->getIterator());
@@ -232,7 +225,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 
     public function __call($method, $arguments)
     {
-        return $this->callModifier($method, ...$arguments);
+        return $this->value()->$method(...$arguments);
     }
 
     public function __invoke($parameters = [])

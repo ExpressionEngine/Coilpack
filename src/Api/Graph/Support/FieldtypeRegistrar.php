@@ -62,9 +62,6 @@ class FieldtypeRegistrar
         foreach ($fieldtypes as $fieldtype) {
             $fieldtype = app(FieldtypeManager::class)->make($fieldtype->name);
             $this->registerFieldtype($fieldtype);
-            foreach ($fieldtype->modifiers() as $modifier) {
-                $this->registerModifier($modifier);
-            }
         }
     }
 
@@ -167,6 +164,23 @@ class FieldtypeRegistrar
         }
 
         return null;
+    }
+
+    public function addType($type, $name = null)
+    {
+        $name = $name ?: $type->name;
+
+        if (array_key_exists($name, $this->types)) {
+            return $this->types[$name];
+        }
+
+        GraphQL::addType($type, $name);
+
+        $type = GraphQL::type($name);
+
+        $this->types[$name] = $type;
+
+        return $type;
     }
 
     public function allTypes()

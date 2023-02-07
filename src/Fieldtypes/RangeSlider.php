@@ -18,7 +18,7 @@ class RangeSlider extends Generic
             $handler->replace_tag($data, $parameters, '{!-- coilpack:fake --}');
             $array = $template->get_data() ?: [];
 
-            return FieldtypeOutput::make($string)->array($array);
+            return FieldtypeOutput::for($this)->value($string)->array($array);
         });
     }
 }

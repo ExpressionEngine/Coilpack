@@ -4,6 +4,7 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\FieldContent;
+use Expressionengine\Coilpack\TypedParameter as Parameter;
 use GraphQL\Type\Definition\Type;
 
 class File extends Generic
@@ -18,162 +19,195 @@ class File extends Generic
             $string = $handler->_wrap_it($data, $parameters['wrap'], $data['path'].$data['filename'].'.'.$data['extension']);
         }
 
-        return FieldtypeOutput::make($data)->string($string);
+        return FieldtypeOutput::for($this)->value($data)->string($string);
     }
 
-    public function modifiers()
+    public function bootModifiers(): array
     {
         return [
-            'rotate' => new Modifiers\File($this, [
+            new Modifiers\File($this, [
+                'name' => 'manipulation',
+                'description' => 'Perform a pre-defined manipulation on the file',
+                'parameters' => new Parameter([
+                    'name' => 'name',
+                    'type' => 'string',
+                    'description' => 'Manipulation name',
+                ]),
+            ]),
+            new Modifiers\File($this, [
                 'name' => 'rotate',
                 'description' => 'Rotate a file',
                 'parameters' => [
-                    'angle' => [
-                        'type' => Type::string(),
+                    new Parameter([
+                        'name' => 'angle',
+                        'type' => 'string',
                         'description' => 'Rotation angle',
-                    ],
+                    ]),
                 ],
-                // 'graphql' => [
-                //     // 'type' =>
-                // ]
             ]),
-            'resize' => new Modifiers\File($this, [
+            new Modifiers\File($this, [
                 'name' => 'resize',
                 'description' => 'Resize a file',
                 'parameters' => [
-                    'height' => [
-                        'type' => Type::int(),
+                    new Parameter([
+                        'name' => 'height',
+                        'type' => 'integer',
                         'description' => 'Height to resize to, px',
-                    ],
-                    'width' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'width',
+                        'type' => 'integer',
                         'description' => 'Width to resize to, px',
-                    ],
-                    'quality' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'quality',
+                        'type' => 'integer',
                         'description' => 'Image quality, %',
                         'defaultValue' => 75,
-                    ],
-                    'maintain_ratio' => [
-                        'type' => Type::boolean(),
+                    ]),
+                    new Parameter([
+                        'name' => 'maintain_ratio',
+                        'type' => 'boolean',
                         'description' => 'Keep image ratio (yes/no)',
                         'defaultValue' => true,
-                    ],
-                    // 'master_dimension' => [
-                    //     'type' => Type::enum()
+                    ]),
+                    // new Parameter([
+                    //    'name' => // ,
+                    //     'type' => 'enum')
                     // ]
                 ],
             ]),
-            'resize_crop' => new Modifiers\File($this, [
+            new Modifiers\File($this, [
                 'name' => 'resize_crop',
                 'description' => 'Resize and Crop a file',
                 'parameters' => [
-                    'resize_height' => [
-                        'type' => Type::int(),
+                    new Parameter([
+                        'name' => 'resize_height',
+                        'type' => 'integer',
                         'description' => 'Height to resize to, px',
-                    ],
-                    'resize_width' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'resize_width',
+                        'type' => 'integer',
                         'description' => 'Width to resize to, px',
-                    ],
-                    'resize_quality' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'resize_quality',
+                        'type' => 'integer',
                         'description' => 'Resized Image quality, %',
                         'defaultValue' => 75,
-                    ],
-                    'resize_maintain_ratio' => [
-                        'type' => Type::boolean(),
+                    ]),
+                    new Parameter([
+                        'name' => 'resize_maintain_ratio',
+                        'type' => 'boolean',
                         'description' => 'Keep image ratio when resizing (yes/no)',
                         'defaultValue' => true,
-                    ],
-                    'crop_height' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_height',
+                        'type' => 'integer',
                         'description' => 'Height to crop to, px',
-                    ],
-                    'crop_width' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_width',
+                        'type' => 'integer',
                         'description' => 'Width to crop to, px',
-                    ],
-                    'crop_quality' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_quality',
+                        'type' => 'integer',
                         'description' => 'Cropped Image quality, %',
                         'defaultValue' => 75,
-                    ],
-                    'crop_maintain_ratio' => [
-                        'type' => Type::boolean(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_maintain_ratio',
+                        'type' => 'boolean',
                         'description' => 'Keep image ratio when cropping (yes/no)',
                         'defaultValue' => true,
-                    ],
-                    'crop_x' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_x',
+                        'type' => 'integer',
                         'description' => 'Horizontal crop offset, px',
                         'defaultValue' => 0,
-                    ],
-                    'crop_y' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'crop_y',
+                        'type' => 'integer',
                         'description' => 'Vertical crop offset, px',
                         'defaultValue' => 0,
-                    ],
+                    ]),
                 ],
             ]),
-            'crop' => new Modifiers\File($this, [
+            new Modifiers\File($this, [
                 'name' => 'crop',
                 'description' => 'Crop a file',
                 'parameters' => [
-                    'height' => [
-                        'type' => Type::int(),
+                    new Parameter([
+                        'name' => 'height',
+                        'type' => 'integer',
                         'description' => 'Height to crop to, px',
-                    ],
-                    'width' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'width',
+                        'type' => 'integer',
                         'description' => 'Width to crop to, px',
-                    ],
-                    'quality' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'quality',
+                        'type' => 'integer',
                         'description' => 'Image quality, %',
                         'defaultValue' => 75,
-                    ],
-                    'maintain_ratio' => [
-                        'type' => Type::boolean(),
+                    ]),
+                    new Parameter([
+                        'name' => 'maintain_ratio',
+                        'type' => 'boolean',
                         'description' => 'Keep image ratio (yes/no)',
                         'defaultValue' => true,
-                    ],
-                    'x' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'x',
+                        'type' => 'integer',
                         'description' => 'Horizontal offset, px',
                         'defaultValue' => 0,
-                    ],
-                    'y' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'y',
+                        'type' => 'integer',
                         'description' => 'Vertical offset, px',
                         'defaultValue' => 0,
-                    ],
+                    ]),
                 ],
             ]),
-            'webp' => new Modifiers\File($this, [
+            new Modifiers\File($this, [
                 'name' => 'webp',
                 'description' => 'Convert a file to WEBP format',
                 'parameters' => [
-                    'height' => [
-                        'type' => Type::int(),
+                    new Parameter([
+                        'name' => 'height',
+                        'type' => 'integer',
                         'description' => 'Height to resize to, px',
-                    ],
-                    'width' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'width',
+                        'type' => 'integer',
                         'description' => '',
-                    ],
-                    'quality' => [
-                        'type' => Type::int(),
+                    ]),
+                    new Parameter([
+                        'name' => 'quality',
+                        'type' => 'integer',
                         'description' => 'Image quality, %',
                         'defaultValue' => 75,
-                    ],
-                    'maintain_ratio' => [
-                        'type' => Type::boolean(),
+                    ]),
+                    new Parameter([
+                        'name' => 'maintain_ratio',
+                        'type' => 'boolean',
                         'description' => 'Keep image ratio (yes/no)',
                         'defaultValue' => true,
-                    ],
-                    // 'master_dimension' => [
-                    //     'type' => Type::enum()
+                    ]),
+                    // new Parameter([
+                    // 'name' => // ,
+                    //     'type' => 'enum')
                     // ]
                 ],
             ]),

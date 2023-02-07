@@ -3,11 +3,13 @@
 namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use Expressionengine\Coilpack\Api\Graph\Support\GeneratedInputType;
+use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
 use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\FieldContent;
+// use Expressionengine\Coilpack\Models\FieldContent;
 use GraphQL\Type\Definition\Type;
 
-abstract class Modifier
+abstract class Modifier implements ConvertsToGraphQL
 {
     protected $attributes;
 
@@ -38,30 +40,49 @@ abstract class Modifier
     /**
      * Modify the content
      *
-     * @param  FieldContent  $content
+     * @param  FieldtypeOutput  $content
      * @param  array  $parameters
      * @return FieldtypeOutput
      */
-    abstract public function handle(FieldContent $content, $parameters = []);
+    abstract public function handle(FieldtypeOutput $content, $parameters = []);
 
-    public function toGraphQL()
+    public function toGraphQL(): array
     {
-        $type = Type::boolean();
-
-        if ($this->parameters) {
-            $type = app(FieldtypeRegistrar::class)->registerModifier($this);
-            if (is_null($type)) {
-                dd($this, $this->parameters);
-            }
-        }
-
-        $defaults = [
-            'type' => $type,
-            // 'defaultValue' => null,
-            'description' => '',
+        $default = [
+            'type' => Type::boolean(),
+            'description' => $this->description,
         ];
 
-        return array_merge($defaults, array_filter($this->attributes['graphql'] ?? []));
+        if (empty($this->parameters)) {
+            return $default;
+        }
+
+        if ($this->parameters instanceof ConvertsToGraphQL) {
+            return array_merge($default, $this->parameters->toGraphQL());
+        }
+
+        if ($this->parameters instanceof Type) {
+            return array_merge($default, ['type' => $this->parameters]);
+        }
+
+        $name = $this->getQualifiedName();
+
+        $typeDefinition = new GeneratedInputType([
+            'name' => $name,
+            'fields' => function () {
+                return collect($this->parameters)->flatMap(function ($parameter, $key) {
+                    $key = ($parameter->name ?? false) ? $parameter->name : $key;
+
+                    return [
+                        $key => $parameter instanceof ConvertsToGraphQL ? $parameter->toGraphQL() : $parameter,
+                    ];
+                })->toArray();
+            },
+        ]);
+
+        return array_merge($default, [
+            'type' => app(FieldtypeRegistrar::class)->addType($typeDefinition, $name),
+        ]);
     }
 
     public function __isset($name)

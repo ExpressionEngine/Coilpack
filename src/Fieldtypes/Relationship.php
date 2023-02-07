@@ -5,7 +5,9 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use ExpressionEngine\Coilpack\Models\Channel\ChannelEntry;
+use ExpressionEngine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
+use Expressionengine\Coilpack\TypedParameter as Parameter;
 
 class Relationship extends Fieldtype implements ListsGraphType
 {
@@ -14,7 +16,7 @@ class Relationship extends Fieldtype implements ListsGraphType
         // $fields = $content->entry->relationships->where('grid_id', $content->field->id);
         $data = $this->loadData($content);
 
-        return FieldtypeOutput::make($data);
+        return FieldtypeOutput::for($this)->value($data);
     }
 
     protected function loadData(FieldContent $content)
@@ -42,6 +44,92 @@ class Relationship extends Fieldtype implements ListsGraphType
         $data = $query->get();
 
         return $data;
+    }
+
+    public function parameters(?ChannelField $field = null)
+    {
+        return [
+            new Parameter([
+                'name' => 'author_id',
+                'type' => 'string',
+                'description' => 'Limit the entries to the specified Member ID',
+            ]),
+            new Parameter([
+                'name' => 'category',
+                'type' => 'string',
+                'description' => 'Limit the entries to the specified Category ID',
+            ]),
+            new Parameter([
+                'name' => 'channel',
+                'type' => 'string',
+                'description' => 'From which channel to show the entries',
+            ]),
+            new Parameter([
+                'name' => 'entry_id',
+                'type' => 'string',
+                'description' => 'Limit the entries to the specified Entry ID',
+            ]),
+            new Parameter([
+                'name' => 'group_id',
+                'type' => 'string',
+                'description' => 'Limit entries to the specified Member Role ID',
+            ]),
+            new Parameter([
+                'name' => 'limit',
+                'type' => 'integer',
+                'description' => 'Limits the number of entries',
+            ]),
+            new Parameter([
+                'name' => 'offset',
+                'type' => 'integer',
+                'description' => 'Offsets the display by X number of entries',
+            ]),
+            new Parameter([
+                'name' => 'orderby',
+                'type' => 'string',
+                'description' => '',
+            ]),
+            new Parameter([
+                'name' => 'show_expired',
+                'type' => 'boolean',
+                'description' => '',
+            ]),
+            new Parameter([
+                'name' => 'show_future_entries',
+                'type' => 'boolean',
+                'description' => 'Sets the display order of the entries',
+            ]),
+            new Parameter([
+                'name' => 'sort',
+                'type' => 'string',
+                'description' => 'The sort order (asc/desc)',
+            ]),
+            new Parameter([
+                'name' => 'start_on',
+                'type' => 'string',
+                'description' => 'A particular date/time on which to start the entries',
+            ]),
+            new Parameter([
+                'name' => 'status',
+                'type' => 'string',
+                'description' => 'Restrict to entries with a particular status',
+            ]),
+            new Parameter([
+                'name' => 'stop_before',
+                'type' => 'string',
+                'description' => '',
+            ]),
+            new Parameter([
+                'name' => 'url_title',
+                'type' => 'string',
+                'description' => 'Limits the query by an entry’s url_title',
+            ]),
+            new Parameter([
+                'name' => 'username',
+                'type' => 'string',
+                'description' => 'Limits the query by username',
+            ]),
+        ];
     }
 
     public function graphType()

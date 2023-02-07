@@ -4,7 +4,8 @@ namespace Expressionengine\Coilpack\Fieldtypes\Modifiers;
 
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
-use Expressionengine\Coilpack\Models\FieldContent;
+
+// use Expressionengine\Coilpack\Models\FieldContent;
 
 class Generic extends Modifier
 {
@@ -13,13 +14,13 @@ class Generic extends Modifier
         $method = 'replace_'.$this->attributes['name'];
         $handler = $this->fieldtype->getHandler();
 
-        return $handler->{$method}($data, $parameters);
+        return $handler->{$method}((string) $data, $parameters);
     }
 
-    public function handle(FieldContent $content, $parameters = [])
+    public function handle(FieldtypeOutput $content, $parameters = [])
     {
-        $modified = $this->callHandler($content->data, $parameters);
+        $modified = $this->callHandler($content, $parameters);
 
-        return FieldtypeOutput::make($modified);
+        return FieldtypeOutput::for($this->fieldtype)->value($modified);
     }
 }

@@ -21,7 +21,7 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
     {
         $data = $this->loadData($content);
 
-        return FieldtypeOutput::make($data);
+        return FieldtypeOutput::for($this)->value($data);
     }
 
     protected function loadData(FieldContent $content)
