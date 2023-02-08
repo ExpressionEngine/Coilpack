@@ -15,6 +15,7 @@
 
 - GraphQL schema configuration. Coilpack now creates a separate schema named 'coilpack'
 - Modifier registration moved to new function, makes use of new Typed parameters
+- Add-ons registering tags with Coilpack should now use a key without the Add-on prefix
 
 ## [0.0.3] - 2023-01-25
 

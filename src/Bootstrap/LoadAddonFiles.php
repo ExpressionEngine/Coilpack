@@ -29,7 +29,10 @@ class LoadAddonFiles
                 app(FieldtypeManager::class)->register($name, $class);
             }
             foreach ($bindings['tags'] ?? [] as $name => $class) {
-                app(\Expressionengine\Coilpack\View\Exp::class)->registerTag($name, $class);
+                app(\Expressionengine\Coilpack\View\Exp::class)->registerTag(
+                    $provider->getPrefix().'.'.$name,
+                    $class
+                );
             }
         }
     }
