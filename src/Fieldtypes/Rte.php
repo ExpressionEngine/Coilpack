@@ -2,15 +2,11 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\FieldContent;
-use GraphQL\Type\Definition\Type;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\TypedParameter as Parameter;
 
 class Rte extends Generic
 {
-
     public function parameters(ChannelField $field = null)
     {
         return [
@@ -28,7 +24,7 @@ class Rte extends Generic
                 'name' => 'images_only',
                 'type' => 'boolean',
                 'description' => 'Remove everything except images from the content',
-            ])
+            ]),
         ];
     }
 }

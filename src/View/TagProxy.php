@@ -23,13 +23,13 @@ class TagProxy
         return ($this->fallback) ? $this->fallback->$key : null;
     }
 
-    public function __call($method, $parameters)
+    public function __call($method, $arguments)
     {
         if ($this->hasTag($method)) {
-            return $this->getTag($method)->parameters($parameters[0])->run();
+            return $this->getTag($method)->arguments($arguments[0])->run();
         }
 
-        return ($this->fallback) ? $this->fallback->$method($parameters[0]) : null;
+        return ($this->fallback) ? $this->fallback->$method($arguments[0]) : null;
     }
 
     protected function getTag($tag)

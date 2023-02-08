@@ -12,7 +12,7 @@ class ContactForm extends FormTag
 
     protected $_user_recipients = false;
 
-    protected $parameters = [
+    protected $arguments = [
         'recipients' => null,
         'channel' => null,
         'formId' => 'contact_form',
@@ -81,7 +81,7 @@ class ContactForm extends FormTag
         $this->attributes = $data;
     }
 
-    public function setUserRecipientsParameter($enable)
+    public function setUserRecipientsArgument($enable)
     {
         return \get_bool_from_string($enable);
     }

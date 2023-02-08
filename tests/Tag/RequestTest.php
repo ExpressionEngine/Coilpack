@@ -12,7 +12,7 @@ class RequestTest extends TestCase
 
         $_GET['testing'] = 'testing_value';
 
-        $testing = $exp->request->get->parameters(['name' => 'testing']);
+        $testing = $exp->request->get->arguments(['name' => 'testing']);
 
         $this->assertEquals('testing_value', (string) $testing);
 
@@ -25,7 +25,7 @@ class RequestTest extends TestCase
 
         $_POST['testing'] = 'testing_value';
 
-        $testing = $exp->request->post->parameters(['name' => 'testing']);
+        $testing = $exp->request->post->arguments(['name' => 'testing']);
 
         $this->assertEquals('testing_value', (string) $testing);
 

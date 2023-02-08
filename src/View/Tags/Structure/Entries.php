@@ -10,7 +10,7 @@ class Entries extends ChannelEntriesTag
 {
     use InteractsWithAddon;
 
-    protected $parameters = [
+    protected $arguments = [
         'category' => '',
         'parent_id' => false,
         'include_hidden' => 'n',
@@ -26,7 +26,7 @@ class Entries extends ChannelEntriesTag
         $this->structure = $this->getAddonModuleInstance('structure');
     }
 
-    // public function setParentIdParameter($id)
+    // public function setParentIdArgument($id)
     // {
     //     $this->parent_id = $id;
 
@@ -52,18 +52,18 @@ class Entries extends ChannelEntriesTag
     public function run()
     {
         // This code is adapted from the Structure Mod's entries() function
-        if (is_numeric($this->getParameter('parent_id'))) {
+        if (is_numeric($this->getArgument('parent_id'))) {
             $child_ids = $this->structure->sql->get_child_entries(
-                $this->getParameter('parent_id'),
-                $this->getParameter('category'),
-                $this->getParameter('include_hidden')
+                $this->getArgument('parent_id'),
+                $this->getArgument('category'),
+                $this->getArgument('include_hidden')
             );
             $fixed_order = $child_ids !== false && is_array($child_ids) && count($child_ids) > 0 ? $child_ids : false;
 
             if ($fixed_order) {
-                $this->setFixedOrderParameter($fixed_order);
+                $this->setFixedOrderArgument($fixed_order);
             } else {
-                $this->setEntryIdParameter('-1'); // No results
+                $this->setEntryIdArgument('-1'); // No results
             }
         }
 

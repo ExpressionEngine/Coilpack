@@ -13,7 +13,7 @@ class ChannelTest extends TestCase
         $this->assertEquals(1, $entries->count());
 
         // Alternate syntax
-        $entries = $exp->channel->entries->parameters(['channel' => 'Testing'])->get();
+        $entries = $exp->channel->entries->arguments(['channel' => 'Testing'])->get();
         $this->assertEquals(1, $entries->count());
     }
 

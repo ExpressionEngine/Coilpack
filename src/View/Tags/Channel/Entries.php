@@ -13,7 +13,7 @@ class Entries extends ModelTag
         $this->query = ChannelEntry::query();
     }
 
-    public function setAuthorIdParameter($author)
+    public function setAuthorIdArgument($author)
     {
         $author = new FilteredParameterValue($author);
         $author->filterQueryWithColumn($this->query, 'author_id');
@@ -21,7 +21,7 @@ class Entries extends ModelTag
         return $author;
     }
 
-    public function setChannelParameter($channel)
+    public function setChannelArgument($channel)
     {
         $channel = new FilteredParameterValue($channel);
 
@@ -32,7 +32,7 @@ class Entries extends ModelTag
         return $channel;
     }
 
-    public function setEntryIdParameter($id)
+    public function setEntryIdArgument($id)
     {
         $id = new FilteredParameterValue($id);
         $id->filterQueryWithColumn($this->query, 'entry_id');
@@ -40,7 +40,7 @@ class Entries extends ModelTag
         return $id;
     }
 
-    public function setUrlTitleParameter($title)
+    public function setUrlTitleArgument($title)
     {
         $title = new FilteredParameterValue($title);
         $title->filterQueryWithColumn($this->query, 'url_title');
@@ -48,7 +48,7 @@ class Entries extends ModelTag
         return $title;
     }
 
-    public function setStatusParameter($status)
+    public function setStatusArgument($status)
     {
         $status = new FilteredParameterValue($status);
         $status->filterQueryWithColumn($this->query, 'status');
@@ -56,7 +56,7 @@ class Entries extends ModelTag
         return $status;
     }
 
-    public function setCategoryParameter($category)
+    public function setCategoryArgument($category)
     {
         $category = new FilteredParameterValue($category);
 
@@ -67,7 +67,7 @@ class Entries extends ModelTag
         return $category;
     }
 
-    public function setCategoryIdParameter($category)
+    public function setCategoryIdArgument($category)
     {
         $category = new FilteredParameterValue($category);
 
@@ -78,11 +78,11 @@ class Entries extends ModelTag
         return $category;
     }
 
-    public function setDynamicParameter()
+    public function setDynamicArgument()
     {
         $lastSegment = last(request()->segments());
 
-        $this->setLimitParameter(1);
+        $this->setLimitArgument(1);
 
         $this->when(is_int($lastSegment), function ($query) use ($lastSegment) {
             $query->where('entry_id', (int) $lastSegment);
@@ -93,7 +93,7 @@ class Entries extends ModelTag
         return true;
     }
 
-    public function setFixedOrderParameter($order = [])
+    public function setFixedOrderArgument($order = [])
     {
         $this->query->whereIn('entry_id', $order);
         $this->query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
@@ -101,7 +101,7 @@ class Entries extends ModelTag
         return $order;
     }
 
-    public function setLimitParameter($count)
+    public function setLimitArgument($count)
     {
         $this->query->take($count);
 
@@ -112,7 +112,7 @@ class Entries extends ModelTag
         return $count;
     }
 
-    public function setDisableParameter($str)
+    public function setDisableArgument($str)
     {
     }
 }

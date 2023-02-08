@@ -11,8 +11,8 @@ abstract class ModelTag extends IterableTag
 
     public function run()
     {
-        if ($this->hasParameter('paginate')) {
-            return $this->query->paginate($this->getParameter('paginate'));
+        if ($this->hasArgument('paginate')) {
+            return $this->query->paginate($this->getArgument('paginate'));
         } elseif ($this->takeFirst) {
             return $this->query->first();
         }

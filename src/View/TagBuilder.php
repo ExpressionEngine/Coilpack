@@ -33,17 +33,17 @@ class TagBuilder extends Tag implements \IteratorAggregate
         // is intended for fluently building the tag
         // i.e. $exp->module->tag->method($args)
         // if(!is_null($this->method)) {
-        //     $this->parameters[$method] = $this->processArguments($args);
+        //     $this->arguments[$method] = $this->processArguments($args);
 
         //     return $this;
         // }
 
         // If $this->method is null though we will assume this request is meant
-        // to execute the tag with the provided parameters
+        // to execute the tag with the provided arguments
         // i.e. $exp->module->method($args)
         $this->method = $method;
-        $this->parameters = (is_array($args)) ? current($args) : $args;
-        // $this->parameters = $this->processArguments($args);
+        $this->arguments = (is_array($args)) ? current($args) : $args;
+        // $this->arguments = $this->processArguments($args);
 
         return $this->run();
     }
@@ -64,7 +64,7 @@ class TagBuilder extends Tag implements \IteratorAggregate
 
     /**
      * This is needed to satisfy Twig.  Since we don't know all of the available
-     * parameters or possible method names we will just always return true
+     * arguments or possible method names we will just always return true
      *
      * @param [type] $key
      * @return bool
@@ -75,14 +75,14 @@ class TagBuilder extends Tag implements \IteratorAggregate
     }
 
     // Too much magic, unnecessary
-    // public function __invoke($parameters = null)
+    // public function __invoke($arguments = null)
     // {
     //     if(is_null($this->method)) {
     //         throw new \Exception("Please specify a method on the '$name' tag");
     //     }
 
-    //     if(!is_null($parameters)) {
-    //         $this->parameters = $parameters;
+    //     if(!is_null($arguments)) {
+    //         $this->arguments = $arguments;
     //     }
 
     //     return $this->process();
@@ -106,7 +106,7 @@ class TagBuilder extends Tag implements \IteratorAggregate
             $output = $this->getInstanceClass()->{$this->method}();
             // If the Tag stored data for us in the template library that is preferable to the generated output
             return $template->get_data() ?: $output;
-        }, $this->parameters);
+        }, $this->arguments);
 
         return is_array($output) && is_array(current($output)) ? collect($output)->map(function ($row) {
             return \Expressionengine\Coilpack\TemplateOutput::make()->value($row);

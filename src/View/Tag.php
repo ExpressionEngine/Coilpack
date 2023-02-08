@@ -7,11 +7,11 @@ use Illuminate\Support\Str;
 abstract class Tag
 {
     /**
-     * A list of parameters passed to the tag
+     * A list of arguments passed to the tag
      *
      * @var array
      */
-    protected $parameters = [];
+    protected $arguments = [];
 
     /**
      * Run the tag logic to produce the output
@@ -21,66 +21,66 @@ abstract class Tag
     abstract public function run();
 
     /**
-     * Set the parameters to be used by the tag
+     * Set the arguments to be used by the tag
      *
-     * @param  array  $parameters
+     * @param  array  $arguments
      * @return static
      */
-    public function parameters($parameters = [])
+    public function arguments($arguments = [])
     {
-        foreach ($parameters as $key => $value) {
-            if ($this->hasParameterMutator($key)) {
-                $value = $this->setMutatedParameterValue($key, $value);
+        foreach ($arguments as $key => $value) {
+            if ($this->hasArgumentMutator($key)) {
+                $value = $this->setMutatedArgumentValue($key, $value);
             }
 
-            $this->parameters[$key] = $value;
+            $this->arguments[$key] = $value;
         }
 
         return $this;
     }
 
     /**
-     * Determine if a set mutator exists for a parameter.
+     * Determine if a set mutator exists for a argument.
      *
      * @param  string  $key
      * @return bool
      */
-    public function hasParameterMutator($key)
+    public function hasArgumentMutator($key)
     {
-        return method_exists($this, 'set'.Str::studly($key).'Parameter');
+        return method_exists($this, 'set'.Str::studly($key).'Argument');
     }
 
     /**
-     * Set the value of a parameter using its mutator.
+     * Set the value of a argument using its mutator.
      *
      * @param  string  $key
      * @param  mixed  $value
      * @return mixed
      */
-    protected function setMutatedParameterValue($key, $value)
+    protected function setMutatedArgumentValue($key, $value)
     {
-        return $this->{'set'.Str::studly($key).'Parameter'}($value);
+        return $this->{'set'.Str::studly($key).'Argument'}($value);
     }
 
-    public function hasParameter($key)
+    public function hasArgument($key)
     {
-        return isset($this->parameters[$key]);
+        return isset($this->arguments[$key]);
     }
 
-    public function getParameter($key)
+    public function getArgument($key)
     {
-        return $this->parameters[$key];
+        return $this->arguments[$key];
     }
 
     /**
-     * Process this tag with the provided parameters
+     * Process this tag with the provided arguments
      *
-     * @param  array  $parameters
+     * @param  array  $arguments
      * @return mixed
      */
-    public function __invoke($parameters = [])
+    public function __invoke($arguments = [])
     {
-        return $this->parameters($parameters)->run();
+        return $this->arguments($arguments)->run();
     }
 
     /**
