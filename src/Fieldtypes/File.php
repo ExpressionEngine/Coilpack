@@ -22,7 +22,7 @@ class File extends Generic
         return FieldtypeOutput::for($this)->value($data)->string($string);
     }
 
-    public function bootModifiers(): array
+    public function defineModifiers(): array
     {
         return [
             new Modifiers\File($this, [

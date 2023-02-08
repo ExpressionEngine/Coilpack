@@ -87,17 +87,17 @@ class Relationship extends Fieldtype implements ListsGraphType
             new Parameter([
                 'name' => 'orderby',
                 'type' => 'string',
-                'description' => '',
+                'description' => 'Sets the display order of the entries',
             ]),
             new Parameter([
                 'name' => 'show_expired',
                 'type' => 'boolean',
-                'description' => '',
+                'description' => 'Include expired entries',
             ]),
             new Parameter([
                 'name' => 'show_future_entries',
                 'type' => 'boolean',
-                'description' => 'Sets the display order of the entries',
+                'description' => 'Include entries that have a date in the future',
             ]),
             new Parameter([
                 'name' => 'sort',
@@ -117,7 +117,7 @@ class Relationship extends Fieldtype implements ListsGraphType
             new Parameter([
                 'name' => 'stop_before',
                 'type' => 'string',
-                'description' => '',
+                'description' => 'A particular date/time on which to stop the entries',
             ]),
             new Parameter([
                 'name' => 'url_title',

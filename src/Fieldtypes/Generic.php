@@ -50,7 +50,7 @@ class Generic extends Fieldtype
         return FieldtypeOutput::for($this)->value($output);
     }
 
-    public function bootModifiers(): array
+    public function defineModifiers(): array
     {
         $default = [
             new Modifiers\Generic($this, [

@@ -2,8 +2,12 @@
 
 namespace Expressionengine\Coilpack\View;
 
+use Expressionengine\Coilpack\Api\Graph\Support\TagQuery;
+use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\Models\Addon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Exp
 {
@@ -55,7 +59,21 @@ class Exp
 
     public function registerTag($name, $class)
     {
+        if (is_string($class)) {
+            $class = new $class;
+        }
+
         Arr::set(static::$tags, $name, $class);
+
+        if ($class instanceof Tag && $class instanceof ConvertsToGraphQL) {
+            $name = str_replace('.', '_', Str::snake("exp_$name"));
+            $query = new TagQuery($class, $name);
+            app()->bind("graphql.query.$name", function ($app) use ($query) {
+                return $query;
+            });
+
+            GraphQL::addQuery("graphql.query.$name", $name);
+        }
     }
 
     public function path($str)

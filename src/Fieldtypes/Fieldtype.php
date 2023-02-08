@@ -42,7 +42,7 @@ abstract class Fieldtype
     final public function modifiers(): Collection
     {
         if (is_null($this->modifiers)) {
-            $modifiers = $this->bootModifiers();
+            $modifiers = $this->defineModifiers();
             $this->modifiers = collect($modifiers)->keyBy('name');
         }
 
@@ -54,7 +54,7 @@ abstract class Fieldtype
      *
      * @return Modifier[]
      */
-    public function bootModifiers(): array
+    public function defineModifiers(): array
     {
         return [];
     }

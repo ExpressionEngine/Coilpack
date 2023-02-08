@@ -9,13 +9,15 @@
 - The ability for third parties to define GraphQL queries in the coilpack schema
 - Extra options for configuring Coilpack's GraphQL behavior
 - Support for chaining multiple modifiers
-- Typed parameter definitions for fieldtypes to support GraphQL
+- Typed parameter definitions for Fieldtypes and Tags to support GraphQL
+- Automatic GraphQL query support for Tags that provide a GraphQL representation
 
 ### Changed
 
 - GraphQL schema configuration. Coilpack now creates a separate schema named 'coilpack'
 - Modifier registration moved to new function, makes use of new Typed parameters
 - Add-ons registering tags with Coilpack should now use a key without the Add-on prefix
+- Renamed Tag 'parameters' to more appropriately be 'arguments' since they hold runtime values
 
 ## [0.0.3] - 2023-01-25
 
