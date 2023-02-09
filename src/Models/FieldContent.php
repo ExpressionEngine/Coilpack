@@ -3,13 +3,15 @@
 namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\Eloquent\Concerns\HasAttributes;
-use Illuminate\Database\Eloquent\Concerns\HasRelationships;
-use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 
 class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 {
-    use HasAttributes, HidesAttributes, HasRelationships;
+    /**
+     * The model's attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [];
 
     /**
      * Create a new model instance.
@@ -19,14 +21,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function __construct(array $attributes = [])
     {
-        $this->syncOriginal();
-
-        $this->setRawAttributes($attributes);
-    }
-
-    public function getDataAttribute($value)
-    {
-        return $value;
+        $this->attributes = $attributes;
     }
 
     public function getFieldtype()
@@ -52,7 +47,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         if (empty($parameters) && array_key_exists('value', $this->attributes)) {
             return $this->attributes['value'];
         }
-
         $fieldtype = $this->getFieldtype();
 
         $value = $fieldtype->apply($this, $parameters);
@@ -69,33 +63,23 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Get the value indicating whether the IDs are incrementing.
-     *
-     * @return bool
-     */
-    public function getIncrementing()
-    {
-        return null;
-    }
-
-    /**
-     * Determine if the model uses timestamps.
-     *
-     * @return bool
-     */
-    public function usesTimestamps()
-    {
-        return false;
-    }
-
-    /**
      * Convert the model instance to an array.
      *
      * @return array
      */
     public function toArray()
     {
-        return $this->attributesToArray();
+        return $this->getAttributes();
+    }
+
+    /**
+     * Get all of the current attributes on the model.
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
@@ -110,11 +94,42 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     {
         $json = json_encode($this->jsonSerialize(), $options);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw \Illuminate\Database\Eloquent\JsonEncodingException::forModel($this, json_last_error_msg());
-        }
+        // if (JSON_ERROR_NONE !== json_last_error()) {
+        //     throw \Illuminate\Database\Eloquent\JsonEncodingException::forModel($this, json_last_error_msg());
+        // }
 
         return $json;
+    }
+
+    /**
+     * Get an attribute from the model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getAttribute($key)
+    {
+        if (! $key) {
+            return;
+        }
+
+        if (array_key_exists($key, $this->attributes)) {
+            return $this->attributes[$key];
+        }
+    }
+
+    /**
+     * Set a given attribute on the model.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -192,7 +207,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetUnset($offset): void
     {
-        unset($this->attributes[$offset], $this->relations[$offset]);
+        unset($this->attributes[$offset]);
     }
 
     /**
@@ -220,7 +235,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     public function __toString()
     {
         return $this->value();
-        // return is_array($value) ? null : $value;
     }
 
     public function __call($method, $arguments)

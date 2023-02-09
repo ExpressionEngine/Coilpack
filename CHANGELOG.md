@@ -12,6 +12,10 @@
 - Typed parameter definitions for Fieldtypes and Tags to support GraphQL
 - Automatic GraphQL query support for Tags that provide a GraphQL representation
 
+### Fixed
+
+- Compatibility issue with FieldContent and latest Laravel 9
+
 ### Changed
 
 - GraphQL schema configuration. Coilpack now creates a separate schema named 'coilpack'
