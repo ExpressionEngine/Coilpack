@@ -4,6 +4,8 @@ namespace Expressionengine\Coilpack;
 
 class Core
 {
+    protected $core;
+
     public function __construct(\ExpressionEngine\Core\Core $core)
     {
         $this->core = $core;
