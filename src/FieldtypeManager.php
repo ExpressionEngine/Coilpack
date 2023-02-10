@@ -39,13 +39,22 @@ class FieldtypeManager
         // Load extra information for complex fields
         // $gridColumns = Models\Addon\Grid\Column::get();
 
+        $fieldsById = $fields->keyBy('field_id');
+
         // Group fields by channel
-        $channels = $fields->reduce(function ($carry, $field) {
+        $channels = $fields->reduce(function ($carry, $field) use ($fieldsById) {
             $field->fieldGroups->map->channels
                 ->merge($field->channels)
                 ->flatten()
-                ->each(function ($channel) use ($field, $carry) {
-                    $carry->getOrPut($channel->channel_id, new Collection)->push($field);
+                ->each(function ($channel) use ($field, $carry, $fieldsById) {
+                    $channelFields = $carry->getOrPut($channel->channel_id, new Collection);
+                    $channelFields->offsetSet($field->getKey(), $field);
+                    // A Fluid field may need to attach additional fields to the channel
+                    if ($field->field_type === 'fluid_field') {
+                        foreach ($field->field_settings['field_channel_fields'] ?? [] as $fieldId) {
+                            $channelFields->offsetSet($fieldId, $fieldsById[$fieldId]);
+                        }
+                    }
                 });
 
             return $carry;

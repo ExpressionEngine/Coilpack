@@ -52,6 +52,6 @@ class Data extends Model
         }
 
         // Make sure that we don't have a join nullifying our entry_id
-        $query->select('*', $this->qualifyColumn('entry_id'));
+        $query->select('*', $this->qualifyColumn('entry_id'), $this->qualifyColumn('id'));
     }
 }

@@ -40,6 +40,7 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
                 array_merge($content->getAttributes(), [
                     'fluid_field' => $content->field,
                     'fluid_order' => $row->order,
+                    'fluid_field_data_id' => $row->id,
                     'field' => $row->field,
                     'data' => $row->{'field_id_'.$row->field_id},
                     'format' => $row->{'field_ft_'.$row->field_id},

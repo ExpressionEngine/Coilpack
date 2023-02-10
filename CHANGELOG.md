@@ -15,6 +15,7 @@
 ### Fixed
 
 - Compatibility issue with FieldContent and latest Laravel 9
+- Handling of Grid field data when inside a Fluid field
 
 ### Changed
 

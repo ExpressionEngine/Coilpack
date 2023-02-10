@@ -29,6 +29,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
             return [];
         }
         $isFluid = isset($content->fluid_field);
+        $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
         $parameters = array_merge([
             'orderby' => 'row_order',
@@ -41,9 +42,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         $query = DB::connection('coilpack')
             ->table($tableName)
             ->where('entry_id', $content->entry_id)
-            ->when($isFluid, function ($query) {
-                $query->where('fluid_field_data_id', '!=', 0);
-            });
+            ->where('fluid_field_data_id', '=', $fluidFieldId); // $fluidFieldId);
 
         // Handle ordering
         if ($parameters['fixed_order'] ?? false) {
@@ -71,7 +70,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
 
         // maybe we want to persist $data from the query before we do any filtering?
         $data = $data->filter(function ($row) use ($isFluid, $content) {
-            return ! $isFluid || $row->fluid_field_data_id == $content->fluid_order;
+            return ! $isFluid || $row->fluid_field_data_id == $content->fluid_field_data_id;
         })->map(function ($row) use ($columns, $content) {
             $columns->each(function ($column) use ($row, $content) {
                 $row->{$column->col_name} = new FieldContent(
