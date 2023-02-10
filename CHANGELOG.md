@@ -16,6 +16,7 @@
 
 - Compatibility issue with FieldContent and latest Laravel 9
 - Handling of Grid field data when inside a Fluid field
+- Bootstrap process when Laravel's config is cached with `php artisan config:cache`
 
 ### Changed
 
