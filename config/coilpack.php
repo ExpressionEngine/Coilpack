@@ -68,8 +68,8 @@ return [
             /**
              * When using the 'token' driver it will be stored here
              */
-            'token' => env('COILPACK_GRAPHQL_TOKEN', null)
-        ]
+            'token' => env('COILPACK_GRAPHQL_TOKEN', null),
+        ],
     ],
 
     /**
