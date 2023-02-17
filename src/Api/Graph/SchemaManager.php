@@ -2,6 +2,8 @@
 
 namespace Expressionengine\Coilpack\Api\Graph;
 
+use Rebing\GraphQL\Support\Facades\GraphQL as RebingGraphQL;
+
 class SchemaManager
 {
     protected $queries = [
@@ -47,10 +49,6 @@ class SchemaManager
     public function addQuery($className, $alias = null)
     {
         if ($alias) {
-            if (array_key_exists($alias, $this->queries)) {
-                throw new \Exception("Unable to add query. A query is already registered for the alias '$alias'.");
-            }
-
             $this->queries[$alias] = $className;
         } else {
             $this->queries[] = $className;
@@ -62,17 +60,21 @@ class SchemaManager
         return $this->queries;
     }
 
-    public function addType($className, $alias = null)
+    public function addType($className, $alias)
     {
-        if ($alias) {
-            if (array_key_exists($alias, $this->types)) {
-                throw new \Exception("Unable to add type. A type is already registered for the alias '$alias'.");
-            }
+        $this->types[$alias] = $className;
+        RebingGraphQL::addType($className, $alias);
 
-            $this->types[$alias] = $className;
-        } else {
-            $this->types[] = $className;
+        return RebingGraphQL::type($alias);
+    }
+
+    public function type($alias)
+    {
+        if (! array_key_exists($alias, $this->types)) {
+            throw new \Exception("Type '$alias' not registered");
         }
+
+        return RebingGraphQL::type($alias);
     }
 
     public function getTypes()

@@ -2,9 +2,9 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedInputType;
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeOutput;
 // use Expressionengine\Coilpack\Models\FieldContent;
 use GraphQL\Type\Definition\Type;
@@ -81,7 +81,7 @@ abstract class Modifier implements ConvertsToGraphQL
         ]);
 
         return array_merge($default, [
-            'type' => app(FieldtypeRegistrar::class)->addType($typeDefinition, $name),
+            'type' => GraphQL::addType($typeDefinition, $name),
         ]);
     }
 

@@ -13,6 +13,7 @@
 ### Changed
 
 - Tag argument mutation now happens on 'get' instead of 'set'
+- Standardize GraphQL type handling through Coilpack's GraphQL Facade
 
 ## [0.1.0] - 2023-02-13
 

@@ -4,12 +4,12 @@ namespace Expressionengine\Coilpack\Api\Graph\Support;
 
 use Expressionengine\Coilpack\Contracts\GeneratesGraphType;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Fieldtypes\Fieldtype;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class FieldtypeRegistrar
@@ -164,32 +164,5 @@ class FieldtypeRegistrar
         }
 
         return null;
-    }
-
-    public function addType($type, $name = null)
-    {
-        $name = $name ?: $type->name;
-
-        if (array_key_exists($name, $this->types)) {
-            return $this->types[$name];
-        }
-
-        GraphQL::addType($type, $name);
-
-        $type = GraphQL::type($name);
-
-        $this->types[$name] = $type;
-
-        return $type;
-    }
-
-    public function allTypes()
-    {
-        return $this->types;
-    }
-
-    public function dd()
-    {
-        dd($this->allTypes(), GraphQL::getTypes());
     }
 }

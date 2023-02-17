@@ -2,9 +2,9 @@
 
 namespace Expressionengine\Coilpack;
 
-use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedInputType;
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Arr;
 
@@ -80,7 +80,7 @@ class TypedParameter implements ConvertsToGraphQL
             ]);
 
             // make sure type is registered
-            $type = app(FieldtypeRegistrar::class)->addType($type);
+            $type = GraphQL::addType($type, $type->name);
 
             return $type;
         }
