@@ -134,7 +134,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
      * @param    $key
      * @return mixed
      */
-    public function offsetGet($key): mixed
+    public function offsetGet($key)
     {
         if (! is_array($this->variables[$key])) {
             return $this->variables[$key];
@@ -185,7 +185,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
      * @param  string  $key
      * @return mixed
      */
-    public function __get($key): mixed
+    public function __get($key)
     {
         return $this->offsetGet($key);
     }

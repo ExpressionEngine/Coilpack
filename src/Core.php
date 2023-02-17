@@ -65,6 +65,11 @@ class Core
     public function runGlobal()
     {
         $request = \ExpressionEngine\Core\Request::fromGlobals();
+
+        if(defined('REQ') && REQ == 'CLI') {
+            return $this->runCli($request);
+        }
+
         $response = $this->core->run($request);
 
         $body = $this->accessRestrictedProperty($response, 'body');
@@ -85,5 +90,21 @@ class Core
         $prop->setAccessible(true);
 
         return $prop->getValue($object);
+    }
+
+    protected function runCli($request)
+    {
+        $application = $this->core->loadApplicationCore();
+        $application->setRequest($request);
+
+        if (defined('BOOT_ONLY')) {
+            return $this->core->bootOnly($request);
+        }
+
+        // $this->legacy->includeBaseController();
+
+        // We need to load the core bootstrap globals here
+        ee()->load->library('core');
+        ee()->core->bootstrap();
     }
 }

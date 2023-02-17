@@ -15,7 +15,7 @@ class ReplaceTemplateTags
      */
     public function bootstrap(Application $app)
     {
-        if (config('coilpack.expressionengine.app_version') === null) {
+        if (empty(config('coilpack.expressionengine'))) {
             return;
         }
 

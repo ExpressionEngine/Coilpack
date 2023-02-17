@@ -94,7 +94,7 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
      * @param  mixed  $offset
      * @return mixed
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet($offset)
     {
         return isset($this->array[$offset]) ? $this->array[$offset] : null;
     }

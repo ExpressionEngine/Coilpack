@@ -12,6 +12,6 @@ class StructureTest extends TestCase
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
 
         $output = $entry->test_structure->value();
-        $this->assertEquals('http://laravel.test/about-default-theme/', (string) $output);
+        $this->assertEquals(url('about-default-theme').'/', (string) $output);
     }
 }

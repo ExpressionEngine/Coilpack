@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         processIsolation="false"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Fieldtypes">
+            <directory suffix="Test.php">./tests/Fieldtype</directory>
+        </testsuite>
+        <testsuite name="Tags">
+            <directory suffix="Test.php">./tests/Tag</directory>
+        </testsuite>
+        <testsuite name="GraphQL">
+            <directory suffix="Test.php">./tests/Graphql</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+    </coverage>
+    <php>
+        <server name="APP_URL" value="http://127.0.0.1:8000"/>
+        <env name="APP_URL" value="http://127.0.0.1:8000" force="true"/>
+        <server name="COILPACK_GRAPHQL_ENABLED" value="true"/>
+        <server name="APP_ENV" value="testing"/>
+        <server name="BCRYPT_ROUNDS" value="4"/>
+        <server name="CACHE_DRIVER" value="array"/>
+        <!-- <server name="DB_CONNECTION" value="sqlite"/> -->
+        <!-- <server name="DB_DATABASE" value=":memory:"/> -->
+        <env name="DB_DATABASE" value="coilpack"/>
+        <server name="DB_DATABASE" value="coilpack"/>
+        <env name="EE_DB_DATABASE" value="coilpack" force="true"/>
+        <server name="EE_DB_DATABASE" value="coilpack" force="true"/>
+        <server name="MAIL_MAILER" value="array"/>
+        <server name="QUEUE_CONNECTION" value="sync"/>
+        <server name="SESSION_DRIVER" value="array"/>
+        <server name="TELESCOPE_ENABLED" value="false"/>
+    </php>
+</phpunit>

@@ -1,0 +1,108 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.0, 8.1, 8.2]
+        os: [ubuntu-latest]
+        laravel: [8, 9, 10]
+        include:
+          - php: 7.4
+            os: ubuntu-latest
+            laravel: 8
+        exclude:
+          - php: 8.0
+            os: ubuntu-latest
+            laravel: 10
+
+    name: Laravel ${{ matrix.laravel }} - PHP ${{ matrix.php }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          path: 'coilpack'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, sqlite, libxml, mbstring, zip, pcntl, pdo, mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+          ini-values: error_log=/home/runner/php_errors.log, memory_limit=128M
+
+      - name: Configure MySQL
+        run: |
+          sudo systemctl start mysql
+          mysql -u root -proot -e 'CREATE DATABASE `coilpack`;'
+          mysql -u root -proot -e 'SET GLOBAL sql_mode="ONLY_FULL_GROUP_BY,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION";'
+          mysql -u root -proot coilpack < coilpack/tests/fixtures/database.sql
+          mysqladmin -u root -proot password ''
+
+      - name: Install Laravel
+        run: composer create-project laravel/laravel=^${{ matrix.laravel }} laravel --prefer-dist
+
+      - name: Add local coilpack
+        working-directory: laravel
+        run: |
+          composer config repositories.0 path ../coilpack
+          composer require expressionengine/coilpack:@dev
+
+      - name: Copy PHPUnit Config
+        working-directory: laravel
+        run: |
+          rm phpunit.xml
+          cp ../coilpack/tests/fixtures/phpunit.xml ./phpunit.xml
+          ls -la ./
+
+      - name: Install ExpressionEngine
+        working-directory: laravel
+        run: php artisan coilpack --install=latest
+
+      - name: Remove Installer
+        working-directory: laravel
+        run: rm -rf ./ee/system/ee/installer
+
+      - name: Copy ExpressionEngine Config
+        working-directory: laravel
+        run: cp ../coilpack/tests/fixtures/config.php ./ee/system/user/config/config.php && ls -la ./ee/system/user/
+
+      - name: Unzip Theme assets
+        run: unzip ./coilpack/tests/fixtures/themes.zip -d ./coilpack/tests/fixtures/
+
+      - name: Copy Theme assets
+        working-directory: laravel
+        run: |
+          rsync -tr ../coilpack/tests/fixtures/themes/* ./ee/themes/
+          ls -latr ./ee/themes/user/site/default/asset/img/blog/
+
+      - name: Copy Coilpack tests
+        working-directory: laravel
+        run: |
+          cp -a ../coilpack/tests/. ./tests/
+          ls -la ./tests
+
+      - name: Start PHP Server
+        working-directory: laravel
+        run: php artisan serve &
+
+      - name: Run tests
+        working-directory: laravel
+        run: |
+          pwd
+          ls -latr ./tests
+          php artisan test
+
+      - name: Archive Laravel errors
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: laravel${{ matrix.containers }}-php${{ matrix.php }}.log
+          path: ./laravel/storage/logs/laravel.log

@@ -125,7 +125,7 @@ abstract class Tag
      * @param  string  $key
      * @return mixed
      */
-    public function getArgument(string $key): mixed
+    public function getArgument(string $key)
     {
         $value = null;
 

@@ -182,7 +182,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      * @param  mixed  $offset
      * @return mixed
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet($offset)
     {
         return $this->getAttribute($offset);
     }
@@ -234,7 +234,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 
     public function __toString()
     {
-        return $this->value();
+        return (string) $this->value();
     }
 
     public function __call($method, $arguments)

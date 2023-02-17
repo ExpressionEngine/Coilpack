@@ -81,7 +81,7 @@ class ChannelTest extends TestCase
     public function test_category_heading()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $heading = $exp->channel->category_heading(['category_id' => 1]);
+        $heading = $exp->channel->category_heading(['category_id' => '1']);
         $this->assertEquals('News', $heading->category_name);
     }
 

@@ -10,7 +10,7 @@ class ProSearchTest extends TestCase
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
 
-        $single = $exp->pro_variables->single->var('gv_comment_disabled')->process();
-        // dd($single);
+        $single = $exp->pro_variables->single(['var' => 'gv_comment_disabled']);
+        $this->assertEquals('Commenting for this entry is <b>disabled</b>.', (string) $single);
     }
 }

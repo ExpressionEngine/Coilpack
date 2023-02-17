@@ -17,6 +17,9 @@ class FluidTest extends TestCase
             'One',
             'Two',
             '1664639700',
+            '<p>Test <strong>rich text</strong></p>',
+            '',
+            'Textarea',
         ], array_map(function ($row) {
             return (string) $row->value();
         }, $output->toArray()));

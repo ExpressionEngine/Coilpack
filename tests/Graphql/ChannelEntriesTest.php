@@ -219,6 +219,6 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-            ->assertJsonFragment(['page_content' => '4461']);
+            ->assertJsonFragment(['page_content' => '4542']);
     }
 }

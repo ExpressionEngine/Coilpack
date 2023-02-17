@@ -12,7 +12,7 @@ class StructureTest extends TestCase
 
         $breadcrumb = $exp->structure->breadcrumb(['entry_id' => 4]);
 
-        $this->assertStringContainsString('<a href="http://laravel.test/about-default-theme/">About Default Theme</a>', $breadcrumb);
+        $this->assertStringContainsString('<a href="'.url('about-default-theme').'/">About Default Theme</a>', $breadcrumb);
     }
 
     public function test_structure_entries()

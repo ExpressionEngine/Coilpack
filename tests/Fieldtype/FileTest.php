@@ -20,7 +20,7 @@ class FileTest extends TestCase
         $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
 
         $output = $entry->test_file->parameters(['wrap' => 'link']);
-        $this->assertEquals('<a href="http://laravel.test/themes/user/site/default/asset/img/blog/blog.jpg">blog</a>', (string) $output);
+        $this->assertEquals('<a href="'.url('themes/user/site/default/asset/img/blog/blog.jpg').'">blog</a>', (string) $output);
     }
 
     public function test_file_rotate()

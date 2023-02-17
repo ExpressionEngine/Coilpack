@@ -15,11 +15,11 @@
     }],
     "require": {
         "php": ">= 7.2.5",
-        "illuminate/contracts": "^7.0|^8.0|^9.0",
-        "illuminate/database": "^7.0|^8.0|^9.0",
-        "illuminate/support": "^7.0|^8.0|^9.0",
-        "rcrowe/twigbridge": "^0.14.0",
-        "rebing/graphql-laravel": "^8.3"
+        "illuminate/contracts": "^7.0|^8.0|^9.0|^10.0",
+        "illuminate/database": "^7.0|^8.0|^9.0|^10.0",
+        "illuminate/support": "^7.0|^8.0|^9.0|^10.0",
+        "rcrowe/twigbridge": "^0.14.1",
+        "rebing/graphql-laravel": "^8.6"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.0",
@@ -64,7 +64,5 @@
                 "Coilpack": "Expressionengine\\Coilpack\\Facades\\Coilpack"
             }
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

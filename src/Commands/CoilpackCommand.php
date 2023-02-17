@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class CoilpackCommand extends Command
 {
-    public $signature = 'coilpack {--dev} {--force} {--source}';
+    public $signature = 'coilpack {--dev} {--force} {--source} {--install=}';
 
     public $description = 'Setup Coilpack';
 
@@ -41,11 +41,15 @@ class CoilpackCommand extends Command
             $this->call('vendor:publish', ['--tag' => 'coilpack-config']);
         }
 
-        $type = $this->choice(
-            'Would you like to install ExpressionEngine or choose an existing installation',
-            ['install', 'choose'],
-            'install'
-        );
+        if($this->option('install')) {
+            $type = 'install';
+        }else{
+            $type = $this->choice(
+                'Would you like to install ExpressionEngine or choose an existing installation',
+                ['install', 'choose'],
+                'install'
+            );
+        }
 
         if ($type == 'install') {
             $this->install();
@@ -151,7 +155,12 @@ class CoilpackCommand extends Command
         }
 
         $this->comment('Coilpack supports the following ExpressionEngine Versions');
-        $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
+
+        if($this->option('install')) {
+            $release = ($this->option('install') == 'latest') ? $releases->first()['tag_name'] : $this->option('install');
+        }else{
+            $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
+        }
 
         $this->installRelease($releases[$release]);
 
