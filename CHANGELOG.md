@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Parsing the 'site' parameter when isolating the template library
+
 ## [0.1.0] - 2023-02-13
 
 ### Added

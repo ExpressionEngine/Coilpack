@@ -23,6 +23,9 @@ class Coilpack
             $template->tagparams = $parameters;
         }
 
+        // This sets the proper site_ids for the template library based on parameters set
+        $template->_fetch_site_ids();
+
         $output = $callable($template);
 
         ee()->remove('TMPL');
