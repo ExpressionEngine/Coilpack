@@ -29,7 +29,7 @@ class TagProxy
             return $this->getTag($method)->arguments($arguments[0])->run();
         }
 
-        return ($this->fallback) ? $this->fallback->$method($arguments[0]) : null;
+        return ($this->fallback) ? $this->fallback->$method($arguments[0] ?? []) : null;
     }
 
     protected function getTag($tag)

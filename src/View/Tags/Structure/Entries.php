@@ -4,17 +4,12 @@ namespace Expressionengine\Coilpack\View\Tags\Structure;
 
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Traits\InteractsWithAddon;
+use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Expressionengine\Coilpack\View\Tags\Channel\Entries as ChannelEntriesTag;
 
 class Entries extends ChannelEntriesTag
 {
     use InteractsWithAddon;
-
-    protected $arguments = [
-        'category' => '',
-        'parent_id' => false,
-        'include_hidden' => 'n',
-    ];
 
     private $structure = null;
 
@@ -26,12 +21,27 @@ class Entries extends ChannelEntriesTag
         $this->structure = $this->getAddonModuleInstance('structure');
     }
 
-    // public function setParentIdArgument($id)
-    // {
-    //     $this->parent_id = $id;
+    public function defineParameters(): array
+    {
+        return array_merge(parent::defineParameters(), [
+            new Parameter([
+                'name' => 'parent_id',
+                'type' => 'string',
+                'description' => 'Limit the entries to children of a specific Entry ID',
+            ]),
+            new Parameter([
+                'name' => 'include_hidden',
+                'type' => 'boolean',
+                'description' => 'Allow hidden entries to be displayed',
+                'defaultValue' => false,
+            ]),
+        ]);
+    }
 
-    //     return $id;
-    // }
+    public function getIncludeHiddenArgument($value)
+    {
+        return ($value === true || $value == 'y') ? 'y' : 'n';
+    }
 
     public function dynamic()
     {
@@ -52,18 +62,19 @@ class Entries extends ChannelEntriesTag
     public function run()
     {
         // This code is adapted from the Structure Mod's entries() function
-        if (is_numeric($this->getArgument('parent_id'))) {
+        if (is_numeric($this->getArgument('parent_id')->value)) {
             $child_ids = $this->structure->sql->get_child_entries(
-                $this->getArgument('parent_id'),
-                $this->getArgument('category'),
+                $this->getArgument('parent_id')->value,
+                $this->getArgument('category')->value ?: $this->getArgument('category_id')->value,
                 $this->getArgument('include_hidden')
             );
-            $fixed_order = $child_ids !== false && is_array($child_ids) && count($child_ids) > 0 ? $child_ids : false;
+
+            $fixed_order = ($child_ids !== false && is_array($child_ids) && count($child_ids) > 0) ? $child_ids : false;
 
             if ($fixed_order) {
-                $this->setFixedOrderArgument($fixed_order);
+                $this->setArgument('fixed_order', $fixed_order);
             } else {
-                $this->setEntryIdArgument('-1'); // No results
+                $this->setArgument('entry_id', '-1'); // No results
             }
         }
 

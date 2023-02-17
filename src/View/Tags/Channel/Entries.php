@@ -4,9 +4,10 @@ namespace Expressionengine\Coilpack\View\Tags\Channel;
 
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
+use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
 use Expressionengine\Coilpack\TypedParameter as Parameter;
-use Expressionengine\Coilpack\View\FilteredParameterValue;
 use Expressionengine\Coilpack\View\ModelTag;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -28,6 +29,11 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             ]),
             new Parameter([
                 'name' => 'category',
+                'type' => 'string',
+                'description' => 'Limit the entries to the specified Category url title',
+            ]),
+            new Parameter([
+                'name' => 'category_id',
                 'type' => 'string',
                 'description' => 'Limit the entries to the specified Category ID',
             ]),
@@ -92,6 +98,12 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'description' => '',
             ]),
             new Parameter([
+                'name' => 'site',
+                'type' => 'string',
+                'description' => '',
+                'defaultValue' => ee()->config->item('site_id'),
+            ]),
+            new Parameter([
                 'name' => 'url_title',
                 'type' => 'string',
                 'description' => 'Limits the query by an entry\'s url_title',
@@ -118,107 +130,94 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         ];
     }
 
-    public function setAuthorIdArgument($author)
+    public function getArgumentFallback($key, $value)
     {
-        $author = new FilteredParameterValue($author);
-        $author->filterQueryWithColumn($this->query, 'author_id');
-
-        return $author;
+        return new FilterArgument($value);
     }
 
-    public function setEntryIdArgument($id)
+    public function getFixedOrderArgument($order)
     {
-        $id = new FilteredParameterValue($id);
-        $id->filterQueryWithColumn($this->query, 'entry_id');
-
-        return $id;
-    }
-
-    public function setUrlTitleArgument($title)
-    {
-        $title = new FilteredParameterValue($title);
-        $title->filterQueryWithColumn($this->query, 'url_title');
-
-        return $title;
-    }
-
-    public function setStatusArgument($status)
-    {
-        $status = new FilteredParameterValue($status);
-        $status->filterQueryWithColumn($this->query, 'status');
-
-        return $status;
-    }
-
-    public function setChannelArgument($channel)
-    {
-        $channel = new FilteredParameterValue($channel);
-
-        $this->whereHas('channel', function ($query) use ($channel) {
-            return $channel->filterQueryWithColumn($query, 'channel_name');
-        });
-
-        return $channel;
-    }
-
-    public function setCategoryArgument($category)
-    {
-        $category = new FilteredParameterValue($category);
-
-        $this->whereHas('categories', function ($query) use ($category) {
-            return $category->filterQueryWithColumn($query, 'cat_url_title');
-        });
-
-        return $category;
-    }
-
-    public function setCategoryIdArgument($category)
-    {
-        $category = new FilteredParameterValue($category);
-
-        $this->whereHas('categories', function ($query) use ($category) {
-            return $category->filterQueryWithColumn($query, 'cat_id');
-        });
-
-        return $category;
-    }
-
-    public function setDynamicArgument()
-    {
-        $lastSegment = last(request()->segments());
-
-        $this->setLimitArgument(1);
-
-        $this->when(is_int($lastSegment), function ($query) use ($lastSegment) {
-            $query->where('entry_id', (int) $lastSegment);
-        }, function ($query) use ($lastSegment) {
-            $query->where('url_title', $lastSegment);
-        });
-
-        return true;
-    }
-
-    public function setFixedOrderArgument($order = [])
-    {
-        $this->query->whereIn('entry_id', $order);
-        $this->query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
-
         return $order;
     }
 
-    public function setLimitArgument($count)
+    public function getSearchArgument($search)
     {
-        $this->query->take($count);
-
-        if ($count == 1) {
-            $this->takeFirst = true;
+        foreach ($search as $field => $value) {
+            $search[$field] = new FilterArgument($value);
         }
 
-        return $count;
+        return $search;
     }
 
-    public function setDisableArgument($str)
+    public function run()
     {
+        // Author
+        $this->query->when($this->hasArgument('author'), function ($query) {
+            $this->getArgument('author')->addQuery($query, 'author_id');
+        });
+
+        // Entry ID
+        $this->query->when($this->hasArgument('entry_id'), function ($query) {
+            $this->getArgument('entry_id')->addQuery($query, 'entry_id');
+        });
+
+        // Site ID
+        $this->query->when($this->hasArgument('site_id'), function ($query) {
+            $this->getArgument('site_id')->addQuery($query, 'site_id');
+        });
+
+        // URL Title
+        $this->query->when($this->hasArgument('url_title'), function ($query) {
+            $this->getArgument('url_title')->addQuery($query, 'url_title');
+        });
+
+        // Status
+        $this->query->when($this->hasArgument('status'), function ($query) {
+            $this->getArgument('status')->addQuery($query, 'status');
+        });
+
+        // Channel
+        $this->query->when($this->hasArgument('channel'), function ($query) {
+            $query->whereHas('channel', function ($query) {
+                return $this->getArgument('channel')->addQuery($query, 'channel_name');
+            });
+        });
+
+        // Category
+        $this->query->when($this->hasArgument('category'), function ($query) {
+            $query->whereHas('categories', function ($query) {
+                return $this->getArgument('category')->addQuery($query, 'cat_url_title');
+            });
+        });
+
+        // Category ID
+        $this->query->when($this->hasArgument('category_id'), function ($query) {
+            $query->whereHas('categories', function ($query) {
+                return $this->getArgument('category_id')->addQuery($query, (new Category)->qualifyColumn('cat_id'));
+            });
+        });
+
+        // Fixed Order
+        $this->query->when($this->hasArgument('fixed_order'), function ($query) {
+            $order = $this->getArgument('fixed_order');
+            $query->whereIn('entry_id', $order);
+            $query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
+        });
+
+        // Dynamic
+        if ($this->hasArgument('dynamic')) {
+            $lastSegment = last(request()->segments());
+
+            $this->setLimitArgument(1);
+
+            $this->query->when(is_int($lastSegment), function ($query) use ($lastSegment) {
+                $query->where('entry_id', (int) $lastSegment);
+            }, function ($query) use ($lastSegment) {
+                $query->where('url_title', $lastSegment);
+            });
+        }
+
+        return parent::run();
     }
 
     public function toGraphQL(): array

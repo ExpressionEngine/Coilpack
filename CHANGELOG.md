@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Default values of Tag parameters are automatically passed as argument values when appropriate
+
 ### Fixed
 
 - Parsing the 'site' parameter when isolating the template library
+
+### Changed
+
+- Tag argument mutation now happens on 'get' instead of 'set'
 
 ## [0.1.0] - 2023-02-13
 

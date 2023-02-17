@@ -7,7 +7,17 @@ abstract class ModelTag extends IterableTag
     protected $query;
 
     protected $takeFirst = false;
-    // abstract protected function query
+
+    public function setLimitArgument($count)
+    {
+        $this->query->take($count);
+
+        if ($count == 1) {
+            $this->takeFirst = true;
+        }
+
+        return $count;
+    }
 
     public function run()
     {
