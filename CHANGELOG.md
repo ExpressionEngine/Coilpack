@@ -5,6 +5,8 @@
 ### Added
 
 - Default values of Tag parameters are automatically passed as argument values when appropriate
+- New AddonTag class to easily extend a native Tag and decorate with GraphQL attributes
+- An implementation of 'exp:comment:entries' tag using new AddonTag class
 
 ### Fixed
 
