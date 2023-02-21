@@ -41,9 +41,9 @@ class CoilpackCommand extends Command
             $this->call('vendor:publish', ['--tag' => 'coilpack-config']);
         }
 
-        if($this->option('install')) {
+        if ($this->option('install')) {
             $type = 'install';
-        }else{
+        } else {
             $type = $this->choice(
                 'Would you like to install ExpressionEngine or choose an existing installation',
                 ['install', 'choose'],
@@ -156,9 +156,9 @@ class CoilpackCommand extends Command
 
         $this->comment('Coilpack supports the following ExpressionEngine Versions');
 
-        if($this->option('install')) {
+        if ($this->option('install')) {
             $release = ($this->option('install') == 'latest') ? $releases->first()['tag_name'] : $this->option('install');
-        }else{
+        } else {
             $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
         }
 

@@ -157,7 +157,6 @@ class LoadExpressionEngine
     /**
      * Bootstrap the given application.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return \Expressionengine\Coilpack\Core
      */
     public function bootstrap(Application $app)

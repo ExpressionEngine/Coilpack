@@ -11,5 +11,7 @@ class EmojiTest extends TestCase
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
 
         $emojis = $exp->emoji->emoji_list();
+
+        $this->assertTrue($emojis->isNotEmpty());
     }
 }

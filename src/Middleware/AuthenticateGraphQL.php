@@ -18,7 +18,6 @@ class AuthenticateGraphQL
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
     public function __construct(Auth $auth)
@@ -30,7 +29,6 @@ class AuthenticateGraphQL
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string  $permission
      * @return mixed
      */

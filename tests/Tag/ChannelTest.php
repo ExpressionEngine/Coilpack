@@ -89,13 +89,13 @@ class ChannelTest extends TestCase
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
         $categories = $exp->channel->category_archive(['channel' => 'blog', 'style' => 'nested']);
-        // dd($categories);
+        $this->assertNotEmpty($categories);
     }
 
-    public function test_info()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $info = $exp->channel->info(['channel' => 'blog']);
-        // dd($info);
-    }
+//     public function test_info()
+//     {
+//         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
+//         $info = $exp->channel->info(['channel' => 'blog']);
+//         // dd($info);
+//     }
 }

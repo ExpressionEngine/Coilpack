@@ -24,7 +24,6 @@ abstract class Fieldtype
     /**
      * Apply the fieldtype to the data in provided
      *
-     * @param  FieldContent  $content
      * @return FieldtypeOutput
      */
     abstract public function apply(FieldContent $content, array $parameters = []);
@@ -73,9 +72,6 @@ abstract class Fieldtype
     /**
      * Call a modifier on the given field content
      *
-     * @param  FieldtypeOutput  $content
-     * @param  string  $name
-     * @param  array  $parameters
      * @return FieldtypeOutput
      */
     public function callModifier(FieldtypeOutput $content, string $name, array $parameters = [])

@@ -16,7 +16,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     /**
      * Create a new model instance.
      *
-     * @param  array  $attributes
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -38,7 +37,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     /**
      * Get the value of this Field Content by applying the fieldtype
      *
-     * @param  array  $parameters
      * @return \Expressionengine\Coilpack\FieldtypeOutput
      */
     public function value(array $parameters = [])
@@ -169,7 +167,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      * Determine if the given attribute exists.
      *
      * @param  mixed  $offset
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -192,7 +189,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      *
      * @param  mixed  $offset
      * @param  mixed  $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -203,7 +199,6 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      * Unset the value for a given offset.
      *
      * @param  mixed  $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {

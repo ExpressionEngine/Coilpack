@@ -119,9 +119,6 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
 
     /**
      * Determine if an item exists at an offset.
-     *
-     * @param    $key
-     * @return bool
      */
     public function offsetExists($key): bool
     {
@@ -131,7 +128,6 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
     /**
      * Get an item at a given offset.
      *
-     * @param    $key
      * @return mixed
      */
     public function offsetGet($key)
@@ -149,10 +145,6 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
 
     /**
      * Set the item at a given offset.
-     *
-     * @param    $key
-     * @param    $value
-     * @return void
      */
     public function offsetSet($key, $value): void
     {
@@ -165,9 +157,6 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
 
     /**
      * Unset the item at a given offset.
-     *
-     * @param    $key
-     * @return void
      */
     public function offsetUnset($key): void
     {

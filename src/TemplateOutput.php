@@ -81,7 +81,6 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
      * Determine if the given attribute exists.
      *
      * @param  mixed  $offset
-     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -104,7 +103,6 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
      *
      * @param  mixed  $offset
      * @param  mixed  $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -119,7 +117,6 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
      * Unset the value for a given offset.
      *
      * @param  mixed  $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {

@@ -66,7 +66,7 @@ class Core
     {
         $request = \ExpressionEngine\Core\Request::fromGlobals();
 
-        if(defined('REQ') && REQ == 'CLI') {
+        if (defined('REQ') && REQ == 'CLI') {
             return $this->runCli($request);
         }
 

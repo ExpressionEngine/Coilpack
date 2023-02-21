@@ -8,7 +8,6 @@ class Coilpack
      * Execute a closure while stubbing the current ee()->TMPL library
      * The stubbed library is passed to the closure as $template
      *
-     * @param  callable  $callable
      * @param  mixed  $parameters
      * @return mixed
      */

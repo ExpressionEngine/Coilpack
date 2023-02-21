@@ -30,8 +30,6 @@ abstract class Tag
 
     /**
      * Get a collection of defined Parameters
-     *
-     * @return Collection
      */
     public function parameters(): Collection
     {
@@ -44,8 +42,6 @@ abstract class Tag
 
     /**
      * Define the parameters available on this Tag
-     *
-     * @return array
      */
     public function defineParameters(): array
     {
@@ -110,7 +106,6 @@ abstract class Tag
     /**
      * Determine whether or not an argument was set
      *
-     * @param  string  $key
      * @return bool
      */
     public function hasArgument(string $key)
@@ -122,7 +117,6 @@ abstract class Tag
      * Retrieve an argument value
      * If a value is not set the parameter's default value will be returned
      *
-     * @param  string  $key
      * @return mixed
      */
     public function getArgument(string $key)
@@ -148,8 +142,6 @@ abstract class Tag
 
     /**
      * Get a list of all mutated arguments
-     *
-     * @return array
      */
     public function getArguments(): array
     {

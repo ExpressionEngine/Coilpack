@@ -35,7 +35,6 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param  \Illuminate\Contracts\Cookie\QueueingFactory  $cookie
      * @param  int  $minutes
      * @return void
      */
@@ -129,7 +128,6 @@ class CookieSessionHandler implements SessionHandlerInterface
     /**
      * Set the request instance.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @return void
      */
     public function setRequest(Request $request)

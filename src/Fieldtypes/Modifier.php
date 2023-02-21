@@ -40,7 +40,6 @@ abstract class Modifier implements ConvertsToGraphQL
     /**
      * Modify the content
      *
-     * @param  FieldtypeOutput  $content
      * @param  array  $parameters
      * @return FieldtypeOutput
      */
