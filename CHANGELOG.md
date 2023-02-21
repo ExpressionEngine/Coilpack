@@ -8,6 +8,7 @@
 - New AddonTag class to easily extend a native Tag and decorate with GraphQL attributes
 - An implementation of 'exp:comment:entries' tag using new AddonTag class
 - Support for Laravel 10
+- Better handling of ExpressionEngine filter arguments
 
 ### Fixed
 
