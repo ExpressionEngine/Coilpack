@@ -132,12 +132,20 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
     public function getArgumentFallback($key, $value)
     {
+        if (in_array($key, ['fixed_order', 'orderby'])) {
+            return $value;
+        }
+
         return new FilterArgument($value);
     }
 
-    public function getFixedOrderArgument($order)
+    public function getSortArgument($value)
     {
-        return $order;
+        if (! in_array(strtolower($value), ['asc', 'desc'])) {
+            return 'asc';
+        }
+
+        return $value;
     }
 
     public function getSearchArgument($search)
@@ -215,6 +223,17 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             }, function ($query) use ($lastSegment) {
                 $query->where('url_title', $lastSegment);
             });
+        }
+
+        if ($this->hasArgument('orderby')) {
+            $direction = $this->hasArgument('sort') ? $this->getArgument('sort') : 'asc';
+            $field = $this->getArgument('orderby');
+
+            if (app(FieldtypeManager::class)->hasField($field)) {
+                $this->query->orderByCustomField($field, $direction);
+            } else {
+                $this->query->orderBy($field, $direction);
+            }
         }
 
         return parent::run();

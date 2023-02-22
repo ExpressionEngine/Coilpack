@@ -9,6 +9,7 @@
 - An implementation of 'exp:comment:entries' tag using new AddonTag class
 - Support for Laravel 10
 - Better handling of ExpressionEngine filter arguments
+- The ability to use orderby and sort parameters on the channel entries tag
 
 ### Fixed
 

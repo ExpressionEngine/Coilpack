@@ -64,6 +64,8 @@ jobs:
 
       - name: Install ExpressionEngine
         working-directory: laravel
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: php artisan coilpack --install=latest
 
       - name: Remove Installer

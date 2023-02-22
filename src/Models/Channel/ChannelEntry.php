@@ -130,6 +130,28 @@ class ChannelEntry extends Model
         return $this->hasOne(ChannelData::class, 'entry_id', 'entry_id')->customFields($fields);
     }
 
+    public function scopeOrderByCustomField($query, $field, $direction = 'asc')
+    {
+        $manager = app(FieldtypeManager::class);
+
+        if (! $manager->hasField($field)) {
+            return $query;
+        }
+
+        $field = $manager->getField($field);
+        $column = "field_id_{$field->field_id}";
+
+        // If this field is not storing it's data on the channel_data table we
+        // will join the separate data table with a unique orderby_field_name alias
+        if ($field->legacy_field_data == 'n' || $field->legacy_field_data === false) {
+            $table = $field->data_table_name;
+            $alias = "orderby_{$field->field_name}";
+            $query->leftJoin("$table as $alias", "$alias.entry_id", '=', $this->qualifyColumn('entry_id'));
+        }
+
+        return $query->orderBy($column, $direction);
+    }
+
     public function fluidData()
     {
         return $this->hasMany(Addon\Fluid\Data::class, 'entry_id');
