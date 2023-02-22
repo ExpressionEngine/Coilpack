@@ -14,6 +14,7 @@
 
 - Parsing the 'site' parameter when isolating the template library
 - Error when applying the File Fieldtype on empty data
+- Missing FieldContent attributes when a ChannelEntry does not contain data for a requested field
 
 ### Changed
 

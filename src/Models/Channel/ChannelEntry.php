@@ -183,10 +183,12 @@ class ChannelEntry extends Model
             $this->getRelationValue('data');
             $fields = $this->data->fields($this->channel);
             $value = ($fields->has($key)) ? $fields->get($key) : new FieldContent([
-                // 'field' => $fields->get($key),
                 'field' => app(FieldtypeManager::class)->getField($key),
                 'data' => null,
                 'entry' => $this,
+                'entry_id' => $this->entry_id,
+                'site_id' => $this->site_id,
+                'channel_id' => $this->channel_id,
             ]);
 
             // $value->setAttribute('data', 'null');
