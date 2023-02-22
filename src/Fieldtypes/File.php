@@ -11,6 +11,10 @@ class File extends Generic
 {
     public function apply(FieldContent $content, array $parameters = [])
     {
+        if (empty($content->getAttribute('data'))) {
+            return null;
+        }
+
         $handler = $this->getHandler();
         $data = $handler->pre_process($content->data);
         $string = $data['url'];

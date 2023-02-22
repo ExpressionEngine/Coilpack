@@ -24,7 +24,7 @@ abstract class Fieldtype
     /**
      * Apply the fieldtype to the data in provided
      *
-     * @return FieldtypeOutput
+     * @return FieldtypeOutput|null
      */
     abstract public function apply(FieldContent $content, array $parameters = []);
 

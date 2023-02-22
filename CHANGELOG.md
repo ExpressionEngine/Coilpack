@@ -13,6 +13,7 @@
 ### Fixed
 
 - Parsing the 'site' parameter when isolating the template library
+- Error when applying the File Fieldtype on empty data
 
 ### Changed
 
