@@ -171,7 +171,7 @@ class CoilpackCommand extends Command
     {
         $url = 'https://api.github.com/repos/expressionengine/expressionengine/releases';
 
-        return collect(Http::get($url)->json())->map(function ($release) {
+        return collect($this->githubApiRequest()->get($url)->throw()->json())->map(function ($release) {
             $fields = ['tag_name', 'name', 'prerelease', 'published_at'];
             $asset = current(array_filter($release['assets'], function ($asset) {
                 return Str::endsWith($asset['browser_download_url'], '.zip');
@@ -190,7 +190,7 @@ class CoilpackCommand extends Command
     {
         $url = 'https://api.github.com/repos/expressionengine/expressionengine/branches?per_page=100';
 
-        return collect(Http::get($url)->json())->map(function ($branch) {
+        return collect($this->githubApiRequest()->get($url)->throw()->json())->map(function ($branch) {
             return [
                 'name' => $branch['name'],
                 'tag_name' => $branch['name'],
@@ -252,6 +252,17 @@ class CoilpackCommand extends Command
                 }
             }
         }
+    }
+
+    protected function githubApiRequest()
+    {
+        $client = Http::retry(3, 250);
+
+        if ($token = env('GITHUB_TOKEN')) {
+            $client->withToken($token);
+        }
+
+        return $client;
     }
 
     protected function askForStar()
