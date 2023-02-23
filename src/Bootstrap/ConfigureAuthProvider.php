@@ -55,11 +55,11 @@ class ConfigureAuthProvider
         // Configure our 'coilpack' guard which uses the 'members' provider below
         app('config')->set('auth.guards.coilpack', [
             'driver' => 'exp_sessions',
-            'provider' => 'members',
+            'provider' => 'coilpack',
         ]);
 
-        app('config')->set('auth.providers.members', [
-            'driver' => 'eloquent',
+        app('config')->set('auth.providers.coilpack', [
+            'driver' => 'coilpack',
             'model' => $this->getMemberModel(),
         ]);
 
