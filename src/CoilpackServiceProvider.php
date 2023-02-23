@@ -2,6 +2,7 @@
 
 namespace Expressionengine\Coilpack;
 
+use Expressionengine\Coilpack\Auth\CoilpackUserProvider;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
@@ -96,6 +97,10 @@ class CoilpackServiceProvider extends ServiceProvider
 
                 app(FieldtypeRegistrar::class)->boot();
             }
+        });
+
+        \Illuminate\Support\Facades\Auth::provider('coilpack', function($app, array $config) {
+            return new CoilpackUserProvider($app->make($config['model']));
         });
     }
 
