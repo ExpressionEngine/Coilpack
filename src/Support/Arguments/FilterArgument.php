@@ -39,6 +39,11 @@ class FilterArgument extends Argument
             $this->boolean = 'and';
         }
 
+        // The boolean logic flips if the argument is negated
+        if ($this->not) {
+            $this->boolean = ($this->boolean === 'or') ? 'and' : 'or';
+        }
+
         $terms = array_filter(explode($this->separator, $value), function ($term) {
             return ! is_null($term) && trim($term) !== '';
         });
@@ -50,18 +55,30 @@ class FilterArgument extends Argument
         }
     }
 
-    public function addQuery($query, $column)
+    public function addQuery($query, $column, $not = null)
     {
         if (! $query instanceof Builder && ! $query instanceof EloquentBuilder) {
             return $query;
         }
 
-        $query->where(function ($query) use ($column) {
-            $this->terms->each(function ($term) use ($query, $column) {
-                $term->addQuery($query, $column, $this->boolean, $this->not, $this->exact);
+        $not = is_null($not) ? $this->not : $not;
+
+        return $query->where(function ($query) use ($column, $not) {
+            $this->terms->each(function ($term) use ($query, $column, $not) {
+                $term->addQuery($query, $column, $this->boolean, $not, $this->exact);
             });
         });
+    }
 
-        return $query;
+    public function addRelationshipQuery($query, $relationship, $column)
+    {
+        $operator = $this->not ? '<' : '>=';
+        $count = 1;
+
+        return $query->has($relationship, $operator, $count, 'and', function ($query) use ($column) {
+            // We are handling the negation on our relationship query
+            // so we just want to use non-negated where clauses
+            return $this->addQuery($query, $column, false);
+        });
     }
 }

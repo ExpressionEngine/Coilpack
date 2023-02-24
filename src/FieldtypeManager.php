@@ -72,6 +72,7 @@ class FieldtypeManager
 
         $this->channels = $channels;
         $this->fieldtypes = Models\Addon\Fieldtype::get()->keyBy('name');
+        $this->booted = true;
 
         return $this;
     }

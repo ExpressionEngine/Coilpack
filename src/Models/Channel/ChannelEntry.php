@@ -144,12 +144,27 @@ class ChannelEntry extends Model
         // If this field is not storing it's data on the channel_data table we
         // will join the separate data table with a unique orderby_field_name alias
         if ($field->legacy_field_data == 'n' || $field->legacy_field_data === false) {
-            $table = $field->data_table_name;
             $alias = "orderby_{$field->field_name}";
-            $query->leftJoin("$table as $alias", "$alias.entry_id", '=', $this->qualifyColumn('entry_id'));
+            $column = "$alias.$column";
+            $this->scopeJoinFieldDataTable($query, $field, $alias);
         }
 
         return $query->orderBy($column, $direction);
+    }
+
+    public function scopeJoinFieldDataTable($query, $field, $alias = null)
+    {
+        if ($field->legacy_field_data == 'y' || $field->legacy_field_data === true) {
+            return $query;
+        }
+
+        $table = $field->data_table_name;
+        $joinTable = $alias ? "$table as $alias" : $table;
+        $alias = $alias ?: $table;
+        $query->leftJoin($joinTable, "$alias.entry_id", '=', $this->qualifyColumn('entry_id'));
+        $query->select('*', $this->qualifyColumn('entry_id'));
+
+        return $query;
     }
 
     public function fluidData()

@@ -10,6 +10,7 @@
 - Support for Laravel 10
 - Better handling of ExpressionEngine filter arguments
 - The ability to use orderby and sort parameters on the channel entries tag
+- Support searching by custom field values on channel entries tag
 
 ### Fixed
 

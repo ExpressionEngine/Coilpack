@@ -15,6 +15,8 @@ class Entries extends ChannelEntriesTag
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->query = ChannelEntry::query();
 
         // Might want to wrap this in try/catch in case structure is not installed but this tag is called

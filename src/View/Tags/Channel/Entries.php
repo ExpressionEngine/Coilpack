@@ -7,6 +7,9 @@ use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
+use Expressionengine\Coilpack\Support\Arguments\ListArgument;
+use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
+use Expressionengine\Coilpack\Support\Arguments\Term;
 use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Expressionengine\Coilpack\View\ModelTag;
 use GraphQL\Type\Definition\Type;
@@ -14,9 +17,12 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class Entries extends ModelTag implements ConvertsToGraphQL
 {
+    protected $fieldtypeManager;
+
     public function __construct()
     {
         $this->query = ChannelEntry::query();
+        $this->fieldtypeManager = app(FieldtypeManager::class);
     }
 
     public function defineParameters(): array
@@ -132,26 +138,37 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
     public function getArgumentFallback($key, $value)
     {
-        if (in_array($key, ['fixed_order', 'orderby'])) {
+        if (in_array($key, ['fixed_order'])) {
             return $value;
         }
 
         return new FilterArgument($value);
     }
 
+    public function getOrderbyArgument($value)
+    {
+        return new ListArgument($value);
+    }
+
     public function getSortArgument($value)
     {
-        if (! in_array(strtolower($value), ['asc', 'desc'])) {
-            return 'asc';
-        }
+        $argument = new ListArgument($value);
 
-        return $value;
+        $argument->terms->map(function ($term) {
+            if (in_array(strtolower($term->value), ['asc', 'desc'])) {
+                return $term;
+            }
+
+            return new Term('desc');
+        });
+
+        return $argument;
     }
 
     public function getSearchArgument($search)
     {
         foreach ($search as $field => $value) {
-            $search[$field] = new FilterArgument($value);
+            $search[$field] = new SearchArgument($value);
         }
 
         return $search;
@@ -186,23 +203,18 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Channel
         $this->query->when($this->hasArgument('channel'), function ($query) {
-            $query->whereHas('channel', function ($query) {
-                return $this->getArgument('channel')->addQuery($query, 'channel_name');
-            });
+            $this->getArgument('channel')->addRelationshipQuery($query, 'channel', 'channel_name');
         });
 
         // Category
         $this->query->when($this->hasArgument('category'), function ($query) {
-            $query->whereHas('categories', function ($query) {
-                return $this->getArgument('category')->addQuery($query, 'cat_url_title');
-            });
+            $this->getArgument('category')->addRelationshipQuery($query, 'categories', 'cat_url_title');
         });
 
         // Category ID
         $this->query->when($this->hasArgument('category_id'), function ($query) {
-            $query->whereHas('categories', function ($query) {
-                return $this->getArgument('category_id')->addQuery($query, (new Category)->qualifyColumn('cat_id'));
-            });
+            $this->getArgument('category_id')
+                ->addRelationshipQuery($query, 'categories', (new Category)->qualifyColumn('cat_id'));
         });
 
         // Fixed Order
@@ -225,14 +237,32 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             });
         }
 
-        if ($this->hasArgument('orderby')) {
-            $direction = $this->hasArgument('sort') ? $this->getArgument('sort') : 'asc';
-            $field = $this->getArgument('orderby');
+        // Search
+        if ($this->hasArgument('search')) {
+            foreach ($this->getArgument('search') as $field => $argument) {
+                if ($this->fieldtypeManager->hasField($field)) {
+                    $field = $this->fieldtypeManager->getField($field);
+                    $alias = "search_{$field->field_name}";
+                    $column = "$alias.field_id_{$field->field_id}";
 
-            if (app(FieldtypeManager::class)->hasField($field)) {
-                $this->query->orderByCustomField($field, $direction);
-            } else {
-                $this->query->orderBy($field, $direction);
+                    $this->query->joinFieldDataTable($field, $alias);
+                    $argument->addQuery($this->query, $column);
+                }
+            }
+        }
+
+        // Orderby and Sort Direction
+        if ($this->hasArgument('orderby')) {
+            $directions = $this->hasArgument('sort') ? $this->getArgument('sort')->terms->map->value->toArray() : ['desc'];
+            $fields = $this->getArgument('orderby');
+            foreach ($fields->terms as $index => $field) {
+                $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
+                $field = $field->value;
+                if ($this->fieldtypeManager->hasField($field)) {
+                    $this->query->orderByCustomField($field, $direction);
+                } else {
+                    $this->query->orderBy($this->query->qualifyColumn($field), $direction);
+                }
             }
         }
 

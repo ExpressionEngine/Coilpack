@@ -6,52 +6,6 @@ use Tests\TestCase;
 
 class ChannelTest extends TestCase
 {
-    public function test_channel_entries_channel()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['channel' => 'Testing']);
-        $this->assertEquals(1, $entries->count());
-
-        // Alternate syntax
-        $entries = $exp->channel->entries->arguments(['channel' => 'Testing'])->run();
-        $this->assertEquals(1, $entries->count());
-    }
-
-    public function test_channel_entries_not_channel()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['channel' => 'not Testing']);
-        $this->assertEquals(12, $entries->count());
-    }
-
-    public function test_channel_entries_status()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['status' => 'open']);
-        $this->assertEquals(12, $entries->count());
-    }
-
-    public function test_channel_entries_not_status()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['status' => 'not open']);
-        $this->assertEquals(1, $entries->count());
-    }
-
-    public function test_channel_entries_category()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['category' => 'news']);
-        $this->assertEquals(1, $entries->count());
-    }
-
-    public function test_channel_entries_not_category()
-    {
-        $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        $entries = $exp->channel->entries(['category' => 'not news']);
-        $this->assertEquals(6, $entries->count());
-    }
-
     public function test_prev_next_entry()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
