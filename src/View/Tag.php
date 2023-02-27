@@ -2,6 +2,7 @@
 
 namespace Expressionengine\Coilpack\View;
 
+use Expressionengine\Coilpack\Support\Arguments\Argument;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -137,7 +138,7 @@ abstract class Tag
             $value = $this->getArgumentFallback($key, $value);
         }
 
-        return $value;
+        return $value instanceof Argument || is_array($value) ? $value : new Argument($value);
     }
 
     /**

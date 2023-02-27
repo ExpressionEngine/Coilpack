@@ -68,7 +68,7 @@ class Entries extends ChannelEntriesTag
             $child_ids = $this->structure->sql->get_child_entries(
                 $this->getArgument('parent_id')->value,
                 $this->getArgument('category')->value ?: $this->getArgument('category_id')->value,
-                $this->getArgument('include_hidden')
+                $this->getArgument('include_hidden')->value
             );
 
             $fixed_order = ($child_ids !== false && is_array($child_ids) && count($child_ids) > 0) ? $child_ids : false;

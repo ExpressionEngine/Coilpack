@@ -92,4 +92,13 @@ class EntriesTest extends TestCase
         ]);
         $this->assertEquals(12, $entries->count());
     }
+
+    public function test_channel_entries_pagination()
+    {
+        $entries = $this->channel->entries([
+            'per_page' => 2,
+        ]);
+
+        $this->assertEquals(2, $entries->count());
+    }
 }

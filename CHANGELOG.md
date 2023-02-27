@@ -11,6 +11,7 @@
 - Better handling of ExpressionEngine filter arguments
 - The ability to use orderby and sort parameters on the channel entries tag
 - Support searching by custom field values on channel entries tag
+- Pagination support for the `exp_channel_entries` GraphQL query
 
 ### Fixed
 
@@ -22,6 +23,7 @@
 
 - Tag argument mutation now happens on 'get' instead of 'set'
 - Standardize GraphQL type handling through Coilpack's GraphQL Facade
+- Removed the `channel_entries` and `channel_entry` GraphQL query in favor of `exp_channel_entries`
 
 ## [0.1.0] - 2023-02-13
 

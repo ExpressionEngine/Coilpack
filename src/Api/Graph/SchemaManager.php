@@ -7,8 +7,8 @@ use Rebing\GraphQL\Support\Facades\GraphQL as RebingGraphQL;
 class SchemaManager
 {
     protected $queries = [
-        'channel_entry' => Queries\ChannelEntryQuery::class,
-        'channel_entries' => Queries\ChannelEntriesQuery::class,
+        // 'channel_entry' => Queries\ChannelEntryQuery::class,
+        // 'channel_entries' => Queries\ChannelEntriesQuery::class,
         'category' => Queries\CategoryQuery::class,
         'categories' => Queries\CategoriesQuery::class,
         'members' => Queries\MembersQuery::class,
@@ -87,6 +87,16 @@ class SchemaManager
         if (! in_array($className, $this->middleware)) {
             $this->middleware[] = $className;
         }
+    }
+
+    public function paginate($typename, $customName = null)
+    {
+        return RebingGraphQL::paginate($typename, $customName);
+    }
+
+    public function simplePaginate($typename, $customName = null)
+    {
+        return RebingGraphQL::simplePaginate($typename, $customName);
     }
 
     public function getMiddleware()

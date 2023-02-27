@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\View\Tags\Channel;
 
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
@@ -11,9 +12,8 @@ use Expressionengine\Coilpack\Support\Arguments\ListArgument;
 use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
 use Expressionengine\Coilpack\Support\Arguments\Term;
 use Expressionengine\Coilpack\TypedParameter as Parameter;
+// use Rebing\GraphQL\Support\Facades\GraphQL;
 use Expressionengine\Coilpack\View\ModelTag;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class Entries extends ModelTag implements ConvertsToGraphQL
 {
@@ -27,7 +27,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
     public function defineParameters(): array
     {
-        return [
+        return array_merge(parent::defineParameters(), [
             new Parameter([
                 'name' => 'author_id',
                 'type' => 'string',
@@ -57,16 +57,6 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'group_id',
                 'type' => 'string',
                 'description' => 'Limit entries to the specified Member Role ID',
-            ]),
-            new Parameter([
-                'name' => 'limit',
-                'type' => 'integer',
-                'description' => 'Limits the number of entries',
-            ]),
-            new Parameter([
-                'name' => 'offset',
-                'type' => 'integer',
-                'description' => 'Offsets the display by X number of entries',
             ]),
             new Parameter([
                 'name' => 'orderby',
@@ -130,10 +120,16 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                             'type' => 'string',
                             'description' => $field->field_instructions,
                         ]);
-                    })->toArray();
+                    })->merge([
+                        new Parameter([
+                            'name' => 'title',
+                            'type' => 'string',
+                            'description' => 'The title of an entry',
+                        ]),
+                    ])->toArray();
                 },
             ]),
-        ];
+        ]);
     }
 
     public function getArgumentFallback($key, $value)
@@ -247,6 +243,8 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
                     $this->query->joinFieldDataTable($field, $alias);
                     $argument->addQuery($this->query, $column);
+                } else {
+                    $argument->addQuery($this->query, $field);
                 }
             }
         }
@@ -272,7 +270,10 @@ class Entries extends ModelTag implements ConvertsToGraphQL
     public function toGraphQL(): array
     {
         return [
-            'type' => Type::listOf(GraphQL::type('ChannelEntry')),
+            'type' => GraphQL::paginate('ChannelEntry'),
+            'middleware' => [
+                \Expressionengine\Coilpack\Api\Graph\Middleware\ResolvePage::class,
+            ],
         ];
     }
 }
