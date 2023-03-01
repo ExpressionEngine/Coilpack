@@ -9,7 +9,6 @@ class ChannelTest extends TestCase
     public function test_prev_next_entry()
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-        // dd(get_class($exp->channel));
         $previous = $exp->channel->prev_entry(['channel' => 'blog', 'url_title' => 'action-comedy-how-to']);
         $this->assertEquals('marrow-and-the-broken-bones', $previous->url_title);
 
@@ -29,7 +28,7 @@ class ChannelTest extends TestCase
             'Photos',
             'Videos',
             'Music',
-        ], $categories->pluck('category_name')->toArray());
+        ], $categories->pluck('cat_name')->toArray());
     }
 
     public function test_category_heading()

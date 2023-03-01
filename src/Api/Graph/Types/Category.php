@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Category\Category as CategoryModel;
 use GraphQL\Type\Definition\Type;
@@ -39,6 +40,14 @@ class Category extends GraphQLType
                 'type' => Type::string(),
                 'description' => 'The members screen name',
             ],
+            'children' => [
+                'type' => Type::listOf(GraphQL::type($this->name)),
+                'description' => 'The categories that are children of this category',
+            ],
+            'parent' => [
+                'type' => GraphQL::type($this->name),
+                'description' => 'The category that is a parent of this category',
+            ],
         ], $this->customFields());
     }
 
@@ -50,7 +59,6 @@ class Category extends GraphQLType
             return [
                 $field->field_name => [
                     'type' => app(FieldtypeRegistrar::class)->getTypeForField($field) ?: \GraphQL\Type\Definition\Type::string(),
-                    // 'type' => $field->field_type == 'grid' ? Type::listOf(GraphQL::type("Field\\$field->field_name")) : Type::string(),
                     'selectable' => false,
                     'is_relation' => false,
                     'resolve' => function ($root, array $args) use ($field) {

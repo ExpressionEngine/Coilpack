@@ -50,6 +50,11 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function entries()
+    {
+        return $this->belongsToMany(ChannelEntry::class, 'category_posts', 'cat_id', 'entry_id');
+    }
+
     public function __get($key)
     {
         // First we check if the model actually has a value for this attribute

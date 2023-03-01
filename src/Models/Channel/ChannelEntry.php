@@ -28,7 +28,6 @@ class ChannelEntry extends Model
         'versioning_enabled' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'allow_comments' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'sticky' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-        // 'entry_date' => 'integer',
         'expiration_date' => 'integer',
         'comment_expiration_date' => 'integer',
         'author_id' => 'integer',
@@ -38,28 +37,6 @@ class ChannelEntry extends Model
     ];
 
     protected static $_relationships = [
-        'Channel' => [
-            'type' => 'belongsTo',
-            'key' => 'channel_id',
-        ],
-        'Author' => [
-            'type' => 'belongsTo',
-            'model' => 'Member',
-            'from_key' => 'author_id',
-        ],
-        'Status' => [
-            'type' => 'belongsTo',
-            'weak' => true,
-        ],
-        'Categories' => [
-            'type' => 'hasAndBelongsToMany',
-            'model' => 'Category',
-            'pivot' => [
-                'table' => 'category_posts',
-                'left' => 'entry_id',
-                'right' => 'cat_id',
-            ],
-        ],
         'Autosaves' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntryAutosave',
@@ -105,6 +82,17 @@ class ChannelEntry extends Model
         'group_column' => 'channel_id',
         'structure_model' => 'Channel',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new Scopes\HideExpired);
+        static::addGlobalScope(new Scopes\HideFuture);
+    }
 
     public function author()
     {
@@ -218,7 +206,7 @@ class ChannelEntry extends Model
         // if(is_null($value) && $fields->has($key)) {
         if (is_null($value) && app(FieldtypeManager::class)->hasField($key)) {
             $this->getRelationValue('data');
-            $fields = $this->data->fields($this->channel);
+            $fields = $this->data->fields($this);
             $value = ($fields->has($key)) ? $fields->get($key) : new FieldContent([
                 'field' => app(FieldtypeManager::class)->getField($key),
                 'data' => null,

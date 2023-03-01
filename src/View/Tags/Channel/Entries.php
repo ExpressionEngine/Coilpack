@@ -7,12 +7,12 @@ use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Models\Channel\Scopes;
 use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
 use Expressionengine\Coilpack\Support\Arguments\ListArgument;
 use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
 use Expressionengine\Coilpack\Support\Arguments\Term;
 use Expressionengine\Coilpack\TypedParameter as Parameter;
-// use Rebing\GraphQL\Support\Facades\GraphQL;
 use Expressionengine\Coilpack\View\ModelTag;
 
 class Entries extends ModelTag implements ConvertsToGraphQL
@@ -66,12 +66,14 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             new Parameter([
                 'name' => 'show_expired',
                 'type' => 'boolean',
-                'description' => '',
+                'description' => 'Include entries with an expiration date that has passed',
+                'defaulValue' => false,
             ]),
             new Parameter([
                 'name' => 'show_future_entries',
                 'type' => 'boolean',
-                'description' => 'Sets the display order of the entries',
+                'description' => 'Include entries with an entry_date in the future',
+                'defaultValue' => false,
             ]),
             new Parameter([
                 'name' => 'sort',
@@ -139,6 +141,16 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         }
 
         return new FilterArgument($value);
+    }
+
+    public function getStartOnArgument($value)
+    {
+        return \Carbon\Carbon::make($value)->timestamp;
+    }
+
+    public function getStopBeforeArgument($value)
+    {
+        return \Carbon\Carbon::make($value)->timestamp;
     }
 
     public function getOrderbyArgument($value)
@@ -220,6 +232,16 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             $query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
         });
 
+        // Start on
+        $this->query->when($this->hasArgument('start_on'), function ($query) {
+            $query->where('entry_date', '>=', $this->getArgument('start_on')->value);
+        });
+
+        // Stop before
+        $this->query->when($this->hasArgument('stop_before'), function ($query) {
+            $query->where('entry_date', '<', $this->getArgument('stop_before')->value);
+        });
+
         // Dynamic
         if ($this->hasArgument('dynamic')) {
             $lastSegment = last(request()->segments());
@@ -247,6 +269,16 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                     $argument->addQuery($this->query, $field);
                 }
             }
+        }
+
+        // Show Expired
+        if ($this->getArgument('show_expired')->value) {
+            $this->query->withoutGlobalScope(Scopes\HideExpired::class);
+        }
+
+        // Show Future
+        if ($this->getArgument('show_future_entries')->value) {
+            $this->query->withoutGlobalScope(Scopes\HideFuture::class);
         }
 
         // Orderby and Sort Direction

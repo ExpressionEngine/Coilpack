@@ -12,12 +12,14 @@
 - The ability to use orderby and sort parameters on the channel entries tag
 - Support searching by custom field values on channel entries tag
 - Pagination support for the `exp_channel_entries` GraphQL query
+- Full tag replacement for channel categories including GraphQL query for `exp_channel_categories`
 
 ### Fixed
 
 - Parsing the 'site' parameter when isolating the template library
 - Error when applying the File Fieldtype on empty data
 - Missing FieldContent attributes when a ChannelEntry does not contain data for a requested field
+- ChannelEntry model to remove future and expired results by default
 
 ### Changed
 

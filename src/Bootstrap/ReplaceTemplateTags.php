@@ -20,6 +20,7 @@ class ReplaceTemplateTags
 
         // Register our Tag replacements
         tap(app(\Expressionengine\Coilpack\View\Exp::class), function ($exp) {
+            $exp->registerTag('channel.categories', new \Expressionengine\Coilpack\View\Tags\Channel\Categories);
             $exp->registerTag('channel.entries', new \Expressionengine\Coilpack\View\Tags\Channel\Entries);
             $exp->registerTag('comment.entries', new \Expressionengine\Coilpack\View\Tags\Comment\Entries);
             $exp->registerTag('structure.entries', new \Expressionengine\Coilpack\View\Tags\Structure\Entries);
