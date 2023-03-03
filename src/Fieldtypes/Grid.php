@@ -10,7 +10,7 @@ use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\View\FilteredParameterValue;
 use Illuminate\Support\Facades\DB;
 

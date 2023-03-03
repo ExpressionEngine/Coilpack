@@ -11,7 +11,7 @@ use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
 use Expressionengine\Coilpack\Support\Arguments\ListArgument;
 use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
 use Expressionengine\Coilpack\Support\Arguments\Term;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\View\ModelTag;
 use GraphQL\Type\Definition\Type;
 

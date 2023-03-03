@@ -2,7 +2,7 @@
 
 namespace Expressionengine\Coilpack\View;
 
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 
 abstract class ModelTag extends IterableTag
 {

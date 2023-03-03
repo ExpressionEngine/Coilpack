@@ -3,7 +3,7 @@
 namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 
 class Rte extends Generic
 {

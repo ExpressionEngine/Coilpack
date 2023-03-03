@@ -3,8 +3,8 @@
 namespace Expressionengine\Coilpack\View\Tags\Structure;
 
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Traits\InteractsWithAddon;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Expressionengine\Coilpack\View\Tags\Channel\Entries as ChannelEntriesTag;
 
 class Entries extends ChannelEntriesTag

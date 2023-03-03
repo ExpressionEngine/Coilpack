@@ -7,7 +7,7 @@ use Expressionengine\Coilpack\FieldtypeOutput;
 use ExpressionEngine\Coilpack\Models\Channel\ChannelEntry;
 use ExpressionEngine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 
 class Relationship extends Fieldtype implements ListsGraphType
 {

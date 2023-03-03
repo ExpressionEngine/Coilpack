@@ -1,6 +1,6 @@
 <?php
 
-namespace Expressionengine\Coilpack;
+namespace Expressionengine\Coilpack\Support;
 
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedInputType;
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
@@ -8,7 +8,7 @@ use Expressionengine\Coilpack\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Arr;
 
-class TypedParameter implements ConvertsToGraphQL
+class Parameter implements ConvertsToGraphQL
 {
     protected $attributes = [
         'name' => '',

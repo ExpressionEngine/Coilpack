@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use Illuminate\Support\Str;
 
 class Generic extends Fieldtype
