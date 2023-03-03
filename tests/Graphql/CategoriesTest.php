@@ -11,7 +11,7 @@ class CategoriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                categories {
+                exp_channel_categories {
                     cat_id,
                     cat_name
                 }
@@ -23,7 +23,7 @@ class CategoriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                category(category_id: 2) {
+                exp_channel_categories(category_id: "2") {
                     cat_id,
                     cat_name
                 }

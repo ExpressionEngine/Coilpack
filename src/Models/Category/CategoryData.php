@@ -32,7 +32,7 @@ class CategoryData extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fieldtypeTables = $fields->filter(function ($field) {
-            return $field->legacy_field_data == 'n' || $field->legacy_field_data === false || $field->legacy_field_data === false;
+            return $field->legacy_field_data == 'n' || $field->legacy_field_data === false;
         })->map(function ($field) {
             return $field->data_table_name;
         });
@@ -47,14 +47,14 @@ class CategoryData extends Model
         $query->select('*', $this->qualifyColumn('cat_id'));
     }
 
-    public function fields($group = null)
+    public function fields($category, $group = null)
     {
-        $group = $group ?? $this->category->group;
+        $group = $group ?? $category->group;
         $fields = app(FieldtypeManager::class)->fieldsForCategoryGroup($group)->keyBy('field_id');
 
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'field_');
-        })->reduce(function ($carry, $key) use ($fields) {
+        })->reduce(function ($carry, $key) use ($fields, $category) {
             [$name, $id] = array_slice(explode('_', $key), 1);
 
             if (! $fields->has($id)) {
@@ -66,7 +66,7 @@ class CategoryData extends Model
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'category' => $this->category,
+                        'category' => $category,
                     ],
                     Arr::only($this->attributes, ['cat_id', 'site_id', 'channel_id'])
                 )));

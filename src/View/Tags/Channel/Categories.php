@@ -90,6 +90,25 @@ class Categories extends ModelTag implements ConvertsToGraphQL
                 'type' => 'string',
                 'description' => 'Restrict to entries with a particular status',
             ]),
+            new Parameter([
+                'name' => 'search',
+                'description' => 'Search for categories matching a certain criteria',
+                'type' => function () {
+                    return app(FieldtypeManager::class)->allFields('category')->map(function ($field) {
+                        return new Parameter([
+                            'name' => $field->field_name,
+                            'type' => 'string',
+                            'description' => $field->field_instructions,
+                        ]);
+                    })->merge([
+                        new Parameter([
+                            'name' => 'cat_name',
+                            'type' => 'string',
+                            'description' => 'The name of a category',
+                        ]),
+                    ])->toArray();
+                },
+            ]),
 
             // new Parameter([
             //     'name' => 'style',
@@ -102,7 +121,7 @@ class Categories extends ModelTag implements ConvertsToGraphQL
 
     public function getArgumentFallback($key, $value)
     {
-        if (in_array($key, ['channel', 'group', 'group_id'])) {
+        if (in_array($key, ['channel', 'group', 'group_id', 'category', 'category_id', 'site_id'])) {
             return new FilterArgument($value);
         }
 
@@ -189,8 +208,8 @@ class Categories extends ModelTag implements ConvertsToGraphQL
         // Search
         if ($this->hasArgument('search')) {
             foreach ($this->getArgument('search') as $field => $argument) {
-                if ($this->fieldtypeManager->hasField($field)) {
-                    $field = $this->fieldtypeManager->getField($field);
+                if ($this->fieldtypeManager->hasField($field, 'category')) {
+                    $field = $this->fieldtypeManager->getField($field, 'category');
                     $alias = "search_{$field->field_name}";
                     $column = "$alias.field_id_{$field->field_id}";
 
@@ -209,7 +228,7 @@ class Categories extends ModelTag implements ConvertsToGraphQL
             foreach ($fields->terms as $index => $field) {
                 $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
                 $field = $field->value;
-                if ($this->fieldtypeManager->hasField($field)) {
+                if ($this->fieldtypeManager->hasField($field, 'category')) {
                     $this->query->orderByCustomField($field, $direction);
                 } else {
                     $this->query->orderBy($this->query->qualifyColumn($field), $direction);

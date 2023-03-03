@@ -26,6 +26,7 @@
 - Tag argument mutation now happens on 'get' instead of 'set'
 - Standardize GraphQL type handling through Coilpack's GraphQL Facade
 - Removed the `channel_entries` and `channel_entry` GraphQL query in favor of `exp_channel_entries`
+- Removed the `categories` and `category` GraphQL query in favor of `exp_channel_categories`
 
 ## [0.1.0] - 2023-02-13
 

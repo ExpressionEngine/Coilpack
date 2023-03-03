@@ -7,10 +7,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL as RebingGraphQL;
 class SchemaManager
 {
     protected $queries = [
-        // 'channel_entry' => Queries\ChannelEntryQuery::class,
-        // 'channel_entries' => Queries\ChannelEntriesQuery::class,
-        'category' => Queries\CategoryQuery::class,
-        'categories' => Queries\CategoriesQuery::class,
         'members' => Queries\MembersQuery::class,
         'me' => Queries\MemberCurrentQuery::class,
         'variables' => Queries\VariablesQuery::class,
