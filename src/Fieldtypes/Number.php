@@ -7,7 +7,7 @@ use Expressionengine\Coilpack\Support\Parameter;
 
 class Number extends Generic
 {
-    public function parameters(ChannelField $field = null)
+    public function parameters(ChannelField $field = null): array
     {
         return [
             new Parameter([

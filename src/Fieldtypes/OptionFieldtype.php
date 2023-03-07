@@ -69,7 +69,7 @@ class OptionFieldtype extends Generic
             ]);
     }
 
-    public function parameters(ChannelField $field = null)
+    public function parameters(ChannelField $field = null): array
     {
         return [
             new Parameter([

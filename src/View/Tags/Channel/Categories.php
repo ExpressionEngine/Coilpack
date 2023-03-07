@@ -94,7 +94,7 @@ class Categories extends ModelTag implements ConvertsToGraphQL
                 'name' => 'search',
                 'description' => 'Search for categories matching a certain criteria',
                 'type' => function () {
-                    return app(FieldtypeManager::class)->allFields('category')->map(function ($field) {
+                    return app(FieldtypeManager::class)->allFields('category')->toBase()->map(function ($field) {
                         return new Parameter([
                             'name' => $field->field_name,
                             'type' => 'string',

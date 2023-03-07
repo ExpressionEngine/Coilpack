@@ -2,9 +2,9 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Queries;
 
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\Models\Member\Member;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 
 class MemberCurrentQuery extends Query

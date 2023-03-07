@@ -46,7 +46,7 @@ class Relationship extends Fieldtype implements ListsGraphType
         return $data;
     }
 
-    public function parameters(?ChannelField $field = null)
+    public function parameters(?ChannelField $field = null): array
     {
         return [
             new Parameter([

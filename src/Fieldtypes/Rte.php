@@ -7,7 +7,7 @@ use Expressionengine\Coilpack\Support\Parameter;
 
 class Rte extends Generic
 {
-    public function parameters(ChannelField $field = null)
+    public function parameters(ChannelField $field = null): array
     {
         return [
             new Parameter([

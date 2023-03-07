@@ -28,7 +28,10 @@ abstract class Fieldtype
      */
     abstract public function apply(FieldContent $content, array $parameters = []);
 
-    public function parameters(ChannelField $field = null)
+    /**
+     * A list of supported parameters for the fieldtype
+     */
+    public function parameters(ChannelField $field = null): array
     {
         return [];
     }

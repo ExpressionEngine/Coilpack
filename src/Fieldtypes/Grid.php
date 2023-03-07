@@ -113,7 +113,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         ]);
     }
 
-    public function parameters(ChannelField $field = null)
+    public function parameters(ChannelField $field = null): array
     {
         return [
             new Parameter([

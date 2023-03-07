@@ -64,13 +64,13 @@ class SchemaManager
         return RebingGraphQL::type($alias);
     }
 
-    public function type($alias)
+    public function type($name)
     {
-        if (! array_key_exists($alias, $this->types)) {
-            throw new \Exception("Type '$alias' not registered");
+        if (! array_key_exists($name, $this->types)) {
+            throw new \Exception("Type '$name' not registered");
         }
 
-        return RebingGraphQL::type($alias);
+        return RebingGraphQL::type($name);
     }
 
     public function getTypes()

@@ -175,7 +175,7 @@ abstract class Tag
     }
 
     /**
-     * Cast the tag to a string by invoking the process method
+     * Cast the tag to a string by invoking the run method
      *
      * @return string
      */
