@@ -76,10 +76,13 @@ class Exp
         }
     }
 
-    public function path($str)
+    public function path(...$arguments)
     {
         // Path variable: {path=group/template}
-        return ee()->functions->create_url($str);
+        $arguments = (empty($arguments)) ? [''] : $arguments;
+        $arguments[0] = ee()->functions->create_url($arguments[0]);
+
+        return implode('/', $arguments);
     }
 
     public function redirect($str)

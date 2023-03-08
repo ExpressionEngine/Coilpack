@@ -28,6 +28,7 @@
 - Standardize GraphQL type handling through Coilpack's GraphQL Facade
 - Removed the `channel_entries` and `channel_entry` GraphQL query in favor of `exp_channel_entries`
 - Removed the `categories` and `category` GraphQL query in favor of `exp_channel_categories`
+- Allow `exp.path()` to generate a url from multiple parameters i.e. `exp.path('group/template', entry.url_title)`
 
 ## [0.1.0] - 2023-02-13
 
