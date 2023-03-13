@@ -21,6 +21,7 @@
 - Error when applying the File Fieldtype on empty data
 - Missing FieldContent attributes when a ChannelEntry does not contain data for a requested field
 - ChannelEntry model to remove future and expired results by default
+- Issue where GraphQL evaluates a fieldtype as null but then continues to apply modifier
 
 ### Changed
 

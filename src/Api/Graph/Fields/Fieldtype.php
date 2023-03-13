@@ -94,6 +94,11 @@ class Fieldtype extends Field
             $parameters = array_intersect_key($args, $this->parameters()->toArray());
             $output = $data->parameters($parameters);
 
+            // If evaluating the data with parameters produces null we stop here
+            if (is_null($output)) {
+                return $output;
+            }
+
             // Parameters take precedence over modifiers
             // Remove any arguments that were used as parameters
             $args = array_diff_key($args, $parameters);
