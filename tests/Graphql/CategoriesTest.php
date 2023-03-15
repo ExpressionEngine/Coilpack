@@ -12,8 +12,10 @@ class CategoriesTest extends TestCase
             'query' => <<<'GQL'
             {
                 exp_channel_categories {
-                    cat_id,
-                    cat_name
+                    data {
+                        cat_id,
+                        cat_name
+                    }
                 }
             }
           GQL
@@ -24,8 +26,10 @@ class CategoriesTest extends TestCase
             'query' => <<<'GQL'
             {
                 exp_channel_categories(category_id: "2") {
-                    cat_id,
-                    cat_name
+                    data {
+                        cat_id,
+                        cat_name
+                    }
                 }
             }
           GQL

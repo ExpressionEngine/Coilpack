@@ -57,7 +57,7 @@ abstract class ModelTag extends IterableTag
 
         if ($this->hasArgument('offset')) {
             $this->query->skip($this->getArgument('offset'));
-        } elseif ($this->hasArgument('limit')) {
+        } elseif ($this->hasArgument('limit') && $this->getArgument('limit') == 1) {
             // If we have a limit but no offset we'll handle this as requesting the 'first' record
             return $this->query->first();
         }

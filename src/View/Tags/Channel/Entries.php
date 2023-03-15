@@ -61,7 +61,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             new Parameter([
                 'name' => 'orderby',
                 'type' => 'string',
-                'description' => '',
+                'description' => 'Order the entries by a field',
             ]),
             new Parameter([
                 'name' => 'show_expired',

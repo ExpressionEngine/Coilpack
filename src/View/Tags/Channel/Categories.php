@@ -27,7 +27,7 @@ class Categories extends ModelTag implements ConvertsToGraphQL
 
     public function defineParameters(): array
     {
-        return [
+        return array_merge(parent::defineParameters(), [
             new Parameter([
                 'name' => 'category',
                 'type' => 'string',
@@ -51,12 +51,12 @@ class Categories extends ModelTag implements ConvertsToGraphQL
             new Parameter([
                 'name' => 'channel',
                 'type' => 'string',
-                'description' => 'Limit the entries to the specified Channel short name',
+                'description' => 'Limit the categories to the specified Channel short name',
             ]),
             new Parameter([
                 'name' => 'orderby',
                 'type' => 'string',
-                'description' => '',
+                'description' => 'Order the categories by a field',
             ]),
             new Parameter([
                 'name' => 'parent_only',
@@ -116,7 +116,7 @@ class Categories extends ModelTag implements ConvertsToGraphQL
             //     'description' => 'There are two list "styles" for your categories: "nested" and "linear".',
             //     'defaultValue' => 'linear',
             // ]),
-        ];
+        ]);
     }
 
     public function getArgumentFallback($key, $value)
@@ -242,7 +242,10 @@ class Categories extends ModelTag implements ConvertsToGraphQL
     public function toGraphQL(): array
     {
         return [
-            'type' => Type::listOf(GraphQL::type('Category')),
+            'type' => GraphQL::paginate('Category'),
+            'middleware' => [
+                \Expressionengine\Coilpack\Api\Graph\Middleware\ResolvePage::class,
+            ],
         ];
     }
 }

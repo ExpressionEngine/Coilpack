@@ -11,7 +11,7 @@
 - Better handling of ExpressionEngine filter arguments
 - The ability to use orderby and sort parameters on the channel entries tag
 - Support searching by custom field values on channel entries tag
-- Pagination support for the `exp_channel_entries` GraphQL query
+- Pagination support for the `exp_channel_entries` and `exp_channel_categories` GraphQL queries
 - Full tag replacement for channel categories including GraphQL query for `exp_channel_categories`
 - The ability to parse GraphQL types and queries from an Add-on's setup file
 
