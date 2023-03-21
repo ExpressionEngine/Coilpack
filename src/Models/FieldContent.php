@@ -111,9 +111,14 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
             return;
         }
 
-        if (array_key_exists($key, $this->attributes)) {
+        if ($this->hasAttribute($key)) {
             return $this->attributes[$key];
         }
+    }
+
+    public function hasAttribute($key)
+    {
+        return array_key_exists($key, $this->attributes);
     }
 
     /**
@@ -148,7 +153,21 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function __get($key)
     {
-        return ($this->getAttribute($key)) ?: $this->value()->{$key};
+        // return ($this->getAttribute($key)) ?: $this->value()->{$key};
+        if ($this->getAttribute($key)) {
+            return $this->getAttribute($key);
+        }
+
+        $value = $this->value();
+        if (isset($value->$key)) {
+            return $value->$key;
+        }
+
+        if ($value->hasModifier($key)) {
+            return $value->callModifier($key);
+        }
+
+        return null;
     }
 
     /**

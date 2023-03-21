@@ -147,7 +147,7 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
 
     public function __isset($key)
     {
-        return array_key_exists($key, (array) $this->array);
+        return ($this->object && property_exists($this->object, $key)) || array_key_exists($key, (array) $this->array);
     }
 
     public function __call($method, $arguments)
