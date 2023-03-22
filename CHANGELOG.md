@@ -14,6 +14,7 @@
 - Pagination support for the `exp_channel_entries` and `exp_channel_categories` GraphQL queries
 - Full tag replacement for channel categories including GraphQL query for `exp_channel_categories`
 - The ability to parse GraphQL types and queries from an Add-on's setup file
+- A tag replacement for Structure Nav to better support new template languages and GraphQL
 
 ### Fixed
 

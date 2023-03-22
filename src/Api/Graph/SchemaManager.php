@@ -7,8 +7,8 @@ use Rebing\GraphQL\Support\Facades\GraphQL as RebingGraphQL;
 class SchemaManager
 {
     protected $queries = [
-        'members' => Queries\MembersQuery::class,
         'me' => Queries\MemberCurrentQuery::class,
+        'members' => Queries\MembersQuery::class,
         'variables' => Queries\VariablesQuery::class,
     ];
 
@@ -16,11 +16,12 @@ class SchemaManager
         'Category' => Types\Category::class,
         'Channel' => Types\Channel::class,
         'ChannelEntry' => Types\ChannelEntry::class,
+        'Fieldtypes__File' => Types\Fieldtypes\File::class,
+        'KeyedValue' => Types\KeyedValue::class,
         'Member' => Types\Member::class,
+        'NavItem' => Types\NavItem::class,
         'Status' => Types\Status::class,
         'Variables' => Types\Variables::class,
-        'KeyedValue' => Types\KeyedValue::class,
-        'Fieldtypes__File' => Types\Fieldtypes\File::class,
     ];
 
     protected $middleware = [

@@ -8,7 +8,7 @@ abstract class ModelTag extends IterableTag
 {
     protected $query;
 
-    protected $takeFirst = false;
+    // protected $takeFirst = false;
 
     public function defineParameters(): array
     {
@@ -38,17 +38,6 @@ abstract class ModelTag extends IterableTag
         ];
     }
 
-    public function getLimitArgument($count)
-    {
-        $this->query->take($count);
-
-        if ($count == 1 && ! $this->hasArgument('offset')) {
-            $this->takeFirst = true;
-        }
-
-        return $count;
-    }
-
     public function run()
     {
         if ($this->hasArgument('page') || $this->hasArgument('per_page')) {
@@ -56,14 +45,14 @@ abstract class ModelTag extends IterableTag
         }
 
         if ($this->hasArgument('offset')) {
-            $this->query->skip($this->getArgument('offset'));
-        } elseif ($this->hasArgument('limit') && $this->getArgument('limit') == 1) {
+            $this->query->skip($this->getArgument('offset')->value);
+        } elseif ($this->hasArgument('limit') && $this->getArgument('limit')->value == 1) {
             // If we have a limit but no offset we'll handle this as requesting the 'first' record
             return $this->query->first();
         }
 
         if ($this->hasArgument('limit')) {
-            $this->query->take($this->getArgument('limit'));
+            $this->query->take($this->getArgument('limit')->value);
         }
 
         return $this->query->get();
