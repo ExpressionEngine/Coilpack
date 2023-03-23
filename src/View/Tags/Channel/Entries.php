@@ -246,7 +246,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         if ($this->hasArgument('dynamic')) {
             $lastSegment = last(request()->segments());
 
-            $this->setLimitArgument(1);
+            $this->setArgument('limit', 1);
 
             $this->query->when(is_int($lastSegment), function ($query) use ($lastSegment) {
                 $query->where('entry_id', (int) $lastSegment);

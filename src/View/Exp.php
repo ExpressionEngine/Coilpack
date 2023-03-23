@@ -96,6 +96,22 @@ class Exp
         return ee()->functions->create_route($str);
     }
 
+    public function embed($view, $vars = [])
+    {
+        $pieces = explode('/', $view);
+        $site_id = ee()->config->item('site_id');
+
+        if (count($pieces) !== 2) {
+            throw new \Exception('Embedded view name must be of the format `template_group/template`');
+        }
+
+        return tap(ee()->TMPL, function ($tmpl) use ($pieces, $site_id, $vars) {
+            $tmpl->embed_vars = $vars;
+            $template = $tmpl->fetch_template($pieces[0], $pieces[1], false, $site_id);
+            $tmpl->parse($template, true, $site_id, false);
+        })->template;
+    }
+
     public function __get($key)
     {
         static::boot();

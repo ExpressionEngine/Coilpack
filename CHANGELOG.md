@@ -15,6 +15,7 @@
 - Full tag replacement for channel categories including GraphQL query for `exp_channel_categories`
 - The ability to parse GraphQL types and queries from an Add-on's setup file
 - A tag replacement for Structure Nav to better support new template languages and GraphQL
+- A method for embedding native ExpressionEngine templates within Twig and Blade
 
 ### Fixed
 
