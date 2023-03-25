@@ -109,6 +109,7 @@ class Exp
             $tmpl->embed_vars = $vars;
             $template = $tmpl->fetch_template($pieces[0], $pieces[1], false, $site_id);
             $tmpl->parse($template, true, $site_id, false);
+            $tmpl->template = $tmpl->process_sub_templates($tmpl->template);
         })->template;
     }
 
