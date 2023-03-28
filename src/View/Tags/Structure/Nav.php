@@ -165,6 +165,7 @@ class Nav extends Tag implements ConvertsToGraphQL
         foreach ($tree as $id => &$node) {
             $node['entry'] = $entries->find($id);
             $node['hidden'] = $node['hidden'] === 'y';
+            $node['active'] = ($id == $current_id);
         }
 
         // Add a fake root element and build the tree structure
@@ -184,6 +185,9 @@ class Nav extends Tag implements ConvertsToGraphQL
                     'entry' => $entry['entry'] ?? null,
                     'depth' => $entry['depth'] ?? null,
                     'structure_url_title' => $entry['structure_url_title'] ?? null,
+                    'url' => $entry['uri'] ?? null,
+                    'uri' => str_replace(ee()->functions->create_url(''), '', $entry['uri'] ?? null),
+                    'active' => $entry['active'] ?? false,
                     'slug' => $entry['slug'] ?? null,
                     'hidden' => $entry['hidden'] ?? null,
                     'children' => $this->createTree($entries, $entry['lft'], $entry['rgt']),
