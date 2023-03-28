@@ -43,6 +43,7 @@ class OptionFieldtype extends Generic
                 }
             }
         } else {
+            $pairs = [];
             $selected = $data;
         }
 
