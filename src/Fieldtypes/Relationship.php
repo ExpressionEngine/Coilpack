@@ -22,7 +22,7 @@ class Relationship extends Fieldtype implements ListsGraphType
     protected function loadData(FieldContent $content)
     {
         $isGrid = $content->field->field_name === 'grid';
-        $isFluid = isset($content->fluid_field);
+        $isFluid = $content->hasAttribute('fluid_field');
 
         $query = ChannelEntry::query()
             ->select('channel_titles.*')

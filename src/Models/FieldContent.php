@@ -232,7 +232,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function __isset($key)
     {
-        return $this->offsetExists($key);
+        if ($this->offsetExists($key)) {
+            return true;
+        }
+
+        $value = $this->value();
+
+        return isset($value->$key) || $value->hasModifier($key);
     }
 
     /**

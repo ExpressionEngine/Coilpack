@@ -25,10 +25,10 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
 
     protected function loadData(FieldContent $content, array $parameters = [])
     {
-        if (! isset($content->entry_id)) {
+        if (! $content->hasAttribute('entry_id')) {
             return [];
         }
-        $isFluid = isset($content->fluid_field);
+        $isFluid = $content->hasAttribute('fluid_field');
         $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
         $parameters = array_merge([

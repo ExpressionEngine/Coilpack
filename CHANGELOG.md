@@ -25,6 +25,7 @@
 - ChannelEntry model to remove future and expired results by default
 - Issue where GraphQL evaluates a fieldtype as null but then continues to apply modifier
 - Error on Option Fieldtypes when querying empty `options` through GraphQL
+- Bug accessing a File field's attributes through a Grid field
 
 ### Changed
 
