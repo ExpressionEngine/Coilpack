@@ -27,6 +27,7 @@
 - Error on Option Fieldtypes when querying empty `options` through GraphQL
 - Bug accessing a File field's attributes through a Grid field
 - Syntax error in Relationship fieldtype causing issue within Grid
+- Gracefully handle when a session is not set on the Laravel request in FormTag
 
 ### Changed
 

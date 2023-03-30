@@ -27,7 +27,10 @@ abstract class FormTag extends Tag
         // to satisfy Laravel's middleware as well as EE's CSRF check
         ee()->load->library('csrf');
         $token = ee()->csrf->get_user_token();
-        request()->session()->put('_token', $token);
+
+        if (request()->hasSession()) {
+            request()->session()->put('_token', $token);
+        }
 
         $defaults = [
             'id' => $this->formId,
