@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
+class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
      * The model's attributes.
@@ -58,6 +58,11 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->value()->getIterator());
+    }
+
+    public function count(): int
+    {
+        return $this->value()->count();
     }
 
     /**
