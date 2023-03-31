@@ -29,6 +29,7 @@
 - Bug accessing a File field's attributes through a Grid field
 - Syntax error in Relationship fieldtype causing issue within Grid
 - Gracefully handle when a session is not set on the Laravel request in FormTag
+- Issue with registering a fluid field that has an empty string in it's list of fields
 
 ### Changed
 
