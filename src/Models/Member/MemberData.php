@@ -75,6 +75,7 @@ class MemberData extends Model
             $nameMap = [
                 'id' => 'data',
                 'ft' => 'format',
+                'dt' => 'datetime',
             ];
 
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);

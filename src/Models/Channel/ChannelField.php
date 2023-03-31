@@ -2,6 +2,7 @@
 
 namespace Expressionengine\Coilpack\Models\Channel;
 
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Schema;
  *
  * Related to Channel which defines the structure of this content.
  */
-class ChannelField extends Model
+class ChannelField extends Model implements Field
 {
     protected $primaryKey = 'field_id';
 

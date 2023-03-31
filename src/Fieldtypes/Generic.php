@@ -11,6 +11,8 @@ class Generic extends Fieldtype
 {
     private $handler = null;
 
+    private $settings;
+
     public function __construct(string $name, $id = null)
     {
         $this->name = $name;
@@ -32,7 +34,18 @@ class Generic extends Fieldtype
 
         $this->handler = ee()->api_channel_fields->setup_handler($this->id ?: $this->name, true);
 
+        if ($this->settings) {
+            $this->handler->_init(['settings' => $this->settings]);
+        }
+
         return $this->handler;
+    }
+
+    public function withSettings($settings)
+    {
+        $this->settings = $settings;
+
+        return parent::withSettings($settings);
     }
 
     public function apply(FieldContent $content, array $parameters = [])

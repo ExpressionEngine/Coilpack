@@ -2,12 +2,12 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\Support\Parameter;
 
 class Duration extends Generic
 {
-    public function parameters(ChannelField $field = null): array
+    public function parameters(Field $field = null): array
     {
         return [
             new Parameter([

@@ -2,13 +2,14 @@
 
 namespace Expressionengine\Coilpack\Models\Member;
 
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 
 /**
  * Member Field Model
  */
-class MemberField extends Model
+class MemberField extends Model implements Field
 {
     protected $primaryKey = 'm_field_id';
 
@@ -22,8 +23,13 @@ class MemberField extends Model
 
     public function getFieldType()
     {
+        // We are not passing the id because Api_Channel_Fields only handles channel field ids
+        $id = null; // $this->m_field_id
+
         // cache this
-        return app(FieldtypeManager::class)->make($this->m_field_type, $this->m_field_id, 'member');
+        return app(FieldtypeManager::class)
+            ->make($this->m_field_type, $id, 'member')
+            ->withSettings($this->m_field_settings);
     }
 
     public function getDataTableNameAttribute($value)

@@ -2,13 +2,14 @@
 
 namespace Expressionengine\Coilpack\Models\Category;
 
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Model;
 
 /**
  * Category Field Model
  */
-class CategoryField extends Model
+class CategoryField extends Model implements Field
 {
     protected $primaryKey = 'field_id';
 
@@ -36,7 +37,12 @@ class CategoryField extends Model
 
     public function getFieldType()
     {
+        // We are not passing the id because Api_Channel_Fields only handles channel field ids
+        $id = null; // $this->field_id
+
         // cache this
-        return app(FieldtypeManager::class)->make($this->field_type, $this->field_id);
+        return app(FieldtypeManager::class)
+            ->make($this->field_type, $id, 'category')
+            ->withSettings($this->field_settings);
     }
 }

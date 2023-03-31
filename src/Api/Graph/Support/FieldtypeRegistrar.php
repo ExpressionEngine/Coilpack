@@ -142,8 +142,13 @@ class FieldtypeRegistrar
 
     public function getTypeForField($field)
     {
-        $type = $this->getType($field->field_name);
-        $type = $type ?: $this->getType($field->field_type);
+        $possibleTypes = array_filter([
+            $this->getType($field->field_name),
+            $this->getType($field->field_type),
+            $this->getType($field->m_field_type),
+        ]);
+
+        $type = array_shift($possibleTypes);
         if ($type === null) {
             dd($field->field_name, $field->field_type, $field->getFieldType(), $this->types);
         }

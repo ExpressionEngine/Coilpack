@@ -4,6 +4,7 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\Contracts\GeneratesGraphType;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
 use Expressionengine\Coilpack\FieldtypeManager;
@@ -113,7 +114,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         ]);
     }
 
-    public function parameters(ChannelField $field = null): array
+    public function parameters(Field $field = null): array
     {
         return [
             new Parameter([

@@ -60,7 +60,7 @@ class Fieldtype extends Field
     {
         $fieldtype = $this->getFieldtype();
 
-        return ($fieldtype) ? $fieldtype->modifiers() : [];
+        return ($fieldtype) ? $fieldtype->modifiers() : collect();
     }
 
     public function args(): array

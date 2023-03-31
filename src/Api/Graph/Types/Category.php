@@ -62,7 +62,7 @@ class Category extends GraphQLType
                     'selectable' => false,
                     'is_relation' => false,
                     'resolve' => function ($root, array $args) use ($field) {
-                        return $root->{$field->field_name} ?? null;
+                        return $root->{$field->field_name};
                     },
                 ],
             ];

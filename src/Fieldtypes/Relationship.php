@@ -2,10 +2,10 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use ExpressionEngine\Coilpack\Models\Channel\ChannelEntry;
-use ExpressionEngine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\Support\Parameter;
 
@@ -47,7 +47,7 @@ class Relationship extends Fieldtype implements ListsGraphType
         return $data;
     }
 
-    public function parameters(?ChannelField $field = null): array
+    public function parameters(Field $field = null): array
     {
         return [
             new Parameter([
