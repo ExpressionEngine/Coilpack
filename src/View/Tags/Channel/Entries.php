@@ -195,8 +195,8 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         });
 
         // Site ID
-        $this->query->when($this->hasArgument('site_id'), function ($query) {
-            $this->getArgument('site_id')->addQuery($query, 'site_id');
+        $this->query->when($this->hasArgument('site'), function ($query) {
+            $this->getArgument('site')->addQuery($query, 'site_id');
         });
 
         // URL Title
@@ -296,7 +296,29 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             }
         }
 
-        return parent::run();
+        // Add page data to channel entries after the query
+        $site_pages = config_item('site_pages');
+
+        $this->getArgument('site')->terms->each(function ($term) use (&$site_pages) {
+            if ($term->value && $term->value != ee()->config->item('site_id')) {
+                $pages = ee()->config->site_pages($term->value);
+                $site_pages[$term->value] = $pages[$term->value];
+            }
+        });
+
+        return tap(parent::run(), function ($result) use ($site_pages) {
+            $result->transform(function ($entry) use ($site_pages) {
+                $entry->page_uri = '';
+                $entry->page_url = '';
+
+                if ($site_pages !== false && isset($site_pages[$entry->site_id]['uris'][$entry->entry_id])) {
+                    $entry->page_uri = $site_pages[$entry->site_id]['uris'][$entry->entry_id];
+                    $entry->page_url = ee()->functions->create_page_url($site_pages[$entry->site_id]['url'], $entry->page_uri);
+                }
+
+                return $entry;
+            });
+        });
     }
 
     public function toGraphQL(): array

@@ -19,8 +19,7 @@ class TemplateStub extends \EE_Template
         $this->tagparams = [
             'dynamic' => 'no',
         ];
-
-        $this->site_ids = [ee()->config->item('site_id')];
+        $this->site_ids = [ee()->config->item('site_id') ?: 1];
 
         $this->data_capture = [
             'parse_variables' => null,
