@@ -27,6 +27,8 @@ class GlobalComposer
             ee()->config->_global_vars,
             [
                 'current_time' => now(),
+                'logged_in' => (ee()->session->userdata('member_id') != 0),
+                'logged_out' => (ee()->session->userdata('member_id') == 0),
             ]
         ))];
 
