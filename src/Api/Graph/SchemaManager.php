@@ -65,6 +65,11 @@ class SchemaManager
         return RebingGraphQL::type($alias);
     }
 
+    public function hasType($name)
+    {
+        return array_key_exists($name, $this->types);
+    }
+
     public function type($name)
     {
         if (! array_key_exists($name, $this->types)) {

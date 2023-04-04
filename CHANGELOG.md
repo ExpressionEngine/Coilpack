@@ -33,6 +33,7 @@
 - Gracefully handle when a session is not set on the Laravel request in FormTag
 - Issue with registering a fluid field that has an empty string in it's list of fields
 - Getting custom field data on members and categories through GraphQL
+- Bug with Fieldtypes providing certain GraphQL types
 
 ### Changed
 
