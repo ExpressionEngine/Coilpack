@@ -131,7 +131,7 @@ class ChannelEntry extends Model
 
         // If this field is not storing it's data on the channel_data table we
         // will join the separate data table with a unique orderby_field_name alias
-        if ($field->legacy_field_data == 'n' || $field->legacy_field_data === false) {
+        if ($field->legacy_field_data === 'n' || $field->legacy_field_data === false) {
             $alias = "orderby_{$field->field_name}";
             $column = "$alias.$column";
             $this->scopeJoinFieldDataTable($query, $field, $alias);

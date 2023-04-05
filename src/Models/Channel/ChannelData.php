@@ -32,7 +32,7 @@ class ChannelData extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fieldtypeTables = $fields->filter(function ($field) {
-            return $field->legacy_field_data == 'n' || $field->legacy_field_data === false;
+            return $field->legacy_field_data === 'n' || $field->legacy_field_data === false;
         })->map(function ($field) {
             return $field->data_table_name;
         });
