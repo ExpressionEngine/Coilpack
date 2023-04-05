@@ -68,16 +68,6 @@ class ContactForm extends FormTag
 
         $data['current_time'] = \Carbon\Carbon::now();
 
-        // Create form
-        // return $this->_setup_form(
-        //     $tagdata,
-        //     $recipients,
-        //     array(
-        //         'form_id' => 'contact_form',
-        //         'markdown' => \get_bool_from_string(ee()->TMPL->fetch_param('markdown'))
-        //     )
-        // );
-
         $this->attributes = $data;
     }
 
@@ -155,6 +145,11 @@ class ContactForm extends FormTag
 
             $author_email = ($query->num_rows() == 0) ? '' : $query->row('email');
         }
+    }
+
+    public function __isset($key)
+    {
+        return (array_key_exists($key, $this->attributes));
     }
 
     public function __get($key)

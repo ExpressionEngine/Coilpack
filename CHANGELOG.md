@@ -35,6 +35,7 @@
 - Getting custom field data on members and categories through GraphQL
 - Bug with Fieldtypes providing certain GraphQL types
 - Bug checking if a field stored data on the legacy data table
+- Email Contact Form attribute access in Twig templates
 
 ### Changed
 
