@@ -149,7 +149,7 @@ class ContactForm extends FormTag
 
     public function __isset($key)
     {
-        return (array_key_exists($key, $this->attributes));
+        return array_key_exists($key, $this->attributes);
     }
 
     public function __get($key)

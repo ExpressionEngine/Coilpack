@@ -63,7 +63,7 @@ abstract class FormTag extends Tag
 
     public function run()
     {
-        return $this->open();
+        return $this;
     }
 
     /**
@@ -86,5 +86,15 @@ abstract class FormTag extends Tag
     protected function decrypt($data)
     {
         return ee('Encrypt')->decode($data, ee()->config->item('session_crypt_key'));
+    }
+
+    /**
+     * Cast the tag to a string by invoking the open method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->open();
     }
 }

@@ -67,7 +67,7 @@ if(!$entry) {
 		{{-- email contact form --}}
 
 		@php
-        $form = $exp->email->contact_form->parameters([
+        $form = $exp->email->contact_form([
             'form_class' => 'contact-form',
             'return' => "{$global->site_url}index.php/{$p_url}/thanks",
             'redirect' => '0'
