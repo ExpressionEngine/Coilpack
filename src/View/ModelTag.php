@@ -41,7 +41,12 @@ abstract class ModelTag extends IterableTag
     public function run()
     {
         if ($this->hasArgument('page') || $this->hasArgument('per_page')) {
-            return $this->query->paginate($this->getArgument('per_page')->value, ['*'], 'page', $this->getArgument('page')->value);
+            return $this->query->paginate(
+                $this->getArgument('per_page')->value,
+                ['*'],
+                'page',
+                $this->hasArgument('page') ? $this->getArgument('page')->value : null
+            );
         }
 
         if ($this->hasArgument('offset')) {

@@ -36,6 +36,7 @@
 - Bug with Fieldtypes providing certain GraphQL types
 - Bug checking if a field stored data on the legacy data table
 - Email Contact Form attribute access in Twig templates
+- Retrieving the current request's page value for paginating ModelTag results
 
 ### Changed
 
