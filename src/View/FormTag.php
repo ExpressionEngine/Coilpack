@@ -2,21 +2,58 @@
 
 namespace Expressionengine\Coilpack\View;
 
+use Expressionengine\Coilpack\Support\Parameter;
+
 abstract class FormTag extends Tag
 {
-    protected $formId;
+    public function defineParameters(): array
+    {
+        return array_merge(parent::defineParameters(), [
+            new Parameter([
+                'name' => 'name',
+                'type' => 'string',
+                'description' => 'A name attribute for the form tag',
+            ]),
+            new Parameter([
+                'name' => 'form_id',
+                'type' => 'string',
+                'description' => 'An id attribute for the form tag',
+            ]),
+            new Parameter([
+                'name' => 'form_class',
+                'type' => 'string',
+                'description' => 'A class attribute for the form tag',
+            ]),
+            new Parameter([
+                'name' => 'form_attributes',
+                'type' => 'array',
+                'description' => 'Additional key/value attributes to add to the form tag',
+            ]),
+            new Parameter([
+                'name' => 'allow_attachments',
+                'type' => 'boolean',
+                'description' => 'Allows file input on your form',
+                'defaulValue' => false,
+            ]),
+            new Parameter([
+                'name' => 'charset',
+                'type' => 'string',
+                'description' => 'Set the character set of the email being sent',
+            ]),
+            new Parameter([
+                'name' => 'return',
+                'type' => 'string',
+                'description' => 'A path (or full URL) where the user should be directed after the form is submitted',
+            ]),
+            new Parameter([
+                'name' => 'redirect',
+                'type' => 'string',
+                'description' => 'How long to display success message before redirect',
+            ]),
+        ]);
+    }
 
-    protected $formClass;
-
-    protected $allowAttachments = false;
-
-    protected $charset;
-
-    protected $return;
-
-    protected $redirect;
-
-    public function setFormClassParameter($class)
+    public function setFormClassArgument($class)
     {
         return (is_array($class)) ? implode(' ', $class) : (string) $class;
     }
@@ -33,25 +70,34 @@ abstract class FormTag extends Tag
         }
 
         $defaults = [
-            'id' => $this->formId,
-            'class' => $this->formClass,
-            'enctype' => ($this->allow_attachments) ? 'multipart/form-data' : '',
+            'id' => $this->getArgument('form_id')->value,
+            'class' => $this->getArgument('form_class')->value,
+            'enctype' => ($this->getArgument('allow_attachments')) ? 'multipart/form-data' : '',
             'hidden_fields' => [
                 '_token' => $token,
-                'RET' => $this->return ?: ee()->uri->uri_string,
-                'URI' => (ee()->uri->uri_string == '')
-                ? 'index'
-                : ee()->uri->uri_string,
-                'charset' => $this->charset,
-                'allow_attachments' => $this->encrypt('allow_attachments_'.($this->allow_attachments ? 'y' : 'n')),
-                'redirect' => $this->redirect,
+                'RET' => $this->hasArgument('return') ? $this->getArgument('return')->value : ee()->uri->uri_string,
+                'URI' => (ee()->uri->uri_string == '') ? 'index' : ee()->uri->uri_string,
+                'charset' => $this->getArgument('charset')->value,
+                'allow_attachments' => $this->encrypt('allow_attachments_'.($this->getArgument('allow_attachments')->value ? 'y' : 'n')),
+                'redirect' => $this->getArgument('redirect')->value,
             ],
         ];
+
+        if ($this->hasArgument('name') && preg_match("#^[a-zA-Z0-9_\-]+$#i", $this->getArgument('name')->value, $match)) {
+            $defaults['name'] = $this->getArgument('name')->value;
+        }
 
         $data = array_merge_recursive($defaults, $data);
 
         $form = ee()->functions->form_declaration($data);
         $form = str_replace('{csrf_token}', $token, $form);
+
+        if ($this->hasArgument('form_attributes')) {
+            $attributes = collect($this->getArgument('form_attributes'))->map(function ($value, $key) {
+                return ($value) ? "$key=\"$value\"" : $key;
+            })->implode(' ');
+            $form = str_replace('<form ', "<form $attributes ", $form);
+        }
 
         return $form;
     }
