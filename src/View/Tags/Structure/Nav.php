@@ -162,41 +162,41 @@ class Nav extends Tag implements ConvertsToGraphQL
         // Add ChannelEntry Models to Tree
         $entries = ChannelEntry::whereIn('entry_id', array_keys($tree))->get();
 
-        foreach ($tree as $id => &$node) {
-            $node['entry'] = $entries->find($id);
+        $parent = null;
+        $structured = [];
+        $tree = array_values($tree);
+
+        foreach ($tree as $i => &$node) {
+            $node['children'] = [];
+            $node['entry'] = $entries->find($node['entry_id']);
             $node['hidden'] = $node['hidden'] === 'y';
-            $node['active'] = ($id == $current_id);
-        }
+            $node['active'] = ($node['entry_id'] == $current_id);
+            $node['parent'] = $parent;
+            $node['url'] = $node['uri'] ?? null;
+            $node['uri'] = str_replace(ee()->functions->create_url(''), '', $node['uri'] ?? null);
 
-        // Add a fake root element and build the tree structure
-        array_unshift($tree, ['entry_id' => 0, 'lft' => 1, 'rgt' => null]);
-        $structure = $this->createTree($tree)[0]['children'];
+            if ($parent) {
+                $parent['children'][] = &$node;
+            } else {
+                $structured[] = &$node;
+            }
 
-        return NavOutput::make('')->array($structure);
-    }
+            // Next is deeper start new parent
+            if ($node['depth'] < @$tree[$i + 1]['depth']) {
+                $parent = &$node;
+            // Next is shallower reset parent
+            } elseif ($node['depth'] > @$tree[$i + 1]['depth']) {
+                $diff = (array_key_exists($i + 1, $tree)) ? $tree[$i]['depth'] - $tree[$i + 1]['depth'] : $tree[$i]['depth'] - 1;
 
-    public function createTree($entries, $left = 0, $right = null)
-    {
-        $tree = [];
-        foreach ($entries as $entry) {
-            // Check to see if the entry belongs in the given $left <-> $right range
-            if ($entry['lft'] == $left + 1 && (is_null($right) || $entry['rgt'] < $right)) {
-                $tree[] = [
-                    'entry' => $entry['entry'] ?? null,
-                    'depth' => $entry['depth'] ?? null,
-                    'structure_url_title' => $entry['structure_url_title'] ?? null,
-                    'url' => $entry['uri'] ?? null,
-                    'uri' => str_replace(ee()->functions->create_url(''), '', $entry['uri'] ?? null),
-                    'active' => $entry['active'] ?? false,
-                    'slug' => $entry['slug'] ?? null,
-                    'hidden' => $entry['hidden'] ?? null,
-                    'children' => $this->createTree($entries, $entry['lft'], $entry['rgt']),
-                ];
-                $left = $entry['rgt'];
+                // Travel up parents by the difference in depth
+                while ($diff > 0) {
+                    $parent = &$parent['parent'];
+                    $diff--;
+                }
             }
         }
 
-        return $tree;
+        return NavOutput::make('')->array($structured);
     }
 
     public function remove_double_slashes($str)
