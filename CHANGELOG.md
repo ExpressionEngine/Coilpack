@@ -38,6 +38,7 @@
 - Email Contact Form attribute access in Twig templates
 - Retrieving the current request's page value for paginating ModelTag results
 - Structure Nav tag behavior now respects hidden nodes
+- Support for Captcha in Email Contact Form
 
 ### Changed
 

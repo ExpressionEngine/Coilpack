@@ -51,23 +51,18 @@ class ContactForm extends FormTag
 
     public function __construct()
     {
-        $this->addonInstance = $this->getAddonInstance('email');
-
         // Load the form helper and session library
         ee()->load->helper('form');
         ee()->load->library('session');
+
+        $this->addonInstance = $this->getAddonInstance('email');
 
         // Conditionals
         $data = [
             'logged_in' => (ee()->session->userdata('member_id') != 0),
             'logged_out' => (ee()->session->userdata('member_id') == 0),
-            'captcha' => null,
+            'captcha' => ($this->addonInstance->use_captchas == 'y') ? ee('Captcha')->create() : null,
         ];
-
-        if ($this->addonInstance->use_captchas == 'y' && ee()->config->item('use_recaptcha') == 'y') {
-            $captcha = ee('Captcha')->create();
-            $data['captcha'] = $captcha;
-        }
 
         // Process default variables
         $postVars = ['message', 'name', 'to', 'from', 'subject', 'required'];
