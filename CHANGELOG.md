@@ -19,6 +19,7 @@
 - Field content implements countable for better support with Twig's length filter
 - Page variables to Channel Entries Tag results
 - Global Variables for logged_in and logged_out
+- Better error handling for incomplete installations
 
 ### Fixed
 

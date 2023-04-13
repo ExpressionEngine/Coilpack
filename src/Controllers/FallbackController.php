@@ -22,10 +22,11 @@ class FallbackController
         } else {
             $core = (new Bootstrap\LoadExpressionEngine)->page()->bootstrap(app());
 
-            $request = Core\Request::fromGlobals();
+            if (! $core) {
+                return view('coilpack::incomplete');
+            }
 
-            // (new Bootstrap\LoadAddonFiles)->bootstrap(app());
-            // (new Bootstrap\ReplaceTemplateTags)->bootstrap(app());
+            $request = Core\Request::fromGlobals();
 
             return $core->runGlobal();
         }
