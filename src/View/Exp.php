@@ -106,8 +106,20 @@ class Exp
         }
 
         return tap(ee()->TMPL, function ($tmpl) use ($pieces, $site_id, $vars) {
-            $tmpl->embed_vars = $vars;
+            // We are being a little tricky here... if $tmpl->depth == 0 and a hidden
+            // template is being embedded ExpressionEngine could use a 404 template.
+            // So we manipulate the depth and reset it after the fetch.
+            $tmpl->depth++;
             $template = $tmpl->fetch_template($pieces[0], $pieces[1], false, $site_id);
+            $tmpl->depth--;
+
+            if ($template === false) {
+                $tmpl->template = '';
+
+                return;
+            }
+
+            $tmpl->embed_vars = $vars;
             $tmpl->parse($template, true, $site_id, false);
             $tmpl->template = $tmpl->process_sub_templates($tmpl->template);
         })->template;
