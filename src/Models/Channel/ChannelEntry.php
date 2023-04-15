@@ -7,6 +7,7 @@ use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\Models\Member\Member;
+use Illuminate\Support\Str;
 
 /**
  * Channel Entry
@@ -167,8 +168,12 @@ class ChannelEntry extends Model
 
     public function hiddenFields()
     {
-        return $this->belongsToMany(ChannelField::class,
-            'channel_entry_hidden_fields', 'entry_id', 'field_id');
+        return $this->belongsToMany(
+            ChannelField::class,
+            'channel_entry_hidden_fields',
+            'entry_id',
+            'field_id'
+        );
     }
 
     public function grids()
@@ -220,5 +225,20 @@ class ChannelEntry extends Model
         }
 
         return $value;
+    }
+
+    public function fillWithEntryData($data)
+    {
+        // Split out field data beginning with `field_`
+        [$fieldData, $attributes] = collect($data)->partition(function ($item, $key) {
+            return Str::startsWith($key, 'field_');
+        });
+
+        $this->forceFill($attributes->toArray());
+        $channelData = (new ChannelData)->forceFill($fieldData->toArray());
+        $channelData->setRelation('fields', ChannelField::all());
+        $this->setRelation('data', $channelData);
+
+        return $this;
     }
 }

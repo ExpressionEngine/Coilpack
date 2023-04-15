@@ -40,6 +40,7 @@
 - Retrieving the current request's page value for paginating ModelTag results
 - Structure Nav tag behavior now respects hidden nodes
 - Support for Captcha in Email Contact Form
+- Live Preview display with Channel Entries Tag replacement
 
 ### Changed
 

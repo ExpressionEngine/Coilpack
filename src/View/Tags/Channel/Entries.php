@@ -244,7 +244,14 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Dynamic
         if ($this->hasArgument('dynamic')) {
-            $lastSegment = last(request()->segments());
+            // If we have live preview data we fill a model instance
+            if (ee('LivePreview')->hasEntryData()) {
+                return (new ChannelEntry)->newCollection([
+                    (new ChannelEntry)->fillWithEntryData(ee('LivePreview')->getEntryData()),
+                ]);
+            }
+
+            $lastSegment = ee()->uri->uri_string() ?: last(request()->segments());
 
             $this->setArgument('limit', 1);
 
