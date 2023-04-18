@@ -236,6 +236,7 @@ class ChannelEntry extends Model
 
         $this->forceFill($attributes->toArray());
         $channelData = (new ChannelData)->forceFill($fieldData->toArray());
+        $channelData->entry_id = $data['entry_id'];
         $channelData->setRelation('fields', ChannelField::all());
         $this->setRelation('data', $channelData);
 

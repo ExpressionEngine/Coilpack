@@ -29,8 +29,8 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         if (! $content->hasAttribute('entry_id')) {
             return [];
         }
+
         $isFluid = $content->hasAttribute('fluid_field');
-        $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
         $parameters = array_merge([
             'orderby' => 'row_order',
@@ -38,6 +38,71 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
             'limit' => 100,
             'offset' => 0,
         ], $parameters);
+
+        $data = ee('LivePreview')->hasEntryData() ? $this->loadFromPreview($content, $parameters) : $this->loadFromDatabase($content, $parameters);
+
+        $columns = $content->field->gridColumns;
+
+        // maybe we want to persist $data from the query before we do any filtering?
+        $data = $data->filter(function ($row) use ($isFluid, $content) {
+            return ! $isFluid || $row->fluid_field_data_id == $content->fluid_field_data_id;
+        })->map(function ($row) use ($columns, $content) {
+            $columns->each(function ($column) use ($row, $content) {
+                $row->{$column->col_name} = new FieldContent(
+                    array_merge($content->getAttributes(), [
+                        'data' => $row->{'col_id_'.$column->col_id},
+                        'grid_row_id' => $row->row_id,
+                        'grid_col_id' => $column->col_id,
+                        'fieldtype' => app(FieldtypeManager::class)->make($column->col_type),
+                    ])
+                );
+            });
+
+            return $row;
+        });
+
+        return $data;
+    }
+
+    protected function loadFromPreview($content, array $parameters = [])
+    {
+        $isFluid = $content->hasAttribute('fluid_field');
+        $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
+
+        $rows = collect($content->data['rows'] ?? [])->map(function ($value, $key) use ($fluidFieldId) {
+            $id = str_replace('row_id_', '', $key);
+
+            return (object) array_merge([
+                'row_id' => $id,
+                'fluid_field_data_id' => $fluidFieldId,
+            ], $value);
+        });
+
+        if ($parameters['fixed_order'] ?? false) {
+            // fixed_order
+        } else {
+            $rows = ($parameters['sort'] == 'asc') ? $rows->sortBy($parameters['orderby']) : $rows->sortByDesc($parameters['orderby']);
+        }
+
+        // Filter by row ids
+        if ($parameters['row_id'] ?? false) {
+            $rows = $rows->where('row_id', '=', $parameters['row_id']);
+        }
+
+        // Handle offset
+        if ($parameters['offset']) {
+            $rows = $rows->skip($parameters['offset']);
+        }
+
+        $rows = $rows->take($parameters['limit']);
+
+        return $rows;
+    }
+
+    protected function loadFromDatabase(FieldContent $content, array $parameters = [])
+    {
+        $isFluid = $content->hasAttribute('fluid_field');
+        $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
         $tableName = "channel_grid_field_{$content->field->field_id}";
         $query = DB::connection('coilpack')
@@ -66,26 +131,6 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         }
 
         $data = $query->take($parameters['limit'])->get();
-
-        $columns = $content->field->gridColumns;
-
-        // maybe we want to persist $data from the query before we do any filtering?
-        $data = $data->filter(function ($row) use ($isFluid, $content) {
-            return ! $isFluid || $row->fluid_field_data_id == $content->fluid_field_data_id;
-        })->map(function ($row) use ($columns, $content) {
-            $columns->each(function ($column) use ($row, $content) {
-                $row->{$column->col_name} = new FieldContent(
-                    array_merge($content->getAttributes(), [
-                        'data' => $row->{'col_id_'.$column->col_id},
-                        'grid_row_id' => $row->row_id,
-                        'grid_col_id' => $column->col_id,
-                        'fieldtype' => app(FieldtypeManager::class)->make($column->col_type),
-                    ])
-                );
-            });
-
-            return $row;
-        });
 
         return $data;
     }

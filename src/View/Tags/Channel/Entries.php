@@ -251,11 +251,11 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 ]);
             }
 
-            $lastSegment = ee()->uri->uri_string() ?: last(request()->segments());
+            $lastSegment = last(ee()->uri->segment_array() ?: request()->segments());
 
             $this->setArgument('limit', 1);
 
-            $this->query->when(is_int($lastSegment), function ($query) use ($lastSegment) {
+            $this->query->when(is_numeric($lastSegment), function ($query) use ($lastSegment) {
                 $query->where('entry_id', (int) $lastSegment);
             }, function ($query) use ($lastSegment) {
                 $query->where('url_title', $lastSegment);
@@ -314,7 +314,18 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         });
 
         return tap(parent::run(), function ($result) use ($site_pages) {
-            $result->transform(function ($entry) use ($site_pages) {
+            // If we have live preview data we fill a model instance
+            $previewEntry = new ChannelEntry;
+
+            if (ee('LivePreview')->hasEntryData()) {
+                $previewEntry->fillWithEntryData(ee('LivePreview')->getEntryData());
+            }
+
+            $result->transform(function ($entry) use ($site_pages, $previewEntry) {
+                if ($entry->entry_id == $previewEntry->entry_id) {
+                    $entry = $previewEntry;
+                }
+
                 $entry->page_uri = '';
                 $entry->page_url = '';
 

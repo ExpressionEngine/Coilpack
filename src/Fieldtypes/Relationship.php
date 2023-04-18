@@ -25,22 +25,27 @@ class Relationship extends Fieldtype implements ListsGraphType
         $isFluid = $content->hasAttribute('fluid_field');
         $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
-        $query = ChannelEntry::query()
-            ->select('channel_titles.*')
-            ->join('relationships', 'entry_id', '=', 'child_id')
-            ->when($isFluid, function ($query) use ($fluidFieldId) {
-                $query->where('relationships.fluid_field_data_id', $fluidFieldId);
-            })
-            ->when($isGrid, function ($query) use ($content) {
-                $query->where('relationships.parent_id', $content->entry_id)
-                    ->where('relationships.grid_field_id', $content->field->field_id)
-                    ->where('relationships.grid_row_id', $content->grid_row_id)
-                    ->where('relationships.grid_col_id', $content->grid_col_id);
-            }, function ($query) use ($content) {
-                $query->where('relationships.parent_id', $content->entry_id)
-                    ->where('relationships.field_id', $content->field->field_id);
-            })
-            ->orderBy('order');
+        $query = ChannelEntry::query();
+
+        if (ee('LivePreview')->hasEntryData()) {
+            $query->whereIn('entry_id', $content->data['data'] ?? [0]);
+        } else {
+            $query->select('channel_titles.*')
+                ->join('relationships', 'entry_id', '=', 'child_id')
+                ->when($isFluid, function ($query) use ($fluidFieldId) {
+                    $query->where('relationships.fluid_field_data_id', $fluidFieldId);
+                })
+                ->when($isGrid, function ($query) use ($content) {
+                    $query->where('relationships.parent_id', $content->entry_id)
+                        ->where('relationships.grid_field_id', $content->field->field_id)
+                        ->where('relationships.grid_row_id', $content->grid_row_id)
+                        ->where('relationships.grid_col_id', $content->grid_col_id);
+                }, function ($query) use ($content) {
+                    $query->where('relationships.parent_id', $content->entry_id)
+                        ->where('relationships.field_id', $content->field->field_id);
+                })
+                ->orderBy('order');
+        }
 
         $data = $query->get();
 

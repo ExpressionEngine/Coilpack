@@ -27,13 +27,33 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
     protected function loadData(FieldContent $content)
     {
         $fields = app(FieldtypeManager::class)->fieldsForChannel($content->entry->channel);
-        $data = FluidData::query()
-            ->customFields($fields)
-            ->with('field')
-            ->where((new FluidData)->qualifyColumn('entry_id'), $content->entry_id)
-            ->where('fluid_field_id', $content->field->field_id)
-            ->orderBy('order')
-            ->get();
+
+        if (ee('LivePreview')->hasEntryData()) {
+            $order = 0;
+            $data = collect($content->data['fields'] ?? [])->map(function ($value, $key) use ($fields, &$order) {
+                $fieldId = array_filter(array_keys($value), function ($key) {
+                    return strpos($key, 'field_id_') === 0;
+                })[0];
+                $fieldId = str_replace('field_id_', '', $fieldId);
+                $field = $fields->find($fieldId);
+
+                return (object) array_merge([
+                    'id' => $key,
+                    'field_id' => $fieldId,
+                    'order' => $order++,
+                    'field' => $field,
+                    "field_ft_$fieldId" => $field->field_fmt,
+                ], $value);
+            });
+        } else {
+            $data = FluidData::query()
+                ->customFields($fields)
+                ->with('field')
+                ->where((new FluidData)->qualifyColumn('entry_id'), $content->entry_id)
+                ->where('fluid_field_id', $content->field->field_id)
+                ->orderBy('order')
+                ->get();
+        }
 
         return $data->map(function ($row) use ($content) {
             return new FieldContent(
