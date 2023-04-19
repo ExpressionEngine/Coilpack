@@ -60,6 +60,6 @@ class TagQuery extends Query
             return $this->tag->toGraphQL()['resolve']($args);
         }
 
-        return $this->tag->arguments($args)->run();
+        return (new $this->tag)->arguments($args)->run();
     }
 }

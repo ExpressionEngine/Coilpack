@@ -41,6 +41,7 @@
 - Structure Nav tag behavior now respects hidden nodes
 - Support for Captcha in Email Contact Form
 - Live Preview display with Channel Entries Tag replacement
+- Error where GraphQL Tag queries accumulated arguments
 
 ### Changed
 
