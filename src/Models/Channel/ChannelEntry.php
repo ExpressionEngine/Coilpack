@@ -25,6 +25,8 @@ class ChannelEntry extends Model
 
     protected $table = 'channel_titles';
 
+    protected $isPreview = false;
+
     protected $casts = [
         'versioning_enabled' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'allow_comments' => \Expressionengine\Coilpack\Casts\BooleanString::class,
@@ -241,5 +243,17 @@ class ChannelEntry extends Model
         $this->setRelation('data', $channelData);
 
         return $this;
+    }
+
+    public function markAsPreview()
+    {
+        $this->isPreview = true;
+
+        return $this;
+    }
+
+    public function isPreview()
+    {
+        return $this->isPreview;
     }
 }

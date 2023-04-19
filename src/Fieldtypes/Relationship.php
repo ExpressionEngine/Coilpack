@@ -27,7 +27,7 @@ class Relationship extends Fieldtype implements ListsGraphType
 
         $query = ChannelEntry::query();
 
-        if (ee('LivePreview')->hasEntryData()) {
+        if ($content->entry->isPreview()) {
             $query->whereIn('entry_id', $content->data['data'] ?? [0]);
         } else {
             $query->select('channel_titles.*')

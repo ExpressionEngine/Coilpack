@@ -39,7 +39,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
             'offset' => 0,
         ], $parameters);
 
-        $data = ee('LivePreview')->hasEntryData() ? $this->loadFromPreview($content, $parameters) : $this->loadFromDatabase($content, $parameters);
+        $data = $content->entry->isPreview() ? $this->loadFromPreview($content, $parameters) : $this->loadFromDatabase($content, $parameters);
 
         $columns = $content->field->gridColumns;
 

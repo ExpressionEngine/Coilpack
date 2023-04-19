@@ -247,7 +247,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             // If we have live preview data we fill a model instance
             if (ee('LivePreview')->hasEntryData()) {
                 return (new ChannelEntry)->newCollection([
-                    (new ChannelEntry)->fillWithEntryData(ee('LivePreview')->getEntryData()),
+                    (new ChannelEntry)->fillWithEntryData(ee('LivePreview')->getEntryData())->markAsPreview(),
                 ]);
             }
 
@@ -318,7 +318,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             $previewEntry = new ChannelEntry;
 
             if (ee('LivePreview')->hasEntryData()) {
-                $previewEntry->fillWithEntryData(ee('LivePreview')->getEntryData());
+                $previewEntry->fillWithEntryData(ee('LivePreview')->getEntryData())->markAsPreview();
             }
 
             $result->transform(function ($entry) use ($site_pages, $previewEntry) {

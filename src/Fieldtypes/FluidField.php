@@ -28,7 +28,7 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
     {
         $fields = app(FieldtypeManager::class)->fieldsForChannel($content->entry->channel);
 
-        if (ee('LivePreview')->hasEntryData()) {
+        if ($content->entry->isPreview()) {
             $order = 0;
             $data = collect($content->data['fields'] ?? [])->map(function ($value, $key) use ($fields, &$order) {
                 $fieldId = array_filter(array_keys($value), function ($key) {

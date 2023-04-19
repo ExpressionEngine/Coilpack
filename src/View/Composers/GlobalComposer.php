@@ -74,7 +74,7 @@ class GlobalComposer
             // 'template_id' => $this->template_id,
             // 'template_type' => $this->embed_type ?: $this->template_type,
             // 'is_ajax_request' => AJAX_REQUEST,
-            // 'is_live_preview_request' => ee('LivePreview')->hasEntryData(),
+            'is_live_preview_request' => ee('LivePreview')->hasEntryData(),
         ]);
     }
 
