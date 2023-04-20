@@ -42,6 +42,7 @@
 - Support for Captcha in Email Contact Form
 - Live Preview display with Channel Entries Tag replacement
 - Error where GraphQL Tag queries accumulated arguments
+- Fluid field database connection issue when default Laravel db connection is not configured
 
 ### Changed
 
