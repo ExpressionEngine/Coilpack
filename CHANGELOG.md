@@ -52,6 +52,7 @@
 - Allow `exp.path()` to generate a url from multiple parameters i.e. `exp.path('group/template', entry.url_title)`
 - Refactor FormTag and `exp.email.contact_form`, add support for `form_attributes`.
 - Cleanup and simplify Template library for rendering Twig and Blade templates
+- No longer overriding ExpressionEngine's `base_url` with Laravel's `APP_URL` unless `base_url` is not set.
 
 ## [0.1.0] - 2023-02-13
 

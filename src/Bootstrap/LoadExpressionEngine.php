@@ -200,7 +200,7 @@ class LoadExpressionEngine
         (new \Illuminate\Foundation\Bootstrap\HandleExceptions)->bootstrap($app);
 
         $configOverrides = [
-            'base_url' => Str::finish(config('app.url'), '/'),
+            'base_url' => Str::finish(ee()->config->item('base_url') ?: config('app.url'), '/'),
         ];
 
         foreach ($configOverrides as $key => $value) {
