@@ -201,6 +201,29 @@ class ChannelEntry extends Model
         return null;
     }
 
+    public function getPageUriAttribute($value)
+    {
+        if ($value) {
+            return $value;
+        }
+
+        // Add page data to channel entries after the query
+        $pages = ee()->config->site_pages($this->site_id)[$this->site_id];
+
+        if ($pages && isset($pages['uris'][$this->entry_id])) {
+            return $pages['uris'][$this->entry_id];
+        }
+
+        return '';
+    }
+
+    public function getPageUrlAttribute($value)
+    {
+        $siteUrl = ee()->config->site_pages($this->site_id)[$this->site_id]['url'] ?? '';
+
+        return ee()->functions->create_page_url($siteUrl, $this->page_uri);
+    }
+
     public function __get($key)
     {
         // First we check if the model actually has a value for this attribute
