@@ -42,7 +42,7 @@ abstract class ModelTag extends IterableTag
     {
         if ($this->hasArgument('page') || $this->hasArgument('per_page')) {
             return $this->query->paginate(
-                $this->getArgument('per_page')->value,
+                $this->hasArgument('limit') ? $this->getArgument('limit')->value : $this->getArgument('per_page')->value,
                 ['*'],
                 'page',
                 $this->hasArgument('page') ? $this->getArgument('page')->value : null

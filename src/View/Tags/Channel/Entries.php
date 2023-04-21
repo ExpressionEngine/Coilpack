@@ -62,6 +62,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'orderby',
                 'type' => 'string',
                 'description' => 'Order the entries by a field',
+                'defaultValue' => 'entry_date',
             ]),
             new Parameter([
                 'name' => 'show_expired',
@@ -79,6 +80,13 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'sort',
                 'type' => 'string',
                 'description' => 'The sort order (asc/desc)',
+                'defaultValue' => 'desc',
+            ]),
+            new Parameter([
+                'name' => 'sticky',
+                'type' => 'string',
+                'description' => 'Handle "sticky" entries',
+                'defaultValue' => 'yes',
             ]),
             new Parameter([
                 'name' => 'start_on',
@@ -136,7 +144,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
     public function getArgumentFallback($key, $value)
     {
-        if (in_array($key, ['fixed_order'])) {
+        if (in_array($key, ['fixed_order', 'sticky'])) {
             return $value;
         }
 
@@ -288,18 +296,32 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             $this->query->withoutGlobalScope(Scopes\HideFuture::class);
         }
 
+        // Sticky
+        if (! $this->hasArgument('sticky') || $this->getArgument('sticky')->value == 'yes') {
+            $this->setArgument('orderby', 'sticky|'.($this->arguments['orderby'] ?? ''));
+            $this->setArgument('sort', 'desc|'.($this->arguments['sort'] ?? ''));
+        }
+
+        if ($this->hasArgument('sticky')) {
+            if ($this->getArgument('sticky')->value == 'only') {
+                $this->query->where('sticky', 'y');
+            }
+
+            if ($this->getArgument('sticky')->value == 'none') {
+                $this->query->where('sticky', 'n');
+            }
+        }
+
         // Orderby and Sort Direction
-        if ($this->hasArgument('orderby')) {
-            $directions = $this->hasArgument('sort') ? $this->getArgument('sort')->terms->map->value->toArray() : ['desc'];
-            $fields = $this->getArgument('orderby');
-            foreach ($fields->terms as $index => $field) {
-                $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
-                $field = $field->value;
-                if ($this->fieldtypeManager->hasField($field)) {
-                    $this->query->orderByCustomField($field, $direction);
-                } else {
-                    $this->query->orderBy($this->query->qualifyColumn($field), $direction);
-                }
+        $directions = $this->getArgument('sort')->terms->map->value->toArray();
+        $fields = $this->getArgument('orderby');
+        foreach ($fields->terms as $index => $field) {
+            $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
+            $field = $field->value;
+            if ($this->fieldtypeManager->hasField($field)) {
+                $this->query->orderByCustomField($field, $direction);
+            } else {
+                $this->query->orderBy($this->query->qualifyColumn($field), $direction);
             }
         }
 

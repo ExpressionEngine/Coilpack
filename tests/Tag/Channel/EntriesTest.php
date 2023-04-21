@@ -63,6 +63,7 @@ class EntriesTest extends TestCase
         $this->channel->entries([
             'orderby' => 'entry_id',
             'sort' => 'asc',
+            'sticky' => 'no',
         ])->each(function ($entry) use (&$id) {
             $this->assertTrue($entry->entry_id > $id);
             $id = $entry->entry_id;
