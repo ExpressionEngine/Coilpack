@@ -243,7 +243,7 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
 
         $value = $this->value();
 
-        return isset($value->$key) || $value->hasModifier($key);
+        return ! is_null($value) && (isset($value->$key) || $value->hasModifier($key));
     }
 
     /**
@@ -264,7 +264,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
 
     public function __call($method, $arguments)
     {
-        return $this->value()->$method(...$arguments);
+        $value = $this->value();
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        return $value->$method(...$arguments);
     }
 
     public function __invoke($parameters = [])
