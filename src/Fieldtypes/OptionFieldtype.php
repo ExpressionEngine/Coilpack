@@ -70,7 +70,7 @@ class OptionFieldtype extends Generic
             ]);
     }
 
-    public function parameters(Field $field = null): array
+    public function parametersForField(Field $field = null): array
     {
         return [
             new Parameter([

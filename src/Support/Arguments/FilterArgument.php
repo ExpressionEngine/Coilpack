@@ -70,6 +70,19 @@ class FilterArgument extends Argument
         });
     }
 
+    public function filterCollection($collection, $key, $not = null)
+    {
+        return $this->terms->reduce(function ($carry, $term) use ($collection, $key, $not) {
+            $filtered = $term->filterCollection($collection, $key, $not, $this->exact);
+
+            if ($this->boolean === 'or') {
+                return $carry->merge($filtered)->unique('row_id');
+            } else {
+                return $carry->intersect($filtered);
+            }
+        }, collect([]));
+    }
+
     public function addRelationshipQuery($query, $relationship, $column)
     {
         $operator = $this->not ? '<' : '>=';

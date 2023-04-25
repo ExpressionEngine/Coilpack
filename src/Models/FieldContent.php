@@ -45,9 +45,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
         if (empty($parameters) && array_key_exists('value', $this->attributes)) {
             return $this->attributes['value'];
         }
+
         $fieldtype = $this->getFieldtype();
 
+        // we don't want to propagate any cached values further
+        unset($this->attributes['value']);
         $value = $fieldtype->apply($this, $parameters);
+
         if (empty($parameters)) {
             $this->attributes['value'] = $value;
         }

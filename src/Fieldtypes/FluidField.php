@@ -5,70 +5,29 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 use Expressionengine\Coilpack\Api\Graph\Fields;
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
-use Expressionengine\Coilpack\Api\Graph\Support\GeneratedUnionType;
 use Expressionengine\Coilpack\Contracts\GeneratesGraphType;
 use Expressionengine\Coilpack\Contracts\ListsGraphType;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\Addon\Fluid\Data as FluidData;
+use Expressionengine\Coilpack\Fieldtypes\Presenters\FluidFieldPresenter;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
 {
-    public function apply(FieldContent $content, array $parameters = [])
-    {
-        $data = $this->loadData($content);
+    protected $presenter;
 
-        return FieldtypeOutput::for($this)->value($data);
+    public function __construct(string $name, $id = null)
+    {
+        parent::__construct($name, $id);
+        $this->presenter = new FluidFieldPresenter;
     }
 
-    protected function loadData(FieldContent $content)
+    public function apply(FieldContent $content, array $parameters = [])
     {
-        $fields = app(FieldtypeManager::class)->fieldsForChannel($content->entry->channel);
+        $data = $this->presenter->present($content, $parameters);
 
-        if ($content->entry->isPreview()) {
-            $order = 0;
-            $data = collect($content->data['fields'] ?? [])->map(function ($value, $key) use ($fields, &$order) {
-                $fieldId = array_filter(array_keys($value), function ($key) {
-                    return strpos($key, 'field_id_') === 0;
-                })[0];
-                $fieldId = str_replace('field_id_', '', $fieldId);
-                $field = $fields->find($fieldId);
-
-                return (object) array_merge([
-                    'id' => $key,
-                    'field_id' => $fieldId,
-                    'order' => $order++,
-                    'field' => $field,
-                    "field_ft_$fieldId" => $field->field_fmt,
-                ], $value);
-            });
-        } else {
-            $data = FluidData::query()
-                ->customFields($fields)
-                ->with('field')
-                ->where((new FluidData)->qualifyColumn('entry_id'), $content->entry_id)
-                ->where('fluid_field_id', $content->field->field_id)
-                ->orderBy('order')
-                ->get();
-        }
-
-        return $data->map(function ($row) use ($content) {
-            return new FieldContent(
-                array_merge($content->getAttributes(), [
-                    'fluid_field' => $content->field,
-                    'fluid_order' => $row->order,
-                    'fluid_field_data_id' => $row->id,
-                    'field' => $row->field,
-                    'data' => $row->{'field_id_'.$row->field_id},
-                    'format' => $row->{'field_ft_'.$row->field_id},
-                    // Fieldtype should be optional, filled in by FieldContent
-                    'fieldtype' => $row->field->getFieldtype(),
-                ])
-            );
-        });
+        return FieldtypeOutput::for($this)->value($data);
     }
 
     public function generateGraphType(ChannelField $field)

@@ -53,7 +53,7 @@ class Fieldtype extends Field
         $field = $this->attributes['field'] ?? null;
         $fieldtype = $this->getFieldtype();
 
-        return ($fieldtype) ? collect($fieldtype->parameters($field))->keyBy('name') : collect();
+        return ($fieldtype) ? collect($fieldtype->parametersForField($field))->keyBy('name') : collect();
     }
 
     protected function modifiers()

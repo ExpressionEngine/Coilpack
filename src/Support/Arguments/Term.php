@@ -2,6 +2,8 @@
 
 namespace Expressionengine\Coilpack\Support\Arguments;
 
+use Illuminate\Support\Str;
+
 class Term
 {
     protected $value;
@@ -37,6 +39,21 @@ class Term
         $value = $exact ? $this->value : "%{$this->value}%";
 
         return $query->where($column, $operator, $value, $boolean);
+    }
+
+    public function filterCollection($collection, $key, $not, $exact)
+    {
+        return $collection->filter(function ($item) use ($key, $not, $exact) {
+            $value = $item->$key;
+
+            if ($exact) {
+                return ($not) ? $value != $this->value : $value == $this->value;
+            } else {
+                $contains = Str::contains($value, $this->value, true);
+
+                return ($not) ? ! $contains : $contains;
+            }
+        });
     }
 
     public function __get($key)
