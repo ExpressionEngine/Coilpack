@@ -78,7 +78,7 @@ class FilterArgument extends Argument
             if ($this->boolean === 'or') {
                 return $carry->merge($filtered)->unique('row_id');
             } else {
-                return $carry->intersect($filtered);
+                return $carry->isEmpty() ? $filtered : $carry->intersectByKeys($filtered);
             }
         }, collect([]));
     }
