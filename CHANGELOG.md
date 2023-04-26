@@ -58,6 +58,7 @@
 - No longer overriding ExpressionEngine's `base_url` with Laravel's `APP_URL` unless `base_url` is not set.
 - Channel Entries Tag now has a default ordering to match native Tag.  Sticky entries are first followed by those with the latest entry_date.
 - Fieldtype `parameters()` has been renamed to `parametersForField()`
+- Simplify install command to use the latest version of ExpressionEngine 7
 
 ## [0.1.0] - 2023-02-13
 

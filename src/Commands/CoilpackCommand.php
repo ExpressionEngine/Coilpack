@@ -154,17 +154,15 @@ class CoilpackCommand extends Command
             $releases = $releases->slice(0, 10);
         }
 
-        $this->comment('Coilpack supports the following ExpressionEngine Versions');
-
         if ($this->option('install')) {
             $release = ($this->option('install') == 'latest') ? $releases->first()['tag_name'] : $this->option('install');
         } else {
-            $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
+            $release = $releases->first()['tag_name'];
         }
 
         $this->installRelease($releases[$release]);
 
-        $this->info("Finish installing {$release} at ".url(config('coilpack.admin_url', 'admin.php')));
+        $this->info('Finish installing ExpressionEngine at '.url(config('coilpack.admin_url', 'admin.php')));
     }
 
     public function availableReleases()
