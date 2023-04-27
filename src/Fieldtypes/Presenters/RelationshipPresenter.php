@@ -35,10 +35,10 @@ class RelationshipPresenter extends Presenter
             $query->whereIn('entry_id', $content->data['data'] ?? [0]);
         } else {
             $query->select('channel_titles.*')
-            ->join('relationships', 'entry_id', '=', 'child_id')
-            ->when($isFluid, function ($query) use ($fluidFieldId) {
-                $query->where('relationships.fluid_field_data_id', $fluidFieldId);
-            })
+                ->join('relationships', 'entry_id', '=', 'child_id')
+                ->when($isFluid, function ($query) use ($fluidFieldId) {
+                    $query->where('relationships.fluid_field_data_id', $fluidFieldId);
+                })
                 ->when($isGrid, function ($query) use ($content) {
                     $query->where('relationships.parent_id', $content->entry_id)
                         ->where('relationships.grid_field_id', $content->field->field_id)
@@ -89,7 +89,7 @@ class RelationshipPresenter extends Presenter
         // Category ID
         $query->when($this->hasArgument('category_id'), function ($query) {
             $this->getArgument('category_id')
-            ->addRelationshipQuery($query, 'categories', (new Category)->qualifyColumn('cat_id'));
+                ->addRelationshipQuery($query, 'categories', (new Category)->qualifyColumn('cat_id'));
         });
 
         // Fixed Order

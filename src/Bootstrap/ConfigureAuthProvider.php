@@ -12,7 +12,6 @@ class ConfigureAuthProvider
     /**
      * Bootstrap the given application.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function bootstrap(Application $app)
@@ -66,7 +65,7 @@ class ConfigureAuthProvider
 
         try {
             $this->registerGateDefinitions();
-        } catch(\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
         }
     }
 

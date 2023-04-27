@@ -130,7 +130,7 @@ class TemplateRoute
 
                 return view($template['view']);
             })
-            ->where('any', '^(?!themes\/|admin\.php|images\/).*');
+                ->where('any', '^(?!themes\/|admin\.php|images\/).*');
         }
     }
 }

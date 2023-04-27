@@ -195,7 +195,7 @@ class Response
             ];
 
             $profiler = ee('Profiler')
-            ->addSection('performance', $performance)
+                ->addSection('performance', $performance)
                 ->addSection('variables', [
                     'server' => $_SERVER,
                     'cookie' => $_COOKIE,

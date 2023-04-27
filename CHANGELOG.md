@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-04-27
+
 ### Added
 
 - Default values of Tag parameters are automatically passed as argument values when appropriate
@@ -18,7 +20,7 @@
 - A method for embedding native ExpressionEngine templates within Twig and Blade
 - Field content implements countable for better support with Twig's length filter
 - Page variables to Channel Entries Tag results
-- Global Variables for logged_in and logged_out
+- Global Variables for logged\_in and logged\_out
 - Better error handling for incomplete installations
 - Support for Grid parameters on LivePreview data
 
@@ -57,7 +59,7 @@
 - Refactor FormTag and `exp.email.contact_form`, add support for `form_attributes`.
 - Cleanup and simplify Template library for rendering Twig and Blade templates
 - No longer overriding ExpressionEngine's `base_url` with Laravel's `APP_URL` unless `base_url` is not set.
-- Channel Entries Tag now has a default ordering to match native Tag.  Sticky entries are first followed by those with the latest entry_date.
+- Channel Entries Tag now has a default ordering to match native Tag.  Sticky entries are first followed by those with the latest entry\_date.
 - Fieldtype `parameters()` has been renamed to `parametersForField()`
 - Simplify install command to use the latest version of ExpressionEngine 7
 
@@ -130,7 +132,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.0...HEAD
+
+[1.0.0]: https://github.com/ExpressionEngine/Coilpack/compare/0.1.0...1.0.0
 
 [0.1.0]: https://github.com/ExpressionEngine/Coilpack/compare/0.0.3...0.1.0
 

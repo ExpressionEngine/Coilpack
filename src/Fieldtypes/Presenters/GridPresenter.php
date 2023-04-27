@@ -123,7 +123,7 @@ class GridPresenter extends Presenter
 
         $tableName = "channel_grid_field_{$content->field->field_id}";
         $query = DB::connection('coilpack')
-        ->table($tableName)
+            ->table($tableName)
             ->where('entry_id', $content->entry_id)
             ->where('fluid_field_data_id', '=', $fluidFieldId); // $fluidFieldId);
 

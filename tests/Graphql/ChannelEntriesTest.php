@@ -22,9 +22,9 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['entry_id' => 2])
-        ->assertJsonFragment(['entry_date' => '2022-10-20'])
-        ->assertJsonFragment(['title' => 'About Default Theme']);
+            ->assertJsonFragment(['entry_id' => 2])
+            ->assertJsonFragment(['entry_date' => '2022-10-20'])
+            ->assertJsonFragment(['title' => 'About Default Theme']);
     }
 
     public function test_entries_author()
@@ -43,7 +43,7 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['screen_name' => 'admin']);
+            ->assertJsonFragment(['screen_name' => 'admin']);
     }
 
     public function test_entries_channel()
@@ -144,8 +144,8 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['caption' => 'Dharmafrog, 2014'])
-        ->assertJsonFragment(['width' => 100]);
+            ->assertJsonFragment(['caption' => 'Dharmafrog, 2014'])
+            ->assertJsonFragment(['width' => 100]);
     }
 
     public function test_entries_relationship()
@@ -170,9 +170,9 @@ class ChannelEntriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['title' => 'Entry with SoundCloud audio'])
-        ->assertJsonFragment(['id' => '164768245'])
-        ->assertJsonFragment(['type' => ['value' => 'soundcloud']]);
+            ->assertJsonFragment(['title' => 'Entry with SoundCloud audio'])
+            ->assertJsonFragment(['id' => '164768245'])
+            ->assertJsonFragment(['type' => ['value' => 'soundcloud']]);
     }
 
     public function test_entries_fluid()

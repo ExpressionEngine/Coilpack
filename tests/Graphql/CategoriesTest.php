@@ -20,7 +20,7 @@ class CategoriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['cat_id' => 2]);
+            ->assertJsonFragment(['cat_id' => 2]);
 
         $this->postJson('graphql', [
             'query' => <<<'GQL'
@@ -34,6 +34,6 @@ class CategoriesTest extends TestCase
             }
           GQL
         ])
-        ->assertJsonFragment(['cat_id' => 2]);
+            ->assertJsonFragment(['cat_id' => 2]);
     }
 }

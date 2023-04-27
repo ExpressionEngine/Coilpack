@@ -145,9 +145,9 @@ class ContactForm extends FormTag
             $table = (! is_numeric($entry_id)) ? 'ct.url_title' : 'ct.entry_id';
 
             $query = ee()->db->select('m.username, m.email, m.screen_name')
-            ->from(['channel_titles ct', 'members m'])
-            ->where('m.member_id = ct.author_id', '', false)
-            ->where($table, $entry_id)
+                ->from(['channel_titles ct', 'members m'])
+                ->where('m.member_id = ct.author_id', '', false)
+                ->where($table, $entry_id)
                 ->get();
 
             if ($query->num_rows() == 0) {
