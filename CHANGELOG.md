@@ -45,6 +45,7 @@
 - Error where GraphQL Tag queries accumulated arguments
 - Fluid field database connection issue when default Laravel db connection is not configured
 - Better handling of FieldContent methods when value is null
+- Error in Fluid Field when settings reference a field that has been deleted
 
 ### Changed
 
