@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Logic for determining behavior of `redirect()` function used within ExpressionEngine
+
 ## [1.0.0] - 2023-04-27
 
 ### Added

@@ -16,11 +16,12 @@ class Redirector extends BaseRedirector
      */
     protected function createRedirect($path, $status, $headers)
     {
-        if (! defined('REQ') || REQ == 'CLI') {
-            return parent::createRedirect($path, $status, $headers);
-        } else {
+        // Use the ExpressionEngine redirect() function behavior during CP requests
+        if (defined('REQ') && REQ == 'CP') {
             return $this->invokeEERedirect($path, $status);
         }
+
+        return parent::createRedirect($path, $status, $headers);
     }
 
     protected function invokeEERedirect($uri = '', $http_response_code = 302, $method = 'auto')
