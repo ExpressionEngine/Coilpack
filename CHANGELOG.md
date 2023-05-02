@@ -5,6 +5,7 @@
 ### Fixed
 
 - Logic for determining behavior of `redirect()` function used within ExpressionEngine
+- Only generate GraphQL queries from Tags during a GraphQL request
 
 ## [1.0.0] - 2023-04-27
 

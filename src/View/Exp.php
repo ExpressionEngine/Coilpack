@@ -7,6 +7,7 @@ use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
 use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\Models\Addon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class Exp
@@ -65,7 +66,8 @@ class Exp
 
         Arr::set(static::$tags, $name, $class);
 
-        if ($class instanceof Tag && $class instanceof ConvertsToGraphQL) {
+        $graphRequest = (config('coilpack.graphql.enabled') && Route::current() && Str::startsWith(Route::current()->uri(), config('graphql.route.prefix')));
+        if ($graphRequest && $class instanceof Tag && $class instanceof ConvertsToGraphQL) {
             $name = str_replace('.', '_', Str::snake("exp_$name"));
             $query = new TagQuery($class, $name);
             app()->bind("graphql.query.$name", function ($app) use ($query) {
