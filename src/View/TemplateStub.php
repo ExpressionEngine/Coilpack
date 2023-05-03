@@ -83,18 +83,34 @@ class TemplateStub extends \EE_Template
     public function parse(&$str, $is_embed = false, $site_id = '', $is_layout = false)
     {
         if (in_array($this->template_engine, ['twig', 'blade'])) {
-            $templateName = 'ee::'.$this->group_name.'.'.$this->template_name;
-            $this->log_item(vsprintf('Coilpack parsing template %s with %s', [
-                $this->group_name.'/'.$this->template_name,
-                $this->template_engine,
-            ]));
+            $cache_status = $this->cache_status;
+            $cache_hash = $this->cache_hash;
 
-            $rendered = View::make($templateName, $this->getData($is_embed))->render();
+            if ($cache_status == 'CURRENT') {
+                $this->log_item(vsprintf('Coilpack cached %s template used', [$this->template_engine]));
+                $rendered = $str;
+            } else {
+                $templateName = 'ee::'.$this->group_name.'.'.$this->template_name;
+                $this->log_item(vsprintf('Coilpack parsing template %s with %s', [
+                    $this->group_name.'/'.$this->template_name,
+                    $this->template_engine,
+                ]));
+                $rendered = View::make($templateName, $this->getData($is_embed))->render();
+            }
 
             if ($is_embed) {
                 $this->template = $rendered;
             } else {
                 $this->final_template = $rendered;
+            }
+
+            // Write the cache file if needed
+            if ($cache_status == 'EXPIRED') {
+                //if the template is not embedded, ensure the cache is restricted to current URI
+                if (! $is_embed) {
+                    $this->cache_prefix = '';
+                }
+                $this->write_cache_file($cache_hash, $rendered, 'template');
             }
 
             return;

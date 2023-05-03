@@ -6,6 +6,7 @@
 
 - Logic for determining behavior of `redirect()` function used within ExpressionEngine
 - Only generate GraphQL queries from Tags during a GraphQL request
+- Support for caching Twig and Blade templates parsed through the template library
 
 ## [1.0.0] - 2023-04-27
 
