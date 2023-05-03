@@ -60,16 +60,14 @@ class Exp
 
     public function registerTag($name, $class)
     {
-        if (is_string($class)) {
-            $class = new $class;
-        }
-
         Arr::set(static::$tags, $name, $class);
 
         $graphRequest = (config('coilpack.graphql.enabled') && Route::current() && Str::startsWith(Route::current()->uri(), config('graphql.route.prefix')));
-        if ($graphRequest && $class instanceof Tag && $class instanceof ConvertsToGraphQL) {
+        $supportedTag = in_array(Tag::class, class_parents($class)) && in_array(ConvertsToGraphQL::class, class_implements($class));
+
+        if ($graphRequest && $supportedTag) {
             $name = str_replace('.', '_', Str::snake("exp_$name"));
-            $query = new TagQuery($class, $name);
+            $query = new TagQuery(new $class, $name);
             app()->bind("graphql.query.$name", function ($app) use ($query) {
                 return $query;
             });
@@ -143,7 +141,7 @@ class Exp
             if (is_array(static::$tags[$key])) {
                 return new TagProxy(static::$tags[$key], $fallback);
             } else {
-                return static::$tags[$key];
+                return is_string(static::$tags[$key]) ? new static::$tags[$key] : static::$tags[$key];
             }
         }
 

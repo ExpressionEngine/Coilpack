@@ -20,12 +20,12 @@ class ReplaceTemplateTags
 
         // Register our Tag replacements
         tap(app(\Expressionengine\Coilpack\View\Exp::class), function ($exp) {
-            $exp->registerTag('channel.categories', new \Expressionengine\Coilpack\View\Tags\Channel\Categories);
-            $exp->registerTag('channel.entries', new \Expressionengine\Coilpack\View\Tags\Channel\Entries);
-            $exp->registerTag('comment.entries', new \Expressionengine\Coilpack\View\Tags\Comment\Entries);
-            $exp->registerTag('structure.entries', new \Expressionengine\Coilpack\View\Tags\Structure\Entries);
-            $exp->registerTag('structure.nav', new \Expressionengine\Coilpack\View\Tags\Structure\Nav);
-            $exp->registerTag('email.contact_form', new \Expressionengine\Coilpack\View\Tags\Email\ContactForm);
+            $exp->registerTag('channel.categories', \Expressionengine\Coilpack\View\Tags\Channel\Categories::class);
+            $exp->registerTag('channel.entries', \Expressionengine\Coilpack\View\Tags\Channel\Entries::class);
+            $exp->registerTag('comment.entries', \Expressionengine\Coilpack\View\Tags\Comment\Entries::class);
+            $exp->registerTag('structure.entries', \Expressionengine\Coilpack\View\Tags\Structure\Entries::class);
+            $exp->registerTag('structure.nav', \Expressionengine\Coilpack\View\Tags\Structure\Nav::class);
+            $exp->registerTag('email.contact_form', \Expressionengine\Coilpack\View\Tags\Email\ContactForm::class);
         });
 
         View::composer('*', \Expressionengine\Coilpack\View\Composers\GlobalComposer::class);
