@@ -38,16 +38,17 @@ class RelationshipPresenter extends Presenter
                 ->join('relationships', 'entry_id', '=', 'child_id')
                 ->when($isFluid, function ($query) use ($fluidFieldId) {
                     $query->where('relationships.fluid_field_data_id', $fluidFieldId);
+                }, function ($query) {
+                    $query->where('relationships.fluid_field_data_id', 0);
                 })
                 ->when($isGrid, function ($query) use ($content) {
-                    $query->where('relationships.parent_id', $content->entry_id)
-                        ->where('relationships.grid_field_id', $content->field->field_id)
-                        ->where('relationships.grid_row_id', $content->grid_row_id)
+                    $query->where('relationships.grid_row_id', $content->grid_row_id)
                         ->where('relationships.grid_col_id', $content->grid_col_id);
-                }, function ($query) use ($content) {
-                    $query->where('relationships.parent_id', $content->entry_id)
-                        ->where('relationships.field_id', $content->field->field_id);
+                }, function ($query) {
+                    $query->where('relationships.grid_field_id', 0);
                 })
+                ->where('relationships.parent_id', $content->entry_id)
+                ->where('relationships.field_id', $content->field->field_id)
                 ->orderBy('order');
         }
 

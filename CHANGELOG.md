@@ -8,6 +8,8 @@
 - Only generate GraphQL queries from Tags during a GraphQL request
 - Support for caching Twig and Blade templates parsed through the template library
 - Improve performance by lazily instantiating replacement Tag classes
+- An issue where Relationship queries could return incorrect records
+- Handling of GraphQL list types when Fieldtypes are nested
 
 ## [1.0.0] - 2023-04-27
 

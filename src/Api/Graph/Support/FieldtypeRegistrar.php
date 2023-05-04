@@ -9,6 +9,7 @@ use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Fieldtypes\Fieldtype;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
 use Expressionengine\Coilpack\Models\Channel\ChannelField;
+use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
@@ -140,7 +141,7 @@ class FieldtypeRegistrar
                 $type = $name;
             }
 
-            $this->types[$fieldtype->name] = $type;
+            $this->types[$fieldtype->name] = ($fieldtype instanceof ListsGraphType) ? "listof::$type" : $type;
 
             return $type;
         }
@@ -159,7 +160,7 @@ class FieldtypeRegistrar
             dd($field->field_name, $field->field_type, $field->getFieldType(), $this->types);
         }
 
-        $type = ($field->getFieldtype() instanceof ListsGraphType) ? Type::listOf($type) : $type;
+        $type = ($field->getFieldtype() instanceof ListsGraphType && ! ($type instanceof ListOfType)) ? Type::listOf($type) : $type;
 
         return $type;
     }
@@ -171,7 +172,14 @@ class FieldtypeRegistrar
         if (array_key_exists($field, $this->types)) {
             $type = $this->types[$field];
 
-            return (is_string($type)) ? GraphQL::type($type) : $this->types[$field];
+            if (is_string($type)) {
+                $isList = strpos($type, 'listof::') === 0;
+                $type = GraphQL::type(str_replace('listof::', '', $type, $isList));
+
+                return ($isList) ? Type::listOf($type) : $type;
+            }
+
+            return $this->types[$field];
         }
 
         return null;
