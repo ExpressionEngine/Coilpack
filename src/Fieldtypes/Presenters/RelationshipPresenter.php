@@ -42,13 +42,14 @@ class RelationshipPresenter extends Presenter
                     $query->where('relationships.fluid_field_data_id', 0);
                 })
                 ->when($isGrid, function ($query) use ($content) {
-                    $query->where('relationships.grid_row_id', $content->grid_row_id)
+                    $query->where('relationships.grid_field_id', $content->field->field_id)
+                        ->where('relationships.grid_row_id', $content->grid_row_id)
                         ->where('relationships.grid_col_id', $content->grid_col_id);
-                }, function ($query) {
-                    $query->where('relationships.grid_field_id', 0);
+                }, function ($query) use ($content) {
+                    $query->where('relationships.field_id', $content->field->field_id)
+                        ->where('relationships.grid_field_id', 0);
                 })
                 ->where('relationships.parent_id', $content->entry_id)
-                ->where('relationships.field_id', $content->field->field_id)
                 ->orderBy('order');
         }
 
