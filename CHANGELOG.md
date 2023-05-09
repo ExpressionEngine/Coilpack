@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2023-05-09
+
 ### Fixed
 
 - Logic for determining behavior of `redirect()` function used within ExpressionEngine
@@ -141,7 +143,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.1...HEAD
+
+[1.0.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.0...1.0.1
 
 [1.0.0]: https://github.com/ExpressionEngine/Coilpack/compare/0.1.0...1.0.0
 
