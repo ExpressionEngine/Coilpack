@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Behavior of `exp.redirect()` tag
+
 ## [1.0.1] - 2023-05-09
 
 ### Fixed

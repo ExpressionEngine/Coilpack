@@ -87,7 +87,7 @@ class Exp
 
     public function redirect($str)
     {
-        return redirect($str);
+        return ee()->functions->redirect(Str::start($str, '/'));
     }
 
     public function route($str)
