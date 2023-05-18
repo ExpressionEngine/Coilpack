@@ -199,7 +199,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Entry ID
         $this->query->when($this->hasArgument('entry_id'), function ($query) {
-            $this->getArgument('entry_id')->addQuery($query, 'entry_id');
+            $this->getArgument('entry_id')->addQuery($query, (new ChannelEntry)->qualifyColumn('entry_id'));
         });
 
         // Site ID
