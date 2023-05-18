@@ -4,18 +4,21 @@ namespace Expressionengine\Coilpack\Controllers;
 
 use Expressionengine\Coilpack\Bootstrap;
 use ExpressionEngine\Core;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Request;
 
-class FallbackController
+class FallbackController extends Controller
 {
+    public function __construct()
+    {
+        if (! $this->isAssetRequest()) {
+            $this->middleware('web');
+        }
+    }
+
     public function index()
     {
-        $assetFolders = [
-            'themes',
-            'images',
-        ];
-
-        if (in_array(Request::segment(1), $assetFolders)) {
+        if ($this->isAssetRequest()) {
             (new Bootstrap\LoadExpressionEngine)->asset()->bootstrapDependencies(app());
 
             return (new AssetController)();
@@ -30,5 +33,15 @@ class FallbackController
 
             return $core->runGlobal();
         }
+    }
+
+    private function isAssetRequest()
+    {
+        $assetFolders = [
+            'themes',
+            'images',
+        ];
+
+        return in_array(Request::segment(1), $assetFolders);
     }
 }

@@ -5,6 +5,7 @@
 ### Fixed
 
 - Behavior of `exp.redirect()` tag
+- Support for Laravel csrf tokens in ExpressionEngine templates
 
 ## [1.0.1] - 2023-05-09
 
