@@ -5,14 +5,13 @@ namespace Expressionengine\Coilpack\Controllers;
 use Expressionengine\Coilpack\Bootstrap;
 use ExpressionEngine\Core;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Request;
 
 class FallbackController extends Controller
 {
     public function __construct()
     {
         if (! $this->isAssetRequest()) {
-            $this->middleware('web');
+            $this->middleware('coilpack');
         }
     }
 
@@ -42,6 +41,10 @@ class FallbackController extends Controller
             'images',
         ];
 
-        return in_array(Request::segment(1), $assetFolders);
+        $path = request()->path();
+        $adminPrefix = trim(app('router')->getRoutes()->getByName('coilpack.admin')->getPrefix(), '/').'/';
+        $pieces = explode('/', strpos($path, $adminPrefix) === 0 ? substr($path, strlen($adminPrefix)) : $path);
+
+        return in_array($pieces[0], $assetFolders);
     }
 }

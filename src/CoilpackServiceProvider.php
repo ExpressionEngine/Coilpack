@@ -38,13 +38,23 @@ class CoilpackServiceProvider extends ServiceProvider
             (new Bootstrap\LoadExpressionEngine)->cli()->bootstrap(app());
         }
 
+        /*
+         * Setup Coilpack Routing
+         */
+        $this->app->make('router')->middlewareGroup('coilpack', [
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        ]);
+
         Route::macro('templates', new Routing\TemplateRoute);
+        Route::mixin(new Routing\CoilpackRoutes);
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         Event::listen(function (\Illuminate\Routing\Events\RouteMatched $event) {
             // Prevent Coilpack from finishing the boot process if we're handling the request with EE
-            if ($event->route->isFallback || $event->route->uri == config('coilpack.admin_url', 'admin.php')) {
+            if ($event->route->isFallback || $event->route->getName() === 'coilpack.admin') {
                 return;
             }
 

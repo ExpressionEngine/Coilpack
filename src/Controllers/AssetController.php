@@ -3,7 +3,6 @@
 namespace Expressionengine\Coilpack\Controllers;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -15,7 +14,7 @@ class AssetController
         $url = parse_url(URL::current());
         $disk = Storage::disk('coilpack');
         $caching = false;
-        $file = implode(DIRECTORY_SEPARATOR, Request::segments());
+        $file = $this->getAssetPath();
 
         if ($disk->missing($file)) {
             abort(404);
@@ -63,6 +62,14 @@ class AssetController
         }
         // return $this->fileResponse($file);
         return $disk->get($file);
+    }
+
+    private function getAssetPath()
+    {
+        $adminPrefix = trim(app('router')->getRoutes()->getByName('coilpack.admin')->getPrefix(), '/').'/';
+        $path = request()->path();
+
+        return strpos($path, $adminPrefix) === 0 ? substr($path, strlen($adminPrefix)) : $path;
     }
 
     private function fileResponse($path, $headers)
