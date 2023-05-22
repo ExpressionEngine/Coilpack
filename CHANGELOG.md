@@ -7,6 +7,7 @@
 - Behavior of `exp.redirect()` tag
 - Support for Laravel csrf tokens in ExpressionEngine templates
 - Using Channel Entries `entry_id` parameter in conjunction with `search` parameter
+- When using the `php artisan coilpack` command with a `--dev` or `--source` flag allow a version choice
 
 ## [1.0.1] - 2023-05-09
 

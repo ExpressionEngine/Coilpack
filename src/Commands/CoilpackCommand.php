@@ -156,6 +156,8 @@ class CoilpackCommand extends Command
 
         if ($this->option('install')) {
             $release = ($this->option('install') == 'latest') ? $releases->first()['tag_name'] : $this->option('install');
+        } elseif ($this->option('source') || $this->option('dev')) {
+            $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
         } else {
             $release = $releases->first()['tag_name'];
         }
