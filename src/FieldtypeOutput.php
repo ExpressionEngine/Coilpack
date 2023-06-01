@@ -33,6 +33,10 @@ class FieldtypeOutput extends TemplateOutput
             return $this->callModifier($method, ...$arguments);
         }
 
+        if (is_null($this->object)) {
+            return null;
+        }
+
         return $this->object->{$method}(...$arguments);
     }
 }

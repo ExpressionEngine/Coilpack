@@ -2,9 +2,10 @@
 
 namespace Expressionengine\Coilpack\Models;
 
+use Expressionengine\Coilpack\Models\Channel\ChannelFieldGroup;
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
+class FieldGroupContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
      * The model's attributes.
@@ -14,59 +15,62 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
     protected $attributes = [];
 
     /**
+     * Group model
+     *
+     * @var ChannelFieldGroup
+     */
+    protected $group;
+
+    /**
+     * Field Contents for the Group
+     *
+     * @var Illuminate\Support\Collection
+     */
+    protected $fields;
+
+    /**
      * Create a new model instance.
      *
      * @return void
      */
-    public function __construct(array $attributes = [])
+    public function __construct(ChannelFieldGroup $group)
     {
-        $this->attributes = $attributes;
-    }
-
-    public function getFieldtype()
-    {
-        if (isset($this->attributes['fieldtype'])) {
-            return $this->fieldtype;
-        }
-
-        $this->attributes['fieldtype'] = $this->field->getFieldtype();
-
-        return $this->fieldtype;
+        $this->group = $group;
+        $this->attributes = array_merge($group->attributesToArray(), [
+            '_field_name' => $group->short_name,
+            '_field_type' => 'field_group',
+        ]);
+        $this->fields = collect();
     }
 
     /**
-     * Get the value of this Field Content by applying the fieldtype
+     * Get the Group model
      *
-     * @return \Expressionengine\Coilpack\FieldtypeOutput
+     * @return ChannelFieldGroup
      */
-    public function value(array $parameters = [])
+    public function group()
     {
-        // should hash and cache params too
-        if (empty($parameters) && array_key_exists('value', $this->attributes)) {
-            return $this->attributes['value'];
-        }
+        return $this->group;
+    }
 
-        $fieldtype = $this->getFieldtype();
-
-        // we don't want to propagate any cached values further
-        unset($this->attributes['value']);
-        $value = $fieldtype->apply($this, $parameters);
-
-        if (empty($parameters)) {
-            $this->attributes['value'] = $value;
-        }
-
-        return $value;
+    /**
+     * Get the collection of fields
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function fields()
+    {
+        return $this->fields;
     }
 
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->value()->getIterator());
+        return $this->fields->getIterator();
     }
 
     public function count(): int
     {
-        return $this->value()->count();
+        return $this->fields->count();
     }
 
     /**
@@ -94,16 +98,10 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
      *
      * @param  int  $options
      * @return string
-     *
-     * @throws \Illuminate\Database\Eloquent\JsonEncodingException
      */
     public function toJson($options = 0)
     {
         $json = json_encode($this->jsonSerialize(), $options);
-
-        // if (JSON_ERROR_NONE !== json_last_error()) {
-        //     throw \Illuminate\Database\Eloquent\JsonEncodingException::forModel($this, json_last_error_msg());
-        // }
 
         return $json;
     }
@@ -117,7 +115,11 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
     public function getAttribute($key)
     {
         if (! $key) {
-            return null;
+            return;
+        }
+
+        if (in_array($key, ['group', 'fields'])) {
+            return $this->$key;
         }
 
         if ($this->hasAttribute($key)) {
@@ -125,6 +127,12 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
         }
     }
 
+    /**
+     * Check to see if an attribute exists
+     *
+     * @param  string  $key
+     * @return bool
+     */
     public function hasAttribute($key)
     {
         return array_key_exists($key, $this->attributes);
@@ -162,17 +170,8 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
      */
     public function __get($key)
     {
-        if (! is_null($this->getAttribute($key))) {
+        if ($this->getAttribute($key)) {
             return $this->getAttribute($key);
-        }
-
-        $value = $this->value();
-        if (isset($value->$key)) {
-            return $value->$key;
-        }
-
-        if ($value->hasModifier($key)) {
-            return $value->callModifier($key);
         }
 
         return null;
@@ -240,13 +239,9 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
      */
     public function __isset($key)
     {
-        if ($this->offsetExists($key)) {
+        if ($this->offsetExists($key) || in_array($key, ['group', 'fields'])) {
             return true;
         }
-
-        $value = $this->value();
-
-        return ! is_null($value) && (isset($value->$key) || $value->hasModifier($key));
     }
 
     /**
@@ -258,31 +253,5 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Count
     public function __unset($key)
     {
         $this->offsetUnset($key);
-    }
-
-    public function __toString()
-    {
-        return (string) $this->value();
-    }
-
-    public function __call($method, $arguments)
-    {
-        $value = $this->value();
-
-        if (is_null($value)) {
-            return null;
-        }
-
-        return $value->$method(...$arguments);
-    }
-
-    public function __invoke($parameters = [])
-    {
-        return $this->value($parameters);
-    }
-
-    public function parameters($parameters = [])
-    {
-        return $this->value($parameters);
     }
 }

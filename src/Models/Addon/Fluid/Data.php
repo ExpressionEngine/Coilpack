@@ -22,6 +22,11 @@ class Data extends Model
         return $this->belongsTo(Models\Channel\ChannelField::class, 'field_id');
     }
 
+    public function fieldGroup()
+    {
+        return $this->belongsTo(Models\Channel\ChannelFieldGroup::class, 'field_group_id');
+    }
+
     public function entry()
     {
         return $this->belongsTo(Models\Channel\ChannelEntry::class, 'entry_id');

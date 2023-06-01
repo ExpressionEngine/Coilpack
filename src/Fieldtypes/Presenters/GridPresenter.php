@@ -15,13 +15,6 @@ class GridPresenter extends Presenter
 {
     use HasArgumentsAndParameters;
 
-    private $fieldtypeManager;
-
-    public function __construct()
-    {
-        $this->fieldtypeManager = app(FieldtypeManager::class);
-    }
-
     public function present(FieldContent $content, $arguments)
     {
         if (! $content->hasAttribute('entry_id')) {

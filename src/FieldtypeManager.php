@@ -13,6 +13,8 @@ class FieldtypeManager
 
     private $fields = [];
 
+    private $fieldgroups;
+
     private $fieldtypes;
 
     private $channels;
@@ -40,6 +42,19 @@ class FieldtypeManager
         // $gridColumns = Models\Addon\Grid\Column::get();
 
         $fieldsById = $fields->keyBy('field_id');
+
+        // Group fields by fieldgroup
+        $this->fieldgroups = $fields->reduce(function ($carry, $field) {
+            foreach ($field->fieldGroups as $group) {
+                if (! $carry->has($group->group_id)) {
+                    $carry->put($group->group_id, new Collection);
+                }
+
+                $carry->get($group->group_id)->push($field);
+            }
+
+            return $carry;
+        }, new Collection);
 
         // Group fields by channel
         $channels = $fields->reduce(function ($carry, $field) use ($fieldsById) {
@@ -112,11 +127,19 @@ class FieldtypeManager
 
     public function hasField($field, $source = 'channel')
     {
+        if (is_numeric($field)) {
+            return ! is_null($this->fields[$source]->where('field_id', $field)->first());
+        }
+
         return $this->fields[$source]->has($field);
     }
 
     public function getField($field, $source = 'channel')
     {
+        if (is_numeric($field)) {
+            return $this->fields[$source]->where('field_id', $field)->first();
+        }
+
         return $this->fields[$source]->get($field);
     }
 
@@ -130,13 +153,22 @@ class FieldtypeManager
         return $this->fieldtypes;
     }
 
+    public function fieldsForFieldGroup($group)
+    {
+        if ($group instanceof \Expressionengine\Coilpack\Models\Channel\ChannelFieldGroup) {
+            $group = $group->getKey();
+        }
+
+        return $this->fieldgroups->get($group) ?: new Collection;
+    }
+
     public function fieldsForChannel($channel)
     {
         if ($channel instanceof \Expressionengine\Coilpack\Models\Channel\Channel) {
             $channel = $channel->getKey();
         }
 
-        return $this->channels->get($channel) ?: collect([]);
+        return $this->channels->get($channel) ?: new Collection;
     }
 
     public function fieldsForCategoryGroup($group)
@@ -145,7 +177,7 @@ class FieldtypeManager
             $group = $group->getKey();
         }
 
-        return $this->categoryGroups->get($group) ?: collect([]);
+        return $this->categoryGroups->get($group) ?: new Collection;
     }
 
     public function register($fieldtype, $class)

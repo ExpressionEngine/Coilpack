@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Fluid Field Groups introduced in ExpressionEngine 7.3
+- Configuration flag to signal preference for using GraphQL Union Types
 ### Fixed
 
 - Behavior of `exp.redirect()` tag
