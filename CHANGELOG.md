@@ -8,6 +8,7 @@
 - Support for Laravel csrf tokens in ExpressionEngine templates
 - Using Channel Entries `entry_id` parameter in conjunction with `search` parameter
 - When using the `php artisan coilpack` command with a `--dev` or `--source` flag allow a version choice
+- Cloning functionality by making ExpressionEngine Request available during Core bootstrap
 
 ## [1.0.1] - 2023-05-09
 

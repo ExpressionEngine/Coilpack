@@ -11,6 +11,14 @@ class LoadExpressionEngine
 {
     public static $core = null;
 
+    protected $constants;
+
+    protected $basePath;
+
+    protected $systemPath;
+
+    protected $configPath;
+
     public $dependentBootstrappers = [
         LoadConfiguration::class,
         CreateDatabaseConnection::class,
@@ -210,8 +218,9 @@ class LoadExpressionEngine
         }
 
         if (! $this->constants['INSTALL_MODE']) {
-            $core->loadApplicationCore();
+            $application = $core->loadApplicationCore();
             ee()->set('coilpack', app('coilpack'));
+            $application->setRequest(\ExpressionEngine\Core\Request::fromGlobals());
         }
 
         ee()->load->library('core');
