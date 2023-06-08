@@ -760,6 +760,7 @@ CREATE TABLE `exp_channels` (
   `default_entry_title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `title_field_label` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Title',
   `url_title_prefix` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `enforce_auto_url_title` char(1) COLLATE utf8mb4_unicode_ci NOT NULL default 'n',
   `preview_url` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `allow_preview` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
   `max_entries` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1124,6 +1125,8 @@ CREATE TABLE `exp_field_groups` (
   `group_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
   `site_id` int(4) unsigned DEFAULT '1',
   `group_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_description` text COLLATE utf8mb4_unicode_ci NULL,
   PRIMARY KEY (`group_id`),
   KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1254,7 +1257,9 @@ CREATE TABLE `exp_fluid_field_data` (
   `entry_id` int(11) unsigned NOT NULL,
   `field_id` int(11) unsigned NOT NULL,
   `field_data_id` int(11) unsigned NOT NULL,
+  `field_group_id` int(11) unsigned DEFAULT NULL,
   `order` int(5) unsigned NOT NULL DEFAULT '0',
+  `group` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fluid_field_id_entry_id` (`fluid_field_id`,`entry_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1458,6 +1463,7 @@ CREATE TABLE `exp_members` (
   `timezone` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `time_format` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_format` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `week_start` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `include_seconds` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `profile_theme` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `forum_theme` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
