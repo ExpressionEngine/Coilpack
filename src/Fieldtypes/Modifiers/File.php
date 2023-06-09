@@ -6,14 +6,11 @@ use Expressionengine\Coilpack\Facades\Coilpack;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Fieldtypes\Modifier;
 
-// use Expressionengine\Coilpack\Models\FieldContent;
-
 class File extends Modifier
 {
     public function handle(FieldtypeOutput $content, $parameters = [])
     {
-        $handler = $this->fieldtype->getHandler();
-        $data = $handler->pre_process($content->raw_content);
+        $data = $content->toArray();
 
         $modified = Coilpack::isolateTemplateLibrary(function ($template) use ($data, $parameters) {
             $output = $this->callHandler($data, $parameters);
@@ -24,7 +21,9 @@ class File extends Modifier
         // Unwrap the output if we have a nested array
         $modified = (is_array($modified) && count($modified) === 1 && is_array(current($modified))) ? $modified[0] : $modified;
 
-        return FieldtypeOutput::for($this->fieldtype)->value($modified)->string($modified['url']);
+        return FieldtypeOutput::for($this->fieldtype)
+            ->value(array_merge($data, $modified))
+            ->string($modified['url']);
     }
 
     protected function callHandler($data, $parameters)
@@ -33,12 +32,16 @@ class File extends Modifier
         $handler = $this->fieldtype->getHandler();
 
         if ($this->attributes['name'] === 'manipulation') {
-            $data['url'] = $handler->replace_tag_catchall($data, [], false, current($parameters));
+            $output = $handler->replace_tag_catchall($data, [], null, current($parameters));
 
-            return $data;
+            return is_string($output) ? ['url' => $output] : $output;
         }
 
-        // Sending fake tagdata to force a call to template parser so we can get more data back
-        return $handler->{$method}($data, $parameters, '{!-- coilpack:fake --}');
+        // If the version of ExpressionEngine supports chainable modifiers (7.3+)
+        // sending `null` tagdata will give us better results otherwise we will
+        // send fake tagdata to force a call to template parser for extra data
+        $tagdata = (method_exists($handler, 'getChainableModifiersThatRequireArray')) ? null : '{!-- coilpack:fake --}';
+
+        return $handler->{$method}($data, $parameters, $tagdata);
     }
 }
