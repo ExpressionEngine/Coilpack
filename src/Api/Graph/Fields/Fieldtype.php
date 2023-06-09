@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\Api\Graph\Fields;
 
 use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Field;
 
@@ -77,7 +78,7 @@ class Fieldtype extends Field
         return $args->toArray();
     }
 
-    protected function resolve($root, array $args)
+    protected function resolve($root, array $args, $context, ResolveInfo $resolveInfo)
     {
         if ($this->attributes['resolve'] ?? false && is_callable($this->attributes['resolve'])) {
             $data = $this->attributes['resolve']($root, $args);
@@ -105,9 +106,14 @@ class Fieldtype extends Field
 
             // apply modifiers
             $modifiers = array_intersect_key($args, $this->modifiers()->toArray());
+            $orderedArguments = $resolveInfo->fieldNodes[0]->arguments;
 
-            foreach ($modifiers as $key => $value) {
-                $output = $output->$key($value);
+            foreach ($orderedArguments as $argument) {
+                $key = (string) $argument->name->value;
+                if (array_key_exists($key, $modifiers)) {
+                    $value = $modifiers[$key];
+                    $output = $output->{$key}($value);
+                }
             }
 
             return $output;

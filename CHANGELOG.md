@@ -14,6 +14,7 @@
 - Using Channel Entries `entry_id` parameter in conjunction with `search` parameter
 - When using the `php artisan coilpack` command with a `--dev` or `--source` flag allow a version choice
 - Cloning functionality by making ExpressionEngine Request available during Core bootstrap
+- GraphQL behavior so that order of modifier arguments is respected
 
 ## [1.0.1] - 2023-05-09
 
