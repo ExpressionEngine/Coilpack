@@ -20,9 +20,9 @@ class FluidFieldPresenter extends Presenter
         $groupIds = $content->field->field_settings['field_channel_field_groups'] ?? [];
         $fieldIds = $content->field->field_settings['field_channel_fields'] ?? [];
 
-        $fields = collect($groupIds)->reduce(function ($carry, $group) {
+        $fields = collect($groupIds)->filter()->reduce(function ($carry, $group) {
             return $carry->merge(app(FieldtypeManager::class)->fieldsForFieldGroup($group));
-        }, new Collection)->merge(collect($fieldIds)->reduce(function ($carry, $field) {
+        }, new Collection)->merge(collect($fieldIds)->filter()->reduce(function ($carry, $field) {
             return $carry->push(app(FieldtypeManager::class)->getField($field));
         }, new Collection));
 
@@ -76,7 +76,7 @@ class FluidFieldPresenter extends Presenter
                 ->orderBy('order')
                 ->get();
         }
-
+        // dd($usingGroups, $data);
         $data = $data->map(function ($row) use ($content) {
             return new FieldContent(
                 array_merge($content->getAttributes(), [

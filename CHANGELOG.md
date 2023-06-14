@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Handle a scenario where Fluid fields save an empty string in their list of associated fields
+
 ## [1.1.0] - 2023-06-14
 
 ### Added
