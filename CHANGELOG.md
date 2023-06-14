@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-06-14
+
 ### Added
 
 - Support for Fluid Field Groups and chainable modifiers introduced in ExpressionEngine 7.3
@@ -157,7 +159,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.1...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.0...HEAD
+
+[1.1.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.1...1.1.0
 
 [1.0.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.0.0...1.0.1
 
