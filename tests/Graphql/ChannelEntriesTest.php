@@ -241,4 +241,25 @@ class ChannelEntriesTest extends TestCase
         ])
             ->assertJsonFragment(['page_content' => '4542']);
     }
+
+    public function test_entries_text_field_multiple_modifiers()
+    {
+        $this->postJson('graphql', [
+            'query' => <<<'GQL'
+            {
+                exp_channel_entries(channel:"about"){
+                    data {
+                        entry_id
+                        title
+                        excerpt_length:page_content(
+                            limit: {characters: 10, end_char: "...", preserve_words:false},
+                            length: true
+                        )
+                    }
+                }
+            }
+          GQL
+        ])
+            ->assertJsonFragment(['excerpt_length' => '13']);
+    }
 }

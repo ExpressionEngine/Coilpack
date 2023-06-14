@@ -67,4 +67,14 @@ class FileTest extends TestCase
 
         $this->assertStringContainsString('_crop', (string) $output);
     }
+
+    public function test_file_chain_modifiers()
+    {
+        $entry = ChannelEntry::where('title', 'Test Fieldtypes')->first();
+
+        $output = $entry->test_file->rotate(['angle' => 90])->webp();
+
+        $this->assertStringContainsString('_rotate', (string) $output);
+        $this->assertStringContainsString('_webp', (string) $output);
+    }
 }
