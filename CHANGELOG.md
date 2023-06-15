@@ -5,6 +5,7 @@
 ### Fixed
 
 - Handle a scenario where Fluid fields save an empty string in their list of associated fields
+- Displaying Fluid field when one of the content fields has been deleted but not unassociated
 
 ## [1.1.0] - 2023-06-14
 
