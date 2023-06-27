@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Enabled direct access to fields inside a FieldGroupContent model using a field name
+
 ## [1.1.1] - 2023-06-15
 
 ### Fixed

@@ -106,7 +106,7 @@ class FluidFieldPresenter extends Presenter
                 // Add the fields into their group
                 if ($row->group) {
                     $group = $carry->get($key);
-                    $group->fields()->push($row);
+                    $group->fields()->put($row->_field_name, $row);
                 }
 
                 return $carry;
