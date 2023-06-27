@@ -16,6 +16,12 @@ class Action extends Model
     // Available as a replacement to ee()->functions->fetch_action_id
     public static function fetch_action_id($class, $method)
     {
-        return static::select('action_id')->where('class', $class)->where('method', $method)->first()->action_id;
+        $action = static::select('action_id')->where('class', $class)->where('method', $method)->first();
+
+        if (! $action) {
+            throw new \Exception("Could not find action for '$class:$method', please make sure the module is installed.");
+        }
+
+        return $action->action_id;
     }
 }

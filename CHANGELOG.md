@@ -5,6 +5,7 @@
 ### Fixed
 
 - Enabled direct access to fields inside a FieldGroupContent model using a field name
+- Behavior of replacement tags for Comments module - `exp.comment.form` and `exp.comment.preview`
 
 ## [1.1.1] - 2023-06-15
 

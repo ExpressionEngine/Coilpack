@@ -18,8 +18,6 @@ class ContactForm extends FormTag
         'channel' => null,
     ];
 
-    protected $attributes;
-
     public function defineParameters(): array
     {
         return array_merge(parent::defineParameters(), [
@@ -158,15 +156,5 @@ class ContactForm extends FormTag
 
             $author_email = ($query->num_rows() == 0) ? '' : $query->row('email');
         }
-    }
-
-    public function __isset($key)
-    {
-        return array_key_exists($key, $this->attributes);
-    }
-
-    public function __get($key)
-    {
-        return (array_key_exists($key, $this->attributes)) ? $this->attributes[$key] : null;
     }
 }

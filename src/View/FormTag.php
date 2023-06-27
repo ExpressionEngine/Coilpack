@@ -6,6 +6,8 @@ use Expressionengine\Coilpack\Support\Parameter;
 
 abstract class FormTag extends Tag
 {
+    protected $attributes = [];
+
     public function defineParameters(): array
     {
         return array_merge(parent::defineParameters(), [
@@ -87,7 +89,10 @@ abstract class FormTag extends Tag
             $defaults['name'] = $this->getArgument('name')->value;
         }
 
-        $data = array_merge_recursive($defaults, $data);
+        // Merge $data onto $defaults and do a deeper merge only on 'hidden_fields' array
+        $hidden = array_merge($defaults['hidden_fields'], $data['hidden_fields'] ?? []);
+        $data = array_merge($defaults, $data);
+        $data['hidden_fields'] = $hidden;
 
         $form = ee()->functions->form_declaration($data);
         $form = str_replace('{csrf_token}', $token, $form);
@@ -132,6 +137,16 @@ abstract class FormTag extends Tag
     protected function decrypt($data)
     {
         return ee('Encrypt')->decode($data, ee()->config->item('session_crypt_key'));
+    }
+
+    public function __isset($key)
+    {
+        return array_key_exists($key, $this->attributes);
+    }
+
+    public function __get($key)
+    {
+        return (array_key_exists($key, $this->attributes)) ? $this->attributes[$key] : null;
     }
 
     /**

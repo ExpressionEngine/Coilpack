@@ -165,6 +165,6 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess, \Countable
 
     public function __call($method, $arguments)
     {
-        return $this->object->{$method}(...$arguments);
+        return $this->object ? $this->object->{$method}(...$arguments) : null;
     }
 }
