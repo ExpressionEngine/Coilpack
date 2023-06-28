@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- The ability for ExpressionEngine to utilize Laravel cache adapters
+
 ### Fixed
 
 - Enabled direct access to fields inside a FieldGroupContent model using a field name
