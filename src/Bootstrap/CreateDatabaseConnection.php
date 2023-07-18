@@ -24,7 +24,7 @@ class CreateDatabaseConnection
             'driver' => 'mysql',
             'url' => '',
             'host' => $config['hostname'] ?? env('DB_HOST', '127.0.0.1'),
-            'port' => (int) $config['port'] ?? env('DB_PORT', 3306),
+            'port' => (int) ($config['port'] ?? env('DB_PORT', 3306)),
             'database' => $config['database'] ?? env('EE_DB_DATABASE', 'expressionengine'),
             'username' => $config['username'] ?? env('DB_USERNAME', 'forge'),
             'password' => $config['password'] ?? env('DB_PASSWORD', ''),
