@@ -45,10 +45,10 @@ class ChannelTest extends TestCase
         $this->assertNotEmpty($categories);
     }
 
-//     public function test_info()
-//     {
-//         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
-//         $info = $exp->channel->info(['channel' => 'blog']);
-//         // dd($info);
-//     }
+    //     public function test_info()
+    //     {
+    //         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
+    //         $info = $exp->channel->info(['channel' => 'blog']);
+    //         // dd($info);
+    //     }
 }
