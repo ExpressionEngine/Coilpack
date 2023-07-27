@@ -6,6 +6,7 @@
 
 - Enabled direct access to fields inside a FieldGroupContent model using a field name
 - Behavior of replacement tags for Comments module - `exp.comment.form` and `exp.comment.preview`
+- Bug due to order of operations in casting database port to integer
 
 ## [1.1.1] - 2023-06-15
 
