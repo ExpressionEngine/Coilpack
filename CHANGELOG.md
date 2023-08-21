@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Behavior of File Modifier to return original data when manipulation fails silently
+
 ## [1.1.2] - 2023-07-27
 
 ### Fixed

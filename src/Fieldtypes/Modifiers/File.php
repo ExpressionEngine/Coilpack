@@ -21,6 +21,13 @@ class File extends Modifier
         // Unwrap the output if we have a nested array
         $modified = (is_array($modified) && count($modified) === 1 && is_array(current($modified))) ? $modified[0] : $modified;
 
+        // If a manipulation fails and returns a boolean we fallback to the original url
+        if(is_bool($modified)) {
+            $modified = [
+                'url' => $data['url'] ?? ''
+            ];
+        }
+
         return FieldtypeOutput::for($this->fieldtype)
             ->value(array_merge($data, $modified))
             ->string($modified['url']);
