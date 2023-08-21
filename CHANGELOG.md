@@ -8,8 +8,15 @@
 
 ### Fixed
 
+- Behavior of File Modifier to return original data when manipulation fails silently
+
+## [1.1.2] - 2023-07-27
+
+### Fixed
+
 - Enabled direct access to fields inside a FieldGroupContent model using a field name
 - Behavior of replacement tags for Comments module - `exp.comment.form` and `exp.comment.preview`
+- Bug due to order of operations in casting database port to integer
 
 ## [1.1.1] - 2023-06-15
 
@@ -175,7 +182,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.1...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.2...HEAD
+
+[1.1.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.1...1.1.2
 
 [1.1.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.0...1.1.1
 
