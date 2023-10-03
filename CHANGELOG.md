@@ -5,6 +5,7 @@
 ### Fixed
 
 - Behavior of File Modifier to return original data when manipulation fails silently
+- Generic fieldtype passes `content_id` along to core fieldtype handler and triggers `pre_process` hook.
 
 ## [1.1.2] - 2023-07-27
 
