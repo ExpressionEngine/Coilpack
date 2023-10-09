@@ -29,6 +29,7 @@ class CoilpackServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Commands\CoilpackCommand::class,
+                Commands\EECliCommand::class,
                 Commands\GraphQLCommand::class,
             ]);
         }

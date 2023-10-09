@@ -4,6 +4,9 @@ namespace Expressionengine\Coilpack;
 
 class Core
 {
+
+    use Traits\CanAccessRestrictedClass;
+
     protected $core;
 
     public function __construct(\ExpressionEngine\Core\Core $core)
@@ -72,24 +75,15 @@ class Core
 
         $response = $this->core->run($request);
 
-        $body = $this->accessRestrictedProperty($response, 'body');
-        $status = $this->accessRestrictedProperty($response, 'status');
-        $headers = $this->accessRestrictedProperty($response, 'headers');
+        $body = $this->getRestrictedProperty($response, 'body');
+        $status = $this->getRestrictedProperty($response, 'status');
+        $headers = $this->getRestrictedProperty($response, 'headers');
 
         if ($body == '') {
             return Response::fromOutput($status);
         }
 
         return new \Illuminate\Http\Response($body, $status, $headers);
-    }
-
-    protected function accessRestrictedProperty($object, $property)
-    {
-        $reflection = new \ReflectionClass($object);
-        $prop = $reflection->getProperty($property);
-        $prop->setAccessible(true);
-
-        return $prop->getValue($object);
     }
 
     protected function runCli($request)
@@ -101,10 +95,14 @@ class Core
             return $this->core->bootOnly($request);
         }
 
-        // $this->legacy->includeBaseController();
+        $this->core->getLegacyApp()->includeBaseController();
 
         // We need to load the core bootstrap globals here
         ee()->load->library('core');
         ee()->core->bootstrap();
+
+        $cli = new \ExpressionEngine\Cli\Cli();
+
+        return $cli;
     }
 }
