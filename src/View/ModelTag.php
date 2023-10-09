@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\View;
 
 use Expressionengine\Coilpack\Support\Parameter;
+use Expressionengine\Coilpack\Support\Arguments\ListArgument;
 
 abstract class ModelTag extends IterableTag
 {
@@ -35,7 +36,18 @@ abstract class ModelTag extends IterableTag
                 'description' => 'How many results to show on each page',
                 'defaultValue' => 10,
             ]),
+            new Parameter([
+                'name' => 'with',
+                'type' => 'string',
+                'description' => 'A pipe separated list of relationships to eager load',
+                'defaultValue' => null,
+            ]),
         ];
+    }
+
+    public function getWithArgument($value)
+    {
+        return new ListArgument($value);
     }
 
     public function run()
@@ -55,6 +67,10 @@ abstract class ModelTag extends IterableTag
 
         if ($this->hasArgument('limit')) {
             $this->query->take($this->getArgument('limit')->value);
+        }
+
+        if ($this->hasArgument('with')) {
+            $this->query->with($this->getArgument('with')->terms->map->value->toArray());
         }
 
         return $this->query->get();

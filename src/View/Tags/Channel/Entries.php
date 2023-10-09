@@ -190,6 +190,17 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         return $search;
     }
 
+    public function getWithArgument($value)
+    {
+        // If the 'data' relation is requested we will append 'channel' and 'hiddenFields'
+        // because these are necessary for properly displaying custom field data
+        if(in_array('data', explode('|', $value))) {
+            $value .= '|channel|hiddenFields';
+        }
+
+        return parent::getWithArgument($value);
+    }
+
     public function run()
     {
         // Author
