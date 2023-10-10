@@ -25,6 +25,7 @@ class SetupCacheManager
         }
 
         $overrideConfig = Arr::only(ee()->config->config, [
+            'uri_protocol',
             'directory_trigger',
             'controller_trigger',
             'function_trigger',
