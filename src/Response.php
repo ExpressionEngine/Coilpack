@@ -258,7 +258,9 @@ class Response
         // to the correct format ["header_name" => "value"]
         $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
             $pieces = explode(': ', $header);
-
+            if (count($pieces) !== 2) {
+                return $carry;
+            }
             if (! in_array(strtolower($pieces[0]), $exclude)) {
                 $carry[$pieces[0]] = $pieces[1];
             }
