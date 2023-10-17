@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack\View;
 
-use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Support\Arguments\ListArgument;
+use Expressionengine\Coilpack\Support\Parameter;
 
 abstract class ModelTag extends IterableTag
 {

@@ -194,7 +194,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
     {
         // If the 'data' relation is requested we will append 'channel' and 'hiddenFields'
         // because these are necessary for properly displaying custom field data
-        if(in_array('data', explode('|', $value))) {
+        if (in_array('data', explode('|', $value))) {
             $value .= '|channel|hiddenFields';
         }
 

@@ -22,9 +22,9 @@ class File extends Modifier
         $modified = (is_array($modified) && count($modified) === 1 && is_array(current($modified))) ? $modified[0] : $modified;
 
         // If a manipulation fails and returns a boolean we fallback to the original url
-        if(is_bool($modified)) {
+        if (is_bool($modified)) {
             $modified = [
-                'url' => $data['url'] ?? ''
+                'url' => $data['url'] ?? '',
             ];
         }
 
