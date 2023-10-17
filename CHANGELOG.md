@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- Artisan command to proxy ExpressionEngine's `eecli` commands in the context of Laravel and Coilpack after they have fully booted.  This command is available through `php artisan eecli`.
+### Fixed
+
+- Behavior of File Modifier to return original data when manipulation fails silently
+- Generic fieldtype passes `content_id` along to core fieldtype handler and triggers `pre_process` hook.
+- Error checking and handling for GraphQL compatible fieldtypes
+- Trigger `core_boot` hook during GraphQL requests
+
 ## [1.1.2] - 2023-07-27
 
 ### Fixed
