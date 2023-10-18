@@ -42,7 +42,7 @@ class Data extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fields = $fields->filter(function ($field) {
-            return $field->legacy_field_data === 'n' || $field->legacy_field_data === false || $field->hasDataTable();
+            return ! $field->hasLegacyFieldData() || $field->hasDataTable();
         });
 
         // Join these extra field data tables
