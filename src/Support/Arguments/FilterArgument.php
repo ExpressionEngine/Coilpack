@@ -28,13 +28,13 @@ class FilterArgument extends Argument
     protected function parse($value)
     {
         // Check for a negated set
-        if (strncasecmp($value, 'not ', 4) == 0) {
+        if (strncasecmp($value ?? '', 'not ', 4) == 0) {
             $this->not = true;
             $value = substr($value, 4);
         }
 
         // Check for set joined by logical and
-        if (strpos($value, '&&')) {
+        if (strpos($value ?? '', '&&')) {
             $this->separator = '&&';
             $this->boolean = 'and';
         }
@@ -44,7 +44,7 @@ class FilterArgument extends Argument
             $this->boolean = ($this->boolean === 'or') ? 'and' : 'or';
         }
 
-        $terms = array_filter(explode($this->separator, $value), function ($term) {
+        $terms = array_filter(explode($this->separator, $value ?? ''), function ($term) {
             return ! is_null($term) && trim($term) !== '';
         });
 

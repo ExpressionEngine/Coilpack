@@ -66,6 +66,7 @@ class LoadExpressionEngine
         // fake SERVER vars for CLI context
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $this->constants['REQ'] = 'CLI';
+        $this->constants['EE_INSTALLED'] = file_exists($this->constants['SYSPATH'].'user/config/config.php');
 
         return $this;
     }

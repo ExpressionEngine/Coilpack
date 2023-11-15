@@ -29,6 +29,7 @@ class CoilpackServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Commands\CoilpackCommand::class,
+                Commands\EECliCommand::class,
                 Commands\GraphQLCommand::class,
             ]);
         }
@@ -86,6 +87,13 @@ class CoilpackServiceProvider extends ServiceProvider
 
             // Only boot the GraphQL fieldtype registrar when needed
             if (\Illuminate\Support\Str::startsWith($event->route->uri, config('graphql.route.prefix'))) {
+                /**
+                 *  Run ExpressionEngine 'core_boot' hook.
+                 */
+                if (ee()->extensions->active_hook('core_boot') === true) {
+                    ee()->extensions->call('core_boot');
+                }
+
                 app(FieldtypeRegistrar::class)->boot();
             }
         });

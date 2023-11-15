@@ -50,9 +50,20 @@ class Generic extends Fieldtype
 
     public function apply(FieldContent $content, array $parameters = [])
     {
-        $handler = $this->getHandler();
+        $handler = clone $this->getHandler();
+
+        // Set entry data on handler
+        $handler->_init(array_merge($this->settings ?? [], [
+            'content_id' => $content->entry_id,
+        ]));
+        $handler->row = $content->entry->toArray();
 
         $data = $content->getAttribute('data');
+
+        // Run pre_process if it exists
+        if (method_exists($handler, 'pre_process')) {
+            $data = $handler->pre_process($data);
+        }
 
         $output = \Expressionengine\Coilpack\Facades\Coilpack::isolateTemplateLibrary(function ($template) use ($handler, $data, $parameters) {
             $output = $handler->replace_tag($data, $parameters);
