@@ -43,9 +43,5 @@ class SetupCacheManager
 
         ee()->remove('cache');
         ee()->set('cache', $cache);
-
-        // ee()->cache->save('test', '123');
-
-        // dd(ee()->cache->get('test'));
     }
 }

@@ -245,7 +245,6 @@ class LoadExpressionEngine
 
         if (! $this->constants['INSTALL_MODE']) {
             if ($this->constants['REQ'] !== 'CP') {
-                // ee()->load->library('core');
                 ee()->core->bootstrap();
             } else {
                 ee()->load->database();
