@@ -257,19 +257,16 @@ class Response
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
         $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
-            $pieces = explode(': ', $header);
-            if (count($pieces) !== 2) {
-                $pieces = [
-                    rtrim($pieces[0], ':'),
-                    ''
-                ];
-            }
-            if (! in_array(strtolower($pieces[0]), $exclude)) {
-                $carry[$pieces[0]] = $pieces[1];
+            $pieces = explode(':', $header);
+            $name = trim($pieces[0]);
+            $value = $pieces[1] ?? '';
+
+            if (! in_array(strtolower($name), $exclude)) {
+                $carry[$name] = trim($value);
             }
 
             // Remove the already set header to avoid duplicates in the response
-            header_remove($pieces[0]);
+            header_remove($name);
 
             return $carry;
         }, []);
