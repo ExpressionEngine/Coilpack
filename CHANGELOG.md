@@ -12,6 +12,7 @@
 - Generic fieldtype passes `content_id` along to core fieldtype handler and triggers `pre_process` hook.
 - Error checking and handling for GraphQL compatible fieldtypes
 - Trigger `core_boot` hook during GraphQL requests
+- Handling of blank headers in HTTP responses
 - Custom field orderby clauses when it uses legacy field data storage
 
 ## [1.1.2] - 2023-07-27
