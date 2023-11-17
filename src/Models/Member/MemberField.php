@@ -36,4 +36,9 @@ class MemberField extends Model implements Field
     {
         return "member_data_field_{$this->m_field_id}";
     }
+
+    public function hasLegacyFieldData()
+    {
+        return $this->m_legacy_field_data === 'y' || $this->m_legacy_field_data === true;
+    }
 }

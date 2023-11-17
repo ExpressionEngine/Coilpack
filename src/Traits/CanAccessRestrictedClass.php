@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack\Traits;
 
-trait CanAccessRestrictedClass {
-
+trait CanAccessRestrictedClass
+{
     protected function getRestrictedProperty($object, $property)
     {
         $reflection = new \ReflectionClass($object);
@@ -28,5 +28,4 @@ trait CanAccessRestrictedClass {
 
         return $method->invoke($object, ...$parameters);
     }
-
 }

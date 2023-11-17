@@ -107,15 +107,15 @@ class FieldtypeRegistrar
             return $this->types[$field->field_name];
         }
 
-        if (!$fieldtype instanceof GeneratesGraphType) {
+        if (! $fieldtype instanceof GeneratesGraphType) {
             return null;
         }
 
         $name = "Field__{$field->field_name}";
         $typeDefinition = $fieldtype->generateGraphType($field);
 
-        if(!$typeDefinition instanceof GraphQLType) {
-            throw new \Exception("Generated GraphQL Type for field {$field->field_name} must extend ".GraphQLType::class.".");
+        if (! $typeDefinition instanceof GraphQLType) {
+            throw new \Exception("Generated GraphQL Type for field {$field->field_name} must extend ".GraphQLType::class.'.');
         }
 
         $typeDefinition->name = $name;

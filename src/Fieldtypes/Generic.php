@@ -61,7 +61,7 @@ class Generic extends Fieldtype
         $data = $content->getAttribute('data');
 
         // Run pre_process if it exists
-        if(method_exists($handler, 'pre_process')) {
+        if (method_exists($handler, 'pre_process')) {
             $data = $handler->pre_process($data);
         }
 

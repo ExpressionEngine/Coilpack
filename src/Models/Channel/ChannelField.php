@@ -75,4 +75,9 @@ class ChannelField extends Model implements Field
     {
         return $this->getFieldType()->getGraphType($this);
     }
+
+    public function hasLegacyFieldData()
+    {
+        return $this->legacy_field_data === 'y' || $this->legacy_field_data === true;
+    }
 }

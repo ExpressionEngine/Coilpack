@@ -7,12 +7,11 @@ use Illuminate\Console\Command;
 
 class EECliCommand extends Command
 {
-
     use CanAccessRestrictedClass;
 
     public $signature = 'eecli {args?*}';
 
-    public $description = "Run ExpressionEngine commands through Coilpack";
+    public $description = 'Run ExpressionEngine commands through Coilpack';
 
     private $cli;
 
@@ -20,7 +19,7 @@ class EECliCommand extends Command
     {
         parent::__construct();
 
-        if(($_SERVER['argv'][1] ?? '') != 'eecli') {
+        if (($_SERVER['argv'][1] ?? '') != 'eecli') {
             return;
         }
 
@@ -29,10 +28,10 @@ class EECliCommand extends Command
 
         $this->setupCommand($_SERVER['argv'][2] ?? 'list');
 
-        foreach($_SERVER['argv'] as $arg) {
+        foreach ($_SERVER['argv'] as $arg) {
             // If we have a help flag we need to get out early so that it can be
             // handled by the ExpressionEngine Command and not by Symfony/Laravel
-            if($arg == '--help') {
+            if ($arg == '--help') {
                 return $this->handle();
             }
         }
@@ -42,7 +41,7 @@ class EECliCommand extends Command
     {
         $availableCommands = $this->callRestrictedMethod($this->cli, 'availableCommands');
 
-        if (!array_key_exists($command, $availableCommands)) {
+        if (! array_key_exists($command, $availableCommands)) {
             exit("Command '$command' not found.");
         }
 
@@ -61,23 +60,22 @@ class EECliCommand extends Command
         $this->callRestrictedMethod($commandClass, 'loadOptions');
         // Convert ExpressionEngine Command's option syntax into Laravel's and update the signature
         $options = $this->getRestrictedProperty($commandClass, 'commandOptions');
-        $this->signature = $this->signature . ' ' . implode(' ', array_map(function($option) {
-            if(strpos($option, 'verbose') !== false) {
+        $this->signature = $this->signature.' '.implode(' ', array_map(function ($option) {
+            if (strpos($option, 'verbose') !== false) {
                 return '';
             }
 
             $pieces = explode(',', $option);
-            if(count($pieces) == 2) {
-                $option = substr($pieces[1], 0, 1) . '|' . $pieces[0];
+            if (count($pieces) == 2) {
+                $option = substr($pieces[1], 0, 1).'|'.$pieces[0];
             }
-            return "{--".$option."=}";
+
+            return '{--'.$option.'=}';
         }, array_keys($options)));
     }
-
 
     public function handle(): int
     {
         return $this->cli->process();
     }
-
 }

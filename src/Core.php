@@ -4,7 +4,6 @@ namespace Expressionengine\Coilpack;
 
 class Core
 {
-
     use Traits\CanAccessRestrictedClass;
 
     protected $core;
