@@ -23,7 +23,6 @@ class LoadExpressionEngine
         LoadConfiguration::class,
         CreateDatabaseConnection::class,
         ConfigureStorageDisk::class,
-        ConfigureAuthProvider::class,
     ];
 
     public function __construct()
@@ -247,7 +246,6 @@ class LoadExpressionEngine
 
         if (! $this->constants['INSTALL_MODE']) {
             if ($this->constants['REQ'] !== 'CP') {
-                ee()->load->library('core');
                 ee()->core->bootstrap();
             } else {
                 ee()->load->database();
@@ -283,9 +281,14 @@ class LoadExpressionEngine
     {
         $dependencies = [];
 
+        if (! $this->constants['INSTALL_MODE'] && ! in_array($this->constants['REQ'], ['ASSET'])) {
+            $dependencies[] = SetupCacheManager::class;
+        }
+
         if (! in_array($this->constants['REQ'], ['CP', 'ASSET'])) {
             $dependencies[] = LoadAddonFiles::class;
             $dependencies[] = ReplaceTemplateTags::class;
+            $dependencies[] = ConfigureAuthProvider::class;
         }
 
         $app->bootstrapWith(array_merge($this->dependentBootstrappers, $dependencies));
