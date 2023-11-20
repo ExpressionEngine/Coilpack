@@ -67,6 +67,7 @@ class Generic extends Fieldtype
 
         $output = \Expressionengine\Coilpack\Facades\Coilpack::isolateTemplateLibrary(function ($template) use ($handler, $data, $parameters) {
             $output = $handler->replace_tag($data, $parameters);
+
             // If the Fieldtype stored data for us in the template library that is preferable to the generated output
             return $template->get_data() ?: $output;
         });

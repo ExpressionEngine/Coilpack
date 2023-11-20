@@ -27,6 +27,7 @@ class LegacyTag extends Tag implements \IteratorAggregate
     {
         $output = Coilpack::isolateTemplateLibrary(function ($template) {
             $output = $this->getInstanceClass()->{$this->method}();
+
             // If the Tag stored data for us in the template library that is preferable to the generated output
             return $template->get_data() ?: $output;
         }, $this->getArguments());

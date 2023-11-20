@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-11-20
+
 ### Added
 
 - The ability for ExpressionEngine to utilize Laravel cache adapters
@@ -189,7 +191,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.2...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.0...HEAD
+
+[1.2.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.2...1.2.0
 
 [1.1.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.1...1.1.2
 

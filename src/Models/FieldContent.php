@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
+class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, Jsonable
 {
     /**
      * The model's attributes.

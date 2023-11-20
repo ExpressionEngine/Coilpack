@@ -37,6 +37,7 @@ class TagProxy
         if (! $this->hasTag($tag)) {
             return null;
         }
+
         // Check that the class extends \Expressionengine\Coilpack\View\Tag
         return $this->hasNestedTag($tag) ? new static($this->tags[$tag]) : new $this->tags[$tag];
     }

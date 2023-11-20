@@ -60,6 +60,7 @@ class AssetController
                 return $this->fileResponse($file, $headers);
             }
         }
+
         // return $this->fileResponse($file);
         return $disk->get($file);
     }

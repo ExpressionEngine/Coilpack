@@ -5,7 +5,7 @@ namespace Expressionengine\Coilpack\Models;
 use Expressionengine\Coilpack\Models\Channel\ChannelFieldGroup;
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldGroupContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
+class FieldGroupContent implements \ArrayAccess, \Countable, \IteratorAggregate, Jsonable
 {
     /**
      * The model's attributes.

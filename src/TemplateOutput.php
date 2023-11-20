@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class TemplateOutput implements \IteratorAggregate, \ArrayAccess, \Countable
+class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     protected $array = [];
 
