@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug in converting ExpressionEngine response headers
+
 ## [1.2.0] - 2023-11-20
 
 ### Added
