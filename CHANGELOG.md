@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.1] - 2023-11-28
+
 ### Fixed
 
 - Bug in converting ExpressionEngine response headers
@@ -195,7 +197,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.1...HEAD
+
+[1.2.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.0...1.2.1
 
 [1.2.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.1.2...1.2.0
 
