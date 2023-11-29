@@ -258,9 +258,8 @@ class Response
         // to the correct format ["header_name" => "value"]
         $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
             $pieces = explode(':', $header, 2);
-            $name = trim(array_shift($pieces));
-            $value = is_array($pieces) ? implode(':', $pieces) : '';
-
+            $name = $pieces[0];
+            $value = $pieces[1] ?? '';
             if (! in_array(strtolower($name), $exclude)) {
                 $carry[$name] = trim($value);
             }
