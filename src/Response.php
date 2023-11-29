@@ -257,9 +257,9 @@ class Response
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
         $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
-            $pieces = explode(':', $header);
+            $pieces = explode(':', $header, 2);
             $name = trim(array_shift($pieces));
-            $value = ! empty($pieces) ? implode('', $pieces) : '';
+            $value = is_array($pieces) ? implode(':', $pieces) : '';
 
             if (! in_array(strtolower($name), $exclude)) {
                 $carry[$name] = trim($value);
