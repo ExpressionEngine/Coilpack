@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug in transforming headers for Laravel response
+
 ## [1.2.1] - 2023-11-28
 
 ### Fixed
