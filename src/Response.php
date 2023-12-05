@@ -11,24 +11,25 @@ class Response
      * @param  int  $status
      * @return Illuminate\Http\Response
      */
-    public static function fromOutput($status = 200)
+    public function fromOutput($status = 200)
     {
         $output = ee()->output->final_output;
+        $response = ee('Response') ?: new \ExpressionEngine\Core\Response;
 
         // Generate No-Cache Headers
 
         if (ee()->config->item('send_headers') == 'y' && ee()->output->out_type != 'feed' && ee()->output->out_type != '404' && ee()->output->out_type != 'cp_asset') {
             ee()->output->set_status_header($status);
 
-            if (! ee('Response')->hasHeader('Expires')) {
+            if (! $response->hasHeader('Expires')) {
                 ee()->output->set_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             }
 
-            if (! ee('Response')->hasHeader('Last-Modified')) {
+            if (! $response->hasHeader('Last-Modified')) {
                 ee()->output->set_header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
             }
 
-            if (! ee('Response')->hasHeader('Pragma')) {
+            if (! $response->hasHeader('Pragma')) {
                 ee()->output->set_header('Pragma: no-cache');
             }
         }
@@ -38,19 +39,19 @@ class Response
 
         switch (ee()->output->out_type) {
             case 'webpage':
-                if (! ee('Response')->hasHeader('Content-Type')) {
+                if (! $response->hasHeader('Content-Type')) {
                     ee()->output->set_header('Content-Type: text/html; charset='.ee()->config->item('charset'));
                 }
 
                 break;
             case 'css':
-                if (! ee('Response')->hasHeader('Content-Type')) {
+                if (! $response->hasHeader('Content-Type')) {
                     ee()->output->set_header('Content-type: text/css');
                 }
 
                 break;
             case 'js':
-                if (! ee('Response')->hasHeader('Content-Type')) {
+                if (! $response->hasHeader('Content-Type')) {
                     ee()->output->set_header('Content-type: text/javascript');
                 }
                 ee()->output->enable_profiler = false;
@@ -62,7 +63,7 @@ class Response
 
                 break;
             case 'xml':
-                if (! ee('Response')->hasHeader('Content-Type')) {
+                if (! $response->hasHeader('Content-Type')) {
                     ee()->output->set_header('Content-Type: text/xml');
                 }
                 $output = trim($output);
@@ -257,16 +258,14 @@ class Response
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
         $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
-            $pieces = explode(':', $header);
-            $name = trim(array_shift($pieces));
-            $value = ! empty($pieces) ? implode('', $pieces) : '';
+            $header = $this->parseHeader($header);
 
-            if (! in_array(strtolower($name), $exclude)) {
-                $carry[$name] = trim($value);
+            if (! in_array(strtolower($header->name), $exclude)) {
+                $carry[$header->name] = $header->value;
             }
 
             // Remove the already set header to avoid duplicates in the response
-            header_remove($name);
+            header_remove($header->name);
 
             return $carry;
         }, []);
@@ -274,15 +273,25 @@ class Response
         // Transform and set headers that have been assigned to the Output class
         // but not yet set on the request to be ["header_name" => "value"]
         foreach (ee()->output->headers as $row) {
-            $header = explode(': ', $row[0]);
+            $header = $this->parseHeader($row[0]);
             $replace = $row[1];
 
             // If this header has not already been set, or if we are replacing it set the value
-            if (! in_array(strtolower($header[0]), $exclude) && (! array_key_exists($header[0], $headers) || $replace)) {
-                $headers[$header[0]] = $header[1];
+            if (! in_array(strtolower($header->name), $exclude) && (! array_key_exists($header->name, $headers) || $replace)) {
+                $headers[$header->name] = $header->value;
             }
         }
 
         return new \Illuminate\Http\Response($output, $status, $headers);
+    }
+
+    protected function parseHeader($header)
+    {
+        $pieces = explode(':', $header, 2);
+
+        return (object) [
+            'name' => $pieces[0],
+            'value' => trim($pieces[1] ?? ''),
+        ];
     }
 }

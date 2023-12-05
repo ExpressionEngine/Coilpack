@@ -8,6 +8,9 @@
          failOnRisky="false"
 >
     <testsuites>
+        <testsuite name="Core">
+            <directory suffix="Test.php">./tests/Core</directory>
+        </testsuite>
         <testsuite name="Fieldtypes">
             <directory suffix="Test.php">./tests/Fieldtype</directory>
         </testsuite>
