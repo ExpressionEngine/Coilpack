@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2023-12-05
+
 ### Fixed
 
 - Bug in transforming headers for Laravel response
@@ -201,7 +203,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.2...HEAD
+
+[1.2.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.1...1.2.2
 
 [1.2.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.0...1.2.1
 
