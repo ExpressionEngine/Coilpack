@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Tests\Core;
 
 use Expressionengine\Coilpack\Response;
+use Tests\TestCase;
 
 class ResponseTest extends TestCase
 {
