@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug retrieving dynamic Structure entry from Structure Entries tag
+
 ## [1.2.2] - 2023-12-05
 
 ### Fixed

@@ -270,14 +270,15 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 ]);
             }
 
-            $lastSegment = last(ee()->uri->segment_array() ?: request()->segments());
-
+            // EE sets the page_query_string to an entry_id if the segment is found
+            // in the config site_pages array during Core::generate_page()
+            $queryString = (ee()->uri->page_query_string != '') ? ee()->uri->page_query_string : ee()->uri->query_string;
             $this->setArgument('limit', 1);
 
-            $this->query->when(is_numeric($lastSegment), function ($query) use ($lastSegment) {
-                $query->where('entry_id', (int) $lastSegment);
-            }, function ($query) use ($lastSegment) {
-                $query->where('url_title', $lastSegment);
+            $this->query->when(is_numeric($queryString), function ($query) use ($queryString) {
+                $query->where('entry_id', (int) $queryString);
+            }, function ($query) use ($queryString) {
+                $query->where('url_title', $queryString);
             });
         }
 
