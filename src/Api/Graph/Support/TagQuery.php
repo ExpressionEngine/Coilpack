@@ -49,8 +49,17 @@ class TagQuery extends Query
         })->toArray();
     }
 
+    protected function getMiddleware(): array
+    {
+        return array_merge($this->tag->toGraphQL()['middleware'] ?? [], $this->middleware);
+    }
+
     public function resolve($root, array $args, $context, ResolveInfo $info, \Closure $getSelectFields)
     {
-        return $this->tag->arguments($args)->run();
+        if ($this->tag->toGraphQL()['resolve'] ?? false) {
+            return $this->tag->toGraphQL()['resolve']($args);
+        }
+
+        return (new $this->tag)->arguments($args)->run();
     }
 }

@@ -94,6 +94,14 @@ class ChannelEntry extends GraphQLType
                 'type' => Type::listOf(GraphQL::type('Category')),
                 'description' => 'The entry categories',
             ],
+            'page_url' => [
+                'type' => Type::string(),
+                'description' => 'The page url for this entry',
+            ],
+            'page_uri' => [
+                'type' => Type::string(),
+                'description' => 'The page uri for this entry',
+            ],
         ], $this->customFields());
     }
 

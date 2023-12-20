@@ -17,6 +17,11 @@ class FieldtypeOutput extends TemplateOutput
         return $instance;
     }
 
+    public function hasModifier($method)
+    {
+        return $this->fieldtype->hasModifier($method);
+    }
+
     public function callModifier(string $name, $parameters = [])
     {
         return $this->fieldtype->callModifier($this, $name, is_array($parameters) ? $parameters : [$parameters]);
@@ -24,7 +29,7 @@ class FieldtypeOutput extends TemplateOutput
 
     public function __call($method, $arguments)
     {
-        if ($this->fieldtype->hasModifier($method)) {
+        if ($this->hasModifier($method)) {
             return $this->callModifier($method, ...$arguments);
         }
 

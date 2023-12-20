@@ -26,7 +26,7 @@ class TagProxy
     public function __call($method, $arguments)
     {
         if ($this->hasTag($method)) {
-            return $this->getTag($method)->arguments($arguments[0])->run();
+            return $this->getTag($method)->arguments($arguments[0] ?? [])->run();
         }
 
         return ($this->fallback) ? $this->fallback->$method($arguments[0] ?? []) : null;

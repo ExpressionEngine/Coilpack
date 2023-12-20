@@ -200,7 +200,7 @@ class LoadExpressionEngine
         (new \Illuminate\Foundation\Bootstrap\HandleExceptions)->bootstrap($app);
 
         $configOverrides = [
-            'base_url' => Str::finish(config('app.url'), '/'),
+            'base_url' => Str::finish(ee()->config->item('base_url') ?: config('app.url'), '/'),
         ];
 
         foreach ($configOverrides as $key => $value) {
@@ -225,27 +225,6 @@ class LoadExpressionEngine
             ee()->load->library('session');
         }
 
-        if (! $this->constants['INSTALL_MODE']) {
-            // @todo move to function or class - Template Setup
-            ee()->load->library('template');
-            ee()->remove('TMPL');
-            ee()->set('TMPL', new \Expressionengine\Coilpack\View\TemplateStub());
-
-            ee()->load->library('api');
-            ee()->legacy_api->instantiate('template_structure');
-            // @todo remove this after api_template_structure changes are made in core and alpha is over
-            if (method_exists(ee()->api_template_structure, 'register_template_engine')) {
-                ee()->api_template_structure->register_template_engine(['twig' => 'Twig', 'blade' => 'Blade']);
-            }
-            // Tell Laravel where the EE templates live and how to interpret new extensions
-            app('view')->addNamespace('ee', SYSPATH.'user/templates');
-            // adding too many extensions could slow down template rendering by
-            // causing more file_exists checks so we're only looking for files
-            // ending in `.twig` or `.blade` The TwigBridge sets up .twig ext
-            app('view')->addExtension('blade', 'blade');
-            // app('config')->push('view.paths', SYSPATH . 'user/templates/'); // PATH_TMPL not available yet
-        }
-
         // These are set in run_ee() but should be moved so we aren't duplicating here
         // @todo update in core
         ee()->core->native_plugins = ['markdown', 'rss_parser', 'xml_encode'];
@@ -255,6 +234,7 @@ class LoadExpressionEngine
             'metaweblog_api', 'moblog', 'pages', 'query', 'relationship', 'rss',
             'rte', 'search', 'simple_commerce', 'spam', 'stats',
         ];
+
         if (! $this->constants['INSTALL_MODE']) {
             if ($this->constants['REQ'] !== 'CP') {
                 ee()->load->library('core');
@@ -263,6 +243,8 @@ class LoadExpressionEngine
                 ee()->load->database();
                 ee()->load->library('extensions');
             }
+
+            $this->setupTemplateLibrary();
 
             // Pass through some of the Extensions library data that
             // was already queried so we don't duplicate the queries
@@ -297,5 +279,28 @@ class LoadExpressionEngine
         }
 
         $app->bootstrapWith(array_merge($this->dependentBootstrappers, $dependencies));
+    }
+
+    protected function setupTemplateLibrary()
+    {
+        ee()->load->library('template');
+        ee()->remove('TMPL');
+        ee()->set('TMPL', new \Expressionengine\Coilpack\View\TemplateStub());
+        ee()->TMPL->log_item('Using Coilpack Template Library');
+
+        ee()->load->library('api');
+        ee()->legacy_api->instantiate('template_structure');
+
+        if (method_exists(ee()->api_template_structure, 'register_template_engine')) {
+            ee()->api_template_structure->register_template_engine(['twig' => 'Twig', 'blade' => 'Blade']);
+        }
+
+        // Tell Laravel where the EE templates live and how to interpret new extensions
+        app('view')->addNamespace('ee', SYSPATH.'user/templates');
+        // adding too many extensions could slow down template rendering by
+        // causing more file_exists checks so we're only looking for files
+        // ending in `.twig` or `.blade` The TwigBridge sets up .twig ext
+        app('view')->addExtension('blade', 'blade');
+        // app('config')->push('view.paths', SYSPATH . 'user/templates/'); // PATH_TMPL not available yet
     }
 }

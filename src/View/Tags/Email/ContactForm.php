@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\View\Tags\Email;
 
 use Expressionengine\Coilpack\Models\Addon\Action;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Traits\InteractsWithAddon;
 use Expressionengine\Coilpack\View\FormTag;
 
@@ -15,30 +16,53 @@ class ContactForm extends FormTag
     protected $arguments = [
         'recipients' => null,
         'channel' => null,
-        'formId' => 'contact_form',
     ];
 
     protected $attributes;
 
+    public function defineParameters(): array
+    {
+        return array_merge(parent::defineParameters(), [
+            new Parameter([
+                'name' => 'markdown',
+                'type' => 'boolean',
+                'description' => 'Enable processing of markdown in the message field',
+                'defaultValue' => false,
+            ]),
+            new Parameter([
+                'name' => 'replyto',
+                'type' => 'boolean',
+                'description' => 'Use the sender email address in the Reply-To field',
+                'defaultValue' => false,
+            ]),
+            new Parameter([
+                'name' => 'recipients',
+                'type' => 'string',
+                'description' => 'Comma separated list of email addresses',
+            ]),
+            new Parameter([
+                'name' => 'user_recipients',
+                'type' => 'boolean',
+                'description' => 'Whether the form will accept recipients from user input via a \'to\' field',
+                'defaultValue' => false,
+            ]),
+        ]);
+    }
+
     public function __construct()
     {
-        $this->addonInstance = $this->getAddonInstance('email');
-
         // Load the form helper and session library
         ee()->load->helper('form');
         ee()->load->library('session');
+
+        $this->addonInstance = $this->getAddonInstance('email');
 
         // Conditionals
         $data = [
             'logged_in' => (ee()->session->userdata('member_id') != 0),
             'logged_out' => (ee()->session->userdata('member_id') == 0),
-            'captcha' => null,
+            'captcha' => ($this->addonInstance->use_captchas == 'y') ? ee('Captcha')->create() : null,
         ];
-
-        if ($this->addonInstance->use_captchas == 'y' && ee()->config->item('use_recaptcha') == 'y') {
-            $captcha = ee('Captcha')->create();
-            $data['captcha'] = $captcha;
-        }
 
         // Process default variables
         $postVars = ['message', 'name', 'to', 'from', 'subject', 'required'];
@@ -68,32 +92,15 @@ class ContactForm extends FormTag
 
         $data['current_time'] = \Carbon\Carbon::now();
 
-        // Create form
-        // return $this->_setup_form(
-        //     $tagdata,
-        //     $recipients,
-        //     array(
-        //         'form_id' => 'contact_form',
-        //         'markdown' => \get_bool_from_string(ee()->TMPL->fetch_param('markdown'))
-        //     )
-        // );
-
         $this->attributes = $data;
-    }
-
-    public function setUserRecipientsArgument($enable)
-    {
-        return \get_bool_from_string($enable);
     }
 
     public function open($data = [])
     {
         // Recipient Email Checking
-        $this->_user_recipients = \get_bool_from_string(
-            ee()->TMPL->fetch_param('user_recipients', 'no')
-        );
+        $this->_user_recipients = $this->getArgument('user_recipients')->value;
 
-        $recipients = $this->recipients;
+        $recipients = $this->getArgument('recipients')->value;
 
         // No email left behind act
         if (! $this->_user_recipients && empty($recipients)) {
@@ -113,13 +120,9 @@ class ContactForm extends FormTag
             'PRV' => '', // We are not handling previews
             'recipients' => $this->encrypt($recipients),
             'user_recipients' => $this->encrypt(($this->_user_recipients) ? 'y' : 'n'),
-            'replyto' => $this->replyTo,
-            'markdown' => $this->encrypt(($this->markdown) ? 'y' : 'n'),
+            'replyto' => $this->getArgument('replyto')->value ? 'yes' : 'no',
+            'markdown' => $this->encrypt(($this->getArgument('markdown')) ? 'y' : 'n'),
         ];
-
-        if ($this->name && preg_match("#^[a-zA-Z0-9_\-]+$#i", $this->name, $match)) {
-            $data['name'] = $this->name;
-        }
 
         return parent::open(['hidden_fields' => $data]);
     }
@@ -155,6 +158,11 @@ class ContactForm extends FormTag
 
             $author_email = ($query->num_rows() == 0) ? '' : $query->row('email');
         }
+    }
+
+    public function __isset($key)
+    {
+        return array_key_exists($key, $this->attributes);
     }
 
     public function __get($key)

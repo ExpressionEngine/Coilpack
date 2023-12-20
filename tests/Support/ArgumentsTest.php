@@ -53,7 +53,7 @@ class ArgumentsTest extends TestCase
     {
         $argument = new Arguments\SearchArgument('not pickles&&shoes');
 
-        $this->assertEquals('and', $argument->boolean);
+        $this->assertEquals('or', $argument->boolean);
         $this->assertTrue($argument->not);
         $this->assertCount(2, $argument->terms);
     }

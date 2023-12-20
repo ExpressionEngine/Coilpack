@@ -7,12 +7,8 @@ use Rebing\GraphQL\Support\Facades\GraphQL as RebingGraphQL;
 class SchemaManager
 {
     protected $queries = [
-        'channel_entry' => Queries\ChannelEntryQuery::class,
-        'channel_entries' => Queries\ChannelEntriesQuery::class,
-        'category' => Queries\CategoryQuery::class,
-        'categories' => Queries\CategoriesQuery::class,
-        'members' => Queries\MembersQuery::class,
         'me' => Queries\MemberCurrentQuery::class,
+        'members' => Queries\MembersQuery::class,
         'variables' => Queries\VariablesQuery::class,
     ];
 
@@ -20,11 +16,12 @@ class SchemaManager
         'Category' => Types\Category::class,
         'Channel' => Types\Channel::class,
         'ChannelEntry' => Types\ChannelEntry::class,
+        'Fieldtypes__File' => Types\Fieldtypes\File::class,
+        'KeyedValue' => Types\KeyedValue::class,
         'Member' => Types\Member::class,
+        'NavItem' => Types\NavItem::class,
         'Status' => Types\Status::class,
         'Variables' => Types\Variables::class,
-        'KeyedValue' => Types\KeyedValue::class,
-        'Fieldtypes__File' => Types\Fieldtypes\File::class,
     ];
 
     protected $middleware = [
@@ -68,13 +65,18 @@ class SchemaManager
         return RebingGraphQL::type($alias);
     }
 
-    public function type($alias)
+    public function hasType($name)
     {
-        if (! array_key_exists($alias, $this->types)) {
-            throw new \Exception("Type '$alias' not registered");
+        return array_key_exists($name, $this->types);
+    }
+
+    public function type($name)
+    {
+        if (! array_key_exists($name, $this->types)) {
+            throw new \Exception("Type '$name' not registered");
         }
 
-        return RebingGraphQL::type($alias);
+        return RebingGraphQL::type($name);
     }
 
     public function getTypes()
@@ -87,6 +89,16 @@ class SchemaManager
         if (! in_array($className, $this->middleware)) {
             $this->middleware[] = $className;
         }
+    }
+
+    public function paginate($typename, $customName = null)
+    {
+        return RebingGraphQL::paginate($typename, $customName);
+    }
+
+    public function simplePaginate($typename, $customName = null)
+    {
+        return RebingGraphQL::simplePaginate($typename, $customName);
     }
 
     public function getMiddleware()

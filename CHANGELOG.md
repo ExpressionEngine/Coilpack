@@ -10,17 +10,56 @@
 - Support for Laravel 10
 - Better handling of ExpressionEngine filter arguments
 - The ability to use orderby and sort parameters on the channel entries tag
+- Support searching by custom field values on channel entries tag
+- Pagination support for the `exp_channel_entries` and `exp_channel_categories` GraphQL queries
+- Full tag replacement for channel categories including GraphQL query for `exp_channel_categories`
+- The ability to parse GraphQL types and queries from an Add-on's setup file
+- A tag replacement for Structure Nav to better support new template languages and GraphQL
+- A method for embedding native ExpressionEngine templates within Twig and Blade
+- Field content implements countable for better support with Twig's length filter
+- Page variables to Channel Entries Tag results
+- Global Variables for logged_in and logged_out
+- Better error handling for incomplete installations
+- Support for Grid parameters on LivePreview data
 
 ### Fixed
 
 - Parsing the 'site' parameter when isolating the template library
 - Error when applying the File Fieldtype on empty data
 - Missing FieldContent attributes when a ChannelEntry does not contain data for a requested field
+- ChannelEntry model to remove future and expired results by default
+- Issue where GraphQL evaluates a fieldtype as null but then continues to apply modifier
+- Error on Option Fieldtypes when querying empty `options` through GraphQL
+- Bug accessing a File field's attributes through a Grid field
+- Syntax error in Relationship fieldtype causing issue within Grid
+- Gracefully handle when a session is not set on the Laravel request in FormTag
+- Issue with registering a fluid field that has an empty string in it's list of fields
+- Getting custom field data on members and categories through GraphQL
+- Bug with Fieldtypes providing certain GraphQL types
+- Bug checking if a field stored data on the legacy data table
+- Email Contact Form attribute access in Twig templates
+- Retrieving the current request's page value for paginating ModelTag results
+- Structure Nav tag behavior now respects hidden nodes
+- Support for Captcha in Email Contact Form
+- Live Preview display with Channel Entries Tag replacement
+- Error where GraphQL Tag queries accumulated arguments
+- Fluid field database connection issue when default Laravel db connection is not configured
+- Better handling of FieldContent methods when value is null
+- Error in Fluid Field when settings reference a field that has been deleted
 
 ### Changed
 
 - Tag argument mutation now happens on 'get' instead of 'set'
 - Standardize GraphQL type handling through Coilpack's GraphQL Facade
+- Removed the `channel_entries` and `channel_entry` GraphQL query in favor of `exp_channel_entries`
+- Removed the `categories` and `category` GraphQL query in favor of `exp_channel_categories`
+- Allow `exp.path()` to generate a url from multiple parameters i.e. `exp.path('group/template', entry.url_title)`
+- Refactor FormTag and `exp.email.contact_form`, add support for `form_attributes`.
+- Cleanup and simplify Template library for rendering Twig and Blade templates
+- No longer overriding ExpressionEngine's `base_url` with Laravel's `APP_URL` unless `base_url` is not set.
+- Channel Entries Tag now has a default ordering to match native Tag.  Sticky entries are first followed by those with the latest entry_date.
+- Fieldtype `parameters()` has been renamed to `parametersForField()`
+- Simplify install command to use the latest version of ExpressionEngine 7
 
 ## [0.1.0] - 2023-02-13
 

@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class TemplateOutput implements \IteratorAggregate, \ArrayAccess
+class TemplateOutput implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     protected $array = [];
 
@@ -77,6 +77,19 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
         return new \ArrayIterator($this->array);
     }
 
+    public function count(): int
+    {
+        if (! is_null($this->object) && method_exists($this->object, 'getIterator')) {
+            return iterator_count($this->object->getIterator());
+        }
+
+        if (! empty($this->array)) {
+            return count($this->array);
+        }
+
+        return strlen($this->string);
+    }
+
     /**
      * Determine if the given attribute exists.
      *
@@ -147,7 +160,7 @@ class TemplateOutput implements \IteratorAggregate, \ArrayAccess
 
     public function __isset($key)
     {
-        return array_key_exists($key, (array) $this->array);
+        return ($this->object && property_exists($this->object, $key)) || array_key_exists($key, (array) $this->array);
     }
 
     public function __call($method, $arguments)

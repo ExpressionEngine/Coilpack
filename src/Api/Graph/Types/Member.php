@@ -2,6 +2,8 @@
 
 namespace Expressionengine\Coilpack\Api\Graph\Types;
 
+use Expressionengine\Coilpack\Api\Graph\Fields;
+use Expressionengine\Coilpack\Api\Graph\Support\FieldtypeRegistrar;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Member\Member as MemberModel;
 use GraphQL\Type\Definition\Type;
@@ -35,14 +37,15 @@ class Member extends GraphQLType
 
         return $fields->flatMap(function ($field) {
             return [
-                $field->m_field_name => [
-                    'type' => $field->m_field_type == 'grid' ? Type::listOf(GraphQL::type("Field__$field->m_field_name")) : Type::string(),
+                $field->m_field_name => new Fields\Fieldtype([
+                    'type' => app(FieldtypeRegistrar::class)->getTypeForField($field) ?: Type::string(),
+                    'field' => $field,
                     'selectable' => false,
                     'is_relation' => false,
                     'resolve' => function ($root, array $args) use ($field) {
-                        return $root->{$field->m_field_name} ?? null;
+                        return $root->{$field->m_field_name};
                     },
-                ],
+                ]),
             ];
         })->toArray();
     }

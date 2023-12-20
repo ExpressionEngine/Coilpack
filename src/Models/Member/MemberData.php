@@ -33,7 +33,7 @@ class MemberData extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fieldtypeTables = $fields->filter(function ($field) {
-            return $field->m_legacy_field_data === false || $field->m_legacy_field_data == 'n';
+            return $field->m_legacy_field_data === false || $field->m_legacy_field_data === 'n';
         })->map(function ($field) {
             return $field->data_table_name;
         });
@@ -75,6 +75,7 @@ class MemberData extends Model
             $nameMap = [
                 'id' => 'data',
                 'ft' => 'format',
+                'dt' => 'datetime',
             ];
 
             $carry->get($id)->setAttribute($nameMap[$name], $this->attributes[$key]);

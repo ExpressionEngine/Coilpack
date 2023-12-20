@@ -32,7 +32,7 @@ class ChannelData extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fieldtypeTables = $fields->filter(function ($field) {
-            return $field->legacy_field_data == 'n' || $field->legacy_field_data === false;
+            return $field->legacy_field_data === 'n' || $field->legacy_field_data === false;
         })->map(function ($field) {
             return $field->data_table_name;
         });
@@ -47,20 +47,20 @@ class ChannelData extends Model
         $query->select('*', $this->qualifyColumn('entry_id'));
     }
 
-    public function fields($channel)
+    public function fields($entry, $channel = null)
     {
         // $fields = $this->entry->channel->allFields();
-        $channel = $channel ?? $this->entry->channel;
+        $channel = $channel ?? $entry->channel;
         $fields = app(FieldtypeManager::class)->fieldsForChannel($channel)->keyBy('field_id');
 
         return collect(array_keys($this->attributes))->filter(function ($key) {
             return Str::startsWith($key, 'field_');
-        })->reduce(function ($carry, $key) use ($fields) {
+        })->reduce(function ($carry, $key) use ($fields, $entry) {
             [$name, $id] = array_slice(explode('_', $key), 1);
 
             // Do not add the field if it isn't part of the entry's channel
             // or if it has been conditionally hidden for this entry
-            if (! $fields->has($id) || $this->entry->hiddenFields->contains($id)) {
+            if (! $fields->has($id) || $entry->hiddenFields->contains($id)) {
                 return $carry;
             }
 
@@ -69,7 +69,7 @@ class ChannelData extends Model
                     [
                         'field_type_id' => (int) $id,
                         'field' => $fields->find($id),
-                        'entry' => $this->entry,
+                        'entry' => $entry,
                     ],
                     Arr::only($this->attributes, ['entry_id', 'site_id', 'channel_id'])
                 )));

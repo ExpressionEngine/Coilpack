@@ -7,6 +7,7 @@ use Expressionengine\Coilpack\Model;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\Models\Member\Member;
+use Illuminate\Support\Str;
 
 /**
  * Channel Entry
@@ -24,11 +25,12 @@ class ChannelEntry extends Model
 
     protected $table = 'channel_titles';
 
+    protected $isPreview = false;
+
     protected $casts = [
         'versioning_enabled' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'allow_comments' => \Expressionengine\Coilpack\Casts\BooleanString::class,
         'sticky' => \Expressionengine\Coilpack\Casts\BooleanString::class,
-        // 'entry_date' => 'integer',
         'expiration_date' => 'integer',
         'comment_expiration_date' => 'integer',
         'author_id' => 'integer',
@@ -38,28 +40,6 @@ class ChannelEntry extends Model
     ];
 
     protected static $_relationships = [
-        'Channel' => [
-            'type' => 'belongsTo',
-            'key' => 'channel_id',
-        ],
-        'Author' => [
-            'type' => 'belongsTo',
-            'model' => 'Member',
-            'from_key' => 'author_id',
-        ],
-        'Status' => [
-            'type' => 'belongsTo',
-            'weak' => true,
-        ],
-        'Categories' => [
-            'type' => 'hasAndBelongsToMany',
-            'model' => 'Category',
-            'pivot' => [
-                'table' => 'category_posts',
-                'left' => 'entry_id',
-                'right' => 'cat_id',
-            ],
-        ],
         'Autosaves' => [
             'type' => 'hasMany',
             'model' => 'ChannelEntryAutosave',
@@ -106,6 +86,17 @@ class ChannelEntry extends Model
         'structure_model' => 'Channel',
     ];
 
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new Scopes\HideExpired);
+        static::addGlobalScope(new Scopes\HideFuture);
+    }
+
     public function author()
     {
         return $this->belongsTo(Member::class, 'author_id');
@@ -143,13 +134,28 @@ class ChannelEntry extends Model
 
         // If this field is not storing it's data on the channel_data table we
         // will join the separate data table with a unique orderby_field_name alias
-        if ($field->legacy_field_data == 'n' || $field->legacy_field_data === false) {
-            $table = $field->data_table_name;
+        if ($field->legacy_field_data === 'n' || $field->legacy_field_data === false) {
             $alias = "orderby_{$field->field_name}";
-            $query->leftJoin("$table as $alias", "$alias.entry_id", '=', $this->qualifyColumn('entry_id'));
+            $column = "$alias.$column";
+            $this->scopeJoinFieldDataTable($query, $field, $alias);
         }
 
         return $query->orderBy($column, $direction);
+    }
+
+    public function scopeJoinFieldDataTable($query, $field, $alias = null)
+    {
+        if ($field->legacy_field_data == 'y' || $field->legacy_field_data === true) {
+            return $query;
+        }
+
+        $table = $field->data_table_name;
+        $joinTable = $alias ? "$table as $alias" : $table;
+        $alias = $alias ?: $table;
+        $query->leftJoin($joinTable, "$alias.entry_id", '=', $this->qualifyColumn('entry_id'));
+        $query->select('*', $this->qualifyColumn('entry_id'));
+
+        return $query;
     }
 
     public function fluidData()
@@ -164,8 +170,12 @@ class ChannelEntry extends Model
 
     public function hiddenFields()
     {
-        return $this->belongsToMany(ChannelField::class,
-            'channel_entry_hidden_fields', 'entry_id', 'field_id');
+        return $this->belongsToMany(
+            ChannelField::class,
+            'channel_entry_hidden_fields',
+            'entry_id',
+            'field_id'
+        );
     }
 
     public function grids()
@@ -191,6 +201,29 @@ class ChannelEntry extends Model
         return null;
     }
 
+    public function getPageUriAttribute($value)
+    {
+        if ($value) {
+            return $value;
+        }
+
+        // Add page data to channel entries after the query
+        $pages = ee()->config->site_pages($this->site_id)[$this->site_id];
+
+        if ($pages && isset($pages['uris'][$this->entry_id])) {
+            return $pages['uris'][$this->entry_id];
+        }
+
+        return '';
+    }
+
+    public function getPageUrlAttribute($value)
+    {
+        $siteUrl = ee()->config->site_pages($this->site_id)[$this->site_id]['url'] ?? '';
+
+        return ee()->functions->create_page_url($siteUrl, $this->page_uri);
+    }
+
     public function __get($key)
     {
         // First we check if the model actually has a value for this attribute
@@ -203,7 +236,7 @@ class ChannelEntry extends Model
         // if(is_null($value) && $fields->has($key)) {
         if (is_null($value) && app(FieldtypeManager::class)->hasField($key)) {
             $this->getRelationValue('data');
-            $fields = $this->data->fields($this->channel);
+            $fields = $this->data->fields($this);
             $value = ($fields->has($key)) ? $fields->get($key) : new FieldContent([
                 'field' => app(FieldtypeManager::class)->getField($key),
                 'data' => null,
@@ -217,5 +250,33 @@ class ChannelEntry extends Model
         }
 
         return $value;
+    }
+
+    public function fillWithEntryData($data)
+    {
+        // Split out field data beginning with `field_`
+        [$fieldData, $attributes] = collect($data)->partition(function ($item, $key) {
+            return Str::startsWith($key, 'field_');
+        });
+
+        $this->forceFill($attributes->toArray());
+        $channelData = (new ChannelData)->forceFill($fieldData->toArray());
+        $channelData->entry_id = $data['entry_id'];
+        $channelData->setRelation('fields', ChannelField::all());
+        $this->setRelation('data', $channelData);
+
+        return $this;
+    }
+
+    public function markAsPreview()
+    {
+        $this->isPreview = true;
+
+        return $this;
+    }
+
+    public function isPreview()
+    {
+        return $this->isPreview;
     }
 }

@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
+class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
      * The model's attributes.
@@ -45,9 +45,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
         if (empty($parameters) && array_key_exists('value', $this->attributes)) {
             return $this->attributes['value'];
         }
+
         $fieldtype = $this->getFieldtype();
 
+        // we don't want to propagate any cached values further
+        unset($this->attributes['value']);
         $value = $fieldtype->apply($this, $parameters);
+
         if (empty($parameters)) {
             $this->attributes['value'] = $value;
         }
@@ -58,6 +62,11 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->value()->getIterator());
+    }
+
+    public function count(): int
+    {
+        return $this->value()->count();
     }
 
     /**
@@ -111,9 +120,14 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
             return;
         }
 
-        if (array_key_exists($key, $this->attributes)) {
+        if ($this->hasAttribute($key)) {
             return $this->attributes[$key];
         }
+    }
+
+    public function hasAttribute($key)
+    {
+        return array_key_exists($key, $this->attributes);
     }
 
     /**
@@ -148,7 +162,21 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function __get($key)
     {
-        return ($this->getAttribute($key)) ?: $this->value()->{$key};
+        // return ($this->getAttribute($key)) ?: $this->value()->{$key};
+        if ($this->getAttribute($key)) {
+            return $this->getAttribute($key);
+        }
+
+        $value = $this->value();
+        if (isset($value->$key)) {
+            return $value->$key;
+        }
+
+        if ($value->hasModifier($key)) {
+            return $value->callModifier($key);
+        }
+
+        return null;
     }
 
     /**
@@ -213,7 +241,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
      */
     public function __isset($key)
     {
-        return $this->offsetExists($key);
+        if ($this->offsetExists($key)) {
+            return true;
+        }
+
+        $value = $this->value();
+
+        return ! is_null($value) && (isset($value->$key) || $value->hasModifier($key));
     }
 
     /**
@@ -234,7 +268,13 @@ class FieldContent implements Jsonable, \IteratorAggregate, \ArrayAccess
 
     public function __call($method, $arguments)
     {
-        return $this->value()->$method(...$arguments);
+        $value = $this->value();
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        return $value->$method(...$arguments);
     }
 
     public function __invoke($parameters = [])

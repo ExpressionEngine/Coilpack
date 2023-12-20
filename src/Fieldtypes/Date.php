@@ -2,12 +2,12 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Contracts\Field;
+use Expressionengine\Coilpack\Support\Parameter;
 
 class Date extends Generic
 {
-    public function parameters(ChannelField $field = null)
+    public function parametersForField(Field $field = null): array
     {
         return [
             new Parameter([

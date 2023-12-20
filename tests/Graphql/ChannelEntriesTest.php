@@ -11,11 +11,13 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about"){
-                    entry_id
-                    title
-                    sticky
-                    entry_date(format: "Y-m-d")
+                exp_channel_entries(channel:"about"){
+                    data {
+                        entry_id
+                        title
+                        sticky
+                        entry_date(format: "Y-m-d")
+                    }
                 }
             }
           GQL
@@ -30,10 +32,12 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about"){
-                    entry_id
-                    author {
-                        screen_name
+                exp_channel_entries(channel:"about"){
+                    data {
+                        entry_id
+                        author {
+                            screen_name
+                        }
                     }
                 }
             }
@@ -47,12 +51,14 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about"){
-                    entry_id
-                    channel {
-                        channel_title
-                        channel_description
-                        channel_id
+                exp_channel_entries(channel:"about"){
+                    data {
+                        entry_id
+                        channel {
+                            channel_title
+                            channel_description
+                            channel_id
+                        }
                     }
                 }
             }
@@ -66,12 +72,14 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"blog"){
-                    entry_id
-                    categories {
-                        cat_id
-                        cat_name
-                        cat_description
+                exp_channel_entries(channel:"blog"){
+                    data {
+                        entry_id
+                        categories {
+                            cat_id
+                            cat_name
+                            cat_description
+                        }
                     }
                 }
             }
@@ -85,21 +93,23 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about" limit:1){
-                    entry_id
-                    about_image {
-                        image {
-                            directory_id
-                            width
-                            height
-                            url
-                            path
-                            file_size_human_long
-                            file_size_human
-                        }
-                        caption
-                        align {
-                            value
+                exp_channel_entries(channel:"about" limit:1){
+                    data {
+                        entry_id
+                        about_image {
+                            image {
+                                directory_id
+                                width
+                                height
+                                url
+                                path
+                                file_size_human_long
+                                file_size_human
+                            }
+                            caption
+                            align {
+                                value
+                            }
                         }
                     }
                 }
@@ -115,17 +125,19 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about" limit:1){
-                    entry_id
-                    about_image {
-                        image(resize: {width:100}) {
-                            url
-                            width
-                            height
-                        }
-                        caption
-                        align {
-                            value
+                exp_channel_entries(channel:"about" limit:1){
+                    data {
+                        entry_id
+                        about_image {
+                            image(resize: {width:100}) {
+                                url
+                                width
+                                height
+                            }
+                            caption
+                            align {
+                                value
+                            }
                         }
                     }
                 }
@@ -141,14 +153,16 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(title:"Test Fieldtypes" limit:1){
-                    entry_id
-                    test_relationships {
-                        title
-                        blog_audio {
-                            id
-                            type {
-                                value
+                exp_channel_entries(search: {title:"Test Fieldtypes"} limit:1){
+                    data {
+                        entry_id
+                        test_relationships {
+                            title
+                            blog_audio {
+                                id
+                                type {
+                                    value
+                                }
                             }
                         }
                     }
@@ -165,16 +179,18 @@ class ChannelEntriesTest extends TestCase
     {
         /**
          * {
-                channel_entries(title:"Test Fieldtypes" limit:1){
-                    entry_id
-                    test_fluid {
-                        ... on test_fluid_test_date {
-                            __typename
-                            value
-                        }
-                        ... on test_fluid_test_checkboxes {
-                            __typename
-                            value
+                exp_channel_entries(search: {title:"Test Fieldtypes"} limit:1){
+                    data {
+                        entry_id
+                        test_fluid {
+                            ... on test_fluid_test_date {
+                                __typename
+                                value
+                            }
+                            ... on test_fluid_test_checkboxes {
+                                __typename
+                                value
+                            }
                         }
                     }
                 }
@@ -183,15 +199,17 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(title:"Test Fieldtypes" limit:1){
-                    entry_id
-                    title
-                    test_fluid {
-                        _field_name
-                        _field_type
-                        test_date
-                        test_checkboxes {
-                            value
+                exp_channel_entries(search: {title:"Test Fieldtypes"} limit:1){
+                    data {
+                        entry_id
+                        title
+                        test_fluid {
+                            _field_name
+                            _field_type
+                            test_date
+                            test_checkboxes {
+                                value
+                            }
                         }
                     }
                 }
@@ -208,13 +226,15 @@ class ChannelEntriesTest extends TestCase
         $this->postJson('graphql', [
             'query' => <<<'GQL'
             {
-                channel_entries(channel:"about"){
-                    entry_id
-                    title
-                    author {
-                    screen_name
+                exp_channel_entries(channel:"about"){
+                    data {
+                        entry_id
+                        title
+                        author {
+                        screen_name
+                        }
+                        page_content(length:true)
                     }
-                    page_content(length:true)
                 }
             }
           GQL

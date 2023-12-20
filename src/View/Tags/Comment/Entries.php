@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\View\Tags\Comment;
 
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\View\AddonTag;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;

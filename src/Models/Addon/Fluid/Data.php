@@ -37,7 +37,7 @@ class Data extends Model
 
         // Get a set of table names for fields that do not store data on the legacy table
         $fields = $fields->filter(function ($field) {
-            return $field->legacy_field_data == 'n' || $field->legacy_field_data === false || $field->hasDataTable();
+            return $field->legacy_field_data === 'n' || $field->legacy_field_data === false || $field->hasDataTable();
         });
 
         // Join these extra field data tables
@@ -45,9 +45,9 @@ class Data extends Model
         foreach ($fields as $field) {
             $table = $field->data_table_name;
             $query->leftJoin($table, function ($join) use ($table, $field) {
-                $join->on("$table.entry_id", '=', DB::raw(0)); // Fluid fields store their data in entry_id=0
+                $join->on("$table.entry_id", '=', DB::connection('coilpack')->raw(0)); // Fluid fields store their data in entry_id=0
                 $join->on("$table.id", '=', $this->qualifyColumn('field_data_id'));
-                $join->on($this->qualifyColumn('field_id'), '=', DB::raw($field->field_id));
+                $join->on($this->qualifyColumn('field_id'), '=', DB::connection('coilpack')->raw($field->field_id));
             });
         }
 

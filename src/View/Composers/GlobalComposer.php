@@ -27,6 +27,8 @@ class GlobalComposer
             ee()->config->_global_vars,
             [
                 'current_time' => now(),
+                'logged_in' => (ee()->session->userdata('member_id') != 0),
+                'logged_out' => (ee()->session->userdata('member_id') == 0),
             ]
         ))];
 
@@ -72,7 +74,7 @@ class GlobalComposer
             // 'template_id' => $this->template_id,
             // 'template_type' => $this->embed_type ?: $this->template_type,
             // 'is_ajax_request' => AJAX_REQUEST,
-            // 'is_live_preview_request' => ee('LivePreview')->hasEntryData(),
+            'is_live_preview_request' => ee('LivePreview')->hasEntryData(),
         ]);
     }
 

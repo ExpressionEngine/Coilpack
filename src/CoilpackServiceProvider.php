@@ -51,6 +51,10 @@ class CoilpackServiceProvider extends ServiceProvider
 
             $core = (new Bootstrap\LoadExpressionEngine)->bootstrap(app());
 
+            if (! $core) {
+                return;
+            }
+
             // Handle ACT requests even on Laravel routes
             // Many EE modules rely on sending an ACT request to the base url
             // i.e. /index.php?ACT=XX or /?ACT=XX so we need to always listen

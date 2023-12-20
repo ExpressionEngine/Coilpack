@@ -53,14 +53,14 @@ class Fieldtype extends Field
         $field = $this->attributes['field'] ?? null;
         $fieldtype = $this->getFieldtype();
 
-        return ($fieldtype) ? collect($fieldtype->parameters($field))->keyBy('name') : collect();
+        return ($fieldtype) ? collect($fieldtype->parametersForField($field))->keyBy('name') : collect();
     }
 
     protected function modifiers()
     {
         $fieldtype = $this->getFieldtype();
 
-        return ($fieldtype) ? $fieldtype->modifiers() : [];
+        return ($fieldtype) ? $fieldtype->modifiers() : collect();
     }
 
     public function args(): array
@@ -93,6 +93,11 @@ class Fieldtype extends Field
             // apply parameters
             $parameters = array_intersect_key($args, $this->parameters()->toArray());
             $output = $data->parameters($parameters);
+
+            // If evaluating the data with parameters produces null we stop here
+            if (is_null($output)) {
+                return $output;
+            }
 
             // Parameters take precedence over modifiers
             // Remove any arguments that were used as parameters

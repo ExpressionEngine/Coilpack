@@ -3,8 +3,8 @@
 namespace Expressionengine\Coilpack\View\Tags\Structure;
 
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Traits\InteractsWithAddon;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
 use Expressionengine\Coilpack\View\Tags\Channel\Entries as ChannelEntriesTag;
 
 class Entries extends ChannelEntriesTag
@@ -15,6 +15,8 @@ class Entries extends ChannelEntriesTag
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->query = ChannelEntry::query();
 
         // Might want to wrap this in try/catch in case structure is not installed but this tag is called
@@ -66,7 +68,7 @@ class Entries extends ChannelEntriesTag
             $child_ids = $this->structure->sql->get_child_entries(
                 $this->getArgument('parent_id')->value,
                 $this->getArgument('category')->value ?: $this->getArgument('category_id')->value,
-                $this->getArgument('include_hidden')
+                $this->getArgument('include_hidden')->value
             );
 
             $fixed_order = ($child_ids !== false && is_array($child_ids) && count($child_ids) > 0) ? $child_ids : false;

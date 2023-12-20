@@ -28,9 +28,14 @@ class StructureTest extends TestCase
     {
         $exp = app(\Expressionengine\Coilpack\View\Exp::class);
 
-        // $nav = $exp->structure->entries->parent_id(2);
-        // $nav = $exp->structure->nav->start_from('/');
-        $nav = $exp->structure->nav(['start_from' => '/', 'status' => 'not Closed']);
+        $nav = $exp->structure->nav(['start_from' => '/', 'status' => 'not Closed'])->render(function ($item, $children, $depth) {
+            return implode('', [
+                '<li>',
+                '<a href="/'.$item['structure_url_title'].'/">'.$item['entry']['title'].'</a>',
+                $children ? '<ul>'.$children.'</ul>' : '',
+                '</li>',
+            ]);
+        });
 
         $this->assertStringContainsString('<a href="/about-default-theme/">About Default Theme</a>', $nav);
     }

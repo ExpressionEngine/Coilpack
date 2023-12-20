@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use GraphQL\Type\Definition\Type;
 
 class File extends Generic

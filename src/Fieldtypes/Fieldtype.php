@@ -2,8 +2,8 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Illuminate\Support\Collection;
 
@@ -28,7 +28,15 @@ abstract class Fieldtype
      */
     abstract public function apply(FieldContent $content, array $parameters = []);
 
-    public function parameters(ChannelField $field = null)
+    public function withSettings($settings)
+    {
+        return $this;
+    }
+
+    /**
+     * A list of supported parameters for the fieldtype
+     */
+    public function parametersForField(Field $field = null): array
     {
         return [];
     }

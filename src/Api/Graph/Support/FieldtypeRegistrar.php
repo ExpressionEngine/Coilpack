@@ -126,11 +126,17 @@ class FieldtypeRegistrar
 
         if (! $fieldtype instanceof GeneratesGraphType) {
             $type = $fieldtype->graphType();
+            $isGraphType = ($type instanceof GraphQLType || $type instanceof \GraphQL\Type\Definition\Type);
 
-            if ($type instanceof GraphQLType) {
-                $name = "Fieldtype__{$fieldtype->name}";
-                $type->name = $name;
-                GraphQL::addType($type, $name);
+            if ($isGraphType) {
+                $name = $type->name ?? "Fieldtype__{$fieldtype->name}";
+
+                // Add the GraphQL type to the registry if needed
+                if (! GraphQL::hasType($name)) {
+                    $type->name = $name;
+                    GraphQL::addType($type, $name);
+                }
+
                 $type = $name;
             }
 
@@ -142,8 +148,13 @@ class FieldtypeRegistrar
 
     public function getTypeForField($field)
     {
-        $type = $this->getType($field->field_name);
-        $type = $type ?: $this->getType($field->field_type);
+        $possibleTypes = array_filter([
+            $this->getType($field->field_name),
+            $this->getType($field->field_type),
+            $this->getType($field->m_field_type),
+        ]);
+
+        $type = array_shift($possibleTypes);
         if ($type === null) {
             dd($field->field_name, $field->field_type, $field->getFieldType(), $this->types);
         }

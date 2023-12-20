@@ -76,10 +76,13 @@ class Exp
         }
     }
 
-    public function path($str)
+    public function path(...$arguments)
     {
         // Path variable: {path=group/template}
-        return ee()->functions->create_url($str);
+        $arguments = (empty($arguments)) ? [''] : $arguments;
+        $arguments[0] = ee()->functions->create_url($arguments[0]);
+
+        return implode('/', $arguments);
     }
 
     public function redirect($str)
@@ -91,6 +94,35 @@ class Exp
     {
         // Route variable: {route=group/template foo='bar'}
         return ee()->functions->create_route($str);
+    }
+
+    public function embed($view, $vars = [])
+    {
+        $pieces = explode('/', $view);
+        $site_id = ee()->config->item('site_id');
+
+        if (count($pieces) !== 2) {
+            throw new \Exception('Embedded view name must be of the format `template_group/template`');
+        }
+
+        return tap(ee()->TMPL, function ($tmpl) use ($pieces, $site_id, $vars) {
+            // We are being a little tricky here... if $tmpl->depth == 0 and a hidden
+            // template is being embedded ExpressionEngine could use a 404 template.
+            // So we manipulate the depth and reset it after the fetch.
+            $tmpl->depth++;
+            $template = $tmpl->fetch_template($pieces[0], $pieces[1], false, $site_id);
+            $tmpl->depth--;
+
+            if ($template === false) {
+                $tmpl->template = '';
+
+                return;
+            }
+
+            $tmpl->embed_vars = $vars;
+            $tmpl->parse($template, true, $site_id, false);
+            $tmpl->template = $tmpl->process_sub_templates($tmpl->template);
+        })->template;
     }
 
     public function __get($key)

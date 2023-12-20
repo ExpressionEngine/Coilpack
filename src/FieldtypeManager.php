@@ -51,8 +51,10 @@ class FieldtypeManager
                     $channelFields->offsetSet($field->getKey(), $field);
                     // A Fluid field may need to attach additional fields to the channel
                     if ($field->field_type === 'fluid_field') {
-                        foreach ($field->field_settings['field_channel_fields'] ?? [] as $fieldId) {
-                            $channelFields->offsetSet($fieldId, $fieldsById[$fieldId]);
+                        foreach (array_filter($field->field_settings['field_channel_fields']) ?? [] as $fieldId) {
+                            if ($fieldsById->has($fieldId)) {
+                                $channelFields->offsetSet($fieldId, $fieldsById[$fieldId]);
+                            }
                         }
                     }
                 });
@@ -72,6 +74,7 @@ class FieldtypeManager
 
         $this->channels = $channels;
         $this->fieldtypes = Models\Addon\Fieldtype::get()->keyBy('name');
+        $this->booted = true;
 
         return $this;
     }

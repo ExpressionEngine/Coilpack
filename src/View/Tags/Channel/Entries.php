@@ -3,25 +3,31 @@
 namespace Expressionengine\Coilpack\View\Tags\Channel;
 
 use Expressionengine\Coilpack\Contracts\ConvertsToGraphQL;
+use Expressionengine\Coilpack\Facades\GraphQL;
 use Expressionengine\Coilpack\FieldtypeManager;
 use Expressionengine\Coilpack\Models\Category\Category;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
+use Expressionengine\Coilpack\Models\Channel\Scopes;
 use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Arguments\ListArgument;
+use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
+use Expressionengine\Coilpack\Support\Arguments\Term;
+use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\View\ModelTag;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class Entries extends ModelTag implements ConvertsToGraphQL
 {
+    protected $fieldtypeManager;
+
     public function __construct()
     {
         $this->query = ChannelEntry::query();
+        $this->fieldtypeManager = app(FieldtypeManager::class);
     }
 
     public function defineParameters(): array
     {
-        return [
+        return array_merge(parent::defineParameters(), [
             new Parameter([
                 'name' => 'author_id',
                 'type' => 'string',
@@ -53,34 +59,34 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'description' => 'Limit entries to the specified Member Role ID',
             ]),
             new Parameter([
-                'name' => 'limit',
-                'type' => 'integer',
-                'description' => 'Limits the number of entries',
-            ]),
-            new Parameter([
-                'name' => 'offset',
-                'type' => 'integer',
-                'description' => 'Offsets the display by X number of entries',
-            ]),
-            new Parameter([
                 'name' => 'orderby',
                 'type' => 'string',
-                'description' => '',
+                'description' => 'Order the entries by a field',
+                'defaultValue' => 'entry_date',
             ]),
             new Parameter([
                 'name' => 'show_expired',
                 'type' => 'boolean',
-                'description' => '',
+                'description' => 'Include entries with an expiration date that has passed',
+                'defaulValue' => false,
             ]),
             new Parameter([
                 'name' => 'show_future_entries',
                 'type' => 'boolean',
-                'description' => 'Sets the display order of the entries',
+                'description' => 'Include entries with an entry_date in the future',
+                'defaultValue' => false,
             ]),
             new Parameter([
                 'name' => 'sort',
                 'type' => 'string',
                 'description' => 'The sort order (asc/desc)',
+                'defaultValue' => 'desc',
+            ]),
+            new Parameter([
+                'name' => 'sticky',
+                'type' => 'string',
+                'description' => 'Handle "sticky" entries',
+                'defaultValue' => 'yes',
             ]),
             new Parameter([
                 'name' => 'start_on',
@@ -124,34 +130,61 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                             'type' => 'string',
                             'description' => $field->field_instructions,
                         ]);
-                    })->toArray();
+                    })->merge([
+                        new Parameter([
+                            'name' => 'title',
+                            'type' => 'string',
+                            'description' => 'The title of an entry',
+                        ]),
+                    ])->toArray();
                 },
             ]),
-        ];
+        ]);
     }
 
     public function getArgumentFallback($key, $value)
     {
-        if (in_array($key, ['fixed_order', 'orderby'])) {
+        if (in_array($key, ['fixed_order', 'sticky'])) {
             return $value;
         }
 
         return new FilterArgument($value);
     }
 
+    public function getStartOnArgument($value)
+    {
+        return \Carbon\Carbon::make($value)->timestamp;
+    }
+
+    public function getStopBeforeArgument($value)
+    {
+        return \Carbon\Carbon::make($value)->timestamp;
+    }
+
+    public function getOrderbyArgument($value)
+    {
+        return new ListArgument($value);
+    }
+
     public function getSortArgument($value)
     {
-        if (! in_array(strtolower($value), ['asc', 'desc'])) {
-            return 'asc';
-        }
+        $argument = new ListArgument($value);
 
-        return $value;
+        $argument->terms->map(function ($term) {
+            if (in_array(strtolower($term->value), ['asc', 'desc'])) {
+                return $term;
+            }
+
+            return new Term('desc');
+        });
+
+        return $argument;
     }
 
     public function getSearchArgument($search)
     {
         foreach ($search as $field => $value) {
-            $search[$field] = new FilterArgument($value);
+            $search[$field] = new SearchArgument($value);
         }
 
         return $search;
@@ -170,8 +203,8 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         });
 
         // Site ID
-        $this->query->when($this->hasArgument('site_id'), function ($query) {
-            $this->getArgument('site_id')->addQuery($query, 'site_id');
+        $this->query->when($this->hasArgument('site'), function ($query) {
+            $this->getArgument('site')->addQuery($query, 'site_id');
         });
 
         // URL Title
@@ -186,23 +219,18 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Channel
         $this->query->when($this->hasArgument('channel'), function ($query) {
-            $query->whereHas('channel', function ($query) {
-                return $this->getArgument('channel')->addQuery($query, 'channel_name');
-            });
+            $this->getArgument('channel')->addRelationshipQuery($query, 'channel', 'channel_name');
         });
 
         // Category
         $this->query->when($this->hasArgument('category'), function ($query) {
-            $query->whereHas('categories', function ($query) {
-                return $this->getArgument('category')->addQuery($query, 'cat_url_title');
-            });
+            $this->getArgument('category')->addRelationshipQuery($query, 'categories', 'cat_url_title');
         });
 
         // Category ID
         $this->query->when($this->hasArgument('category_id'), function ($query) {
-            $query->whereHas('categories', function ($query) {
-                return $this->getArgument('category_id')->addQuery($query, (new Category)->qualifyColumn('cat_id'));
-            });
+            $this->getArgument('category_id')
+                ->addRelationshipQuery($query, 'categories', (new Category)->qualifyColumn('cat_id'));
         });
 
         // Fixed Order
@@ -212,37 +240,134 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             $query->orderByRaw('FIELD(entry_id, '.implode(',', $order).')');
         });
 
+        // Start on
+        $this->query->when($this->hasArgument('start_on'), function ($query) {
+            $query->where('entry_date', '>=', $this->getArgument('start_on')->value);
+        });
+
+        // Stop before
+        $this->query->when($this->hasArgument('stop_before'), function ($query) {
+            $query->where('entry_date', '<', $this->getArgument('stop_before')->value);
+        });
+
         // Dynamic
         if ($this->hasArgument('dynamic')) {
-            $lastSegment = last(request()->segments());
+            // If we have live preview data we fill a model instance
+            if (ee('LivePreview')->hasEntryData()) {
+                return (new ChannelEntry)->newCollection([
+                    (new ChannelEntry)->fillWithEntryData(ee('LivePreview')->getEntryData())->markAsPreview(),
+                ]);
+            }
 
-            $this->setLimitArgument(1);
+            $lastSegment = last(ee()->uri->segment_array() ?: request()->segments());
 
-            $this->query->when(is_int($lastSegment), function ($query) use ($lastSegment) {
+            $this->setArgument('limit', 1);
+
+            $this->query->when(is_numeric($lastSegment), function ($query) use ($lastSegment) {
                 $query->where('entry_id', (int) $lastSegment);
             }, function ($query) use ($lastSegment) {
                 $query->where('url_title', $lastSegment);
             });
         }
 
-        if ($this->hasArgument('orderby')) {
-            $direction = $this->hasArgument('sort') ? $this->getArgument('sort') : 'asc';
-            $field = $this->getArgument('orderby');
+        // Search
+        if ($this->hasArgument('search')) {
+            foreach ($this->getArgument('search') as $field => $argument) {
+                if ($this->fieldtypeManager->hasField($field)) {
+                    $field = $this->fieldtypeManager->getField($field);
+                    $alias = "search_{$field->field_name}";
+                    $column = "$alias.field_id_{$field->field_id}";
 
-            if (app(FieldtypeManager::class)->hasField($field)) {
-                $this->query->orderByCustomField($field, $direction);
-            } else {
-                $this->query->orderBy($field, $direction);
+                    $this->query->joinFieldDataTable($field, $alias);
+                    $argument->addQuery($this->query, $column);
+                } else {
+                    $argument->addQuery($this->query, $field);
+                }
             }
         }
 
-        return parent::run();
+        // Show Expired
+        if ($this->getArgument('show_expired')->value) {
+            $this->query->withoutGlobalScope(Scopes\HideExpired::class);
+        }
+
+        // Show Future
+        if ($this->getArgument('show_future_entries')->value) {
+            $this->query->withoutGlobalScope(Scopes\HideFuture::class);
+        }
+
+        // Sticky
+        if (! $this->hasArgument('sticky') || $this->getArgument('sticky')->value == 'yes') {
+            $this->setArgument('orderby', 'sticky|'.($this->arguments['orderby'] ?? ''));
+            $this->setArgument('sort', 'desc|'.($this->arguments['sort'] ?? ''));
+        }
+
+        if ($this->hasArgument('sticky')) {
+            if ($this->getArgument('sticky')->value == 'only') {
+                $this->query->where('sticky', 'y');
+            }
+
+            if ($this->getArgument('sticky')->value == 'none') {
+                $this->query->where('sticky', 'n');
+            }
+        }
+
+        // Orderby and Sort Direction
+        $directions = $this->getArgument('sort')->terms->map->value->toArray();
+        $fields = $this->getArgument('orderby');
+        foreach ($fields->terms as $index => $field) {
+            $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
+            $field = $field->value;
+            if ($this->fieldtypeManager->hasField($field)) {
+                $this->query->orderByCustomField($field, $direction);
+            } else {
+                $this->query->orderBy($this->query->qualifyColumn($field), $direction);
+            }
+        }
+
+        // Add page data to channel entries after the query
+        $site_pages = config_item('site_pages');
+
+        $this->getArgument('site')->terms->each(function ($term) use (&$site_pages) {
+            if ($term->value && $term->value != ee()->config->item('site_id')) {
+                $pages = ee()->config->site_pages($term->value);
+                $site_pages[$term->value] = $pages[$term->value];
+            }
+        });
+
+        return tap(parent::run(), function ($result) use ($site_pages) {
+            // If we have live preview data we fill a model instance
+            $previewEntry = new ChannelEntry;
+
+            if (ee('LivePreview')->hasEntryData()) {
+                $previewEntry->fillWithEntryData(ee('LivePreview')->getEntryData())->markAsPreview();
+            }
+
+            $result->transform(function ($entry) use ($site_pages, $previewEntry) {
+                if ($entry->entry_id == $previewEntry->entry_id) {
+                    $entry = $previewEntry;
+                }
+
+                $entry->page_uri = '';
+                $entry->page_url = '';
+
+                if ($site_pages !== false && isset($site_pages[$entry->site_id]['uris'][$entry->entry_id])) {
+                    $entry->page_uri = $site_pages[$entry->site_id]['uris'][$entry->entry_id];
+                    $entry->page_url = ee()->functions->create_page_url($site_pages[$entry->site_id]['url'], $entry->page_uri);
+                }
+
+                return $entry;
+            });
+        });
     }
 
     public function toGraphQL(): array
     {
         return [
-            'type' => Type::listOf(GraphQL::type('ChannelEntry')),
+            'type' => GraphQL::paginate('ChannelEntry'),
+            'middleware' => [
+                \Expressionengine\Coilpack\Api\Graph\Middleware\ResolvePage::class,
+            ],
         ];
     }
 }

@@ -3,10 +3,10 @@
 namespace Expressionengine\Coilpack\Fieldtypes;
 
 use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
+use Expressionengine\Coilpack\Contracts\Field;
 use Expressionengine\Coilpack\FieldtypeOutput;
-use Expressionengine\Coilpack\Models\Channel\ChannelField;
 use Expressionengine\Coilpack\Models\FieldContent;
-use Expressionengine\Coilpack\TypedParameter as Parameter;
+use Expressionengine\Coilpack\Support\Parameter;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class OptionFieldtype extends Generic
@@ -43,6 +43,7 @@ class OptionFieldtype extends Generic
                 }
             }
         } else {
+            $pairs = [];
             $selected = $data;
         }
 
@@ -69,7 +70,7 @@ class OptionFieldtype extends Generic
             ]);
     }
 
-    public function parameters(ChannelField $field = null)
+    public function parametersForField(Field $field = null): array
     {
         return [
             new Parameter([

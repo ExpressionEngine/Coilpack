@@ -134,8 +134,8 @@ class CoilpackCommand extends Command
 
         file_put_contents($routesFile, str_replace($search, $replace, $content));
 
-        $this->info("Coilpack has disabled the Laravel 'welcome' route to avoid routing conflicts.");
-        $this->info('You may enable it at any time by uncommenting the route in `routes/web.php`.');
+        $this->comment("Coilpack has disabled the Laravel 'welcome' route to avoid routing conflicts.");
+        $this->comment('You may enable it at any time by uncommenting the route in `routes/web.php`.');
     }
 
     public function install()
@@ -154,17 +154,15 @@ class CoilpackCommand extends Command
             $releases = $releases->slice(0, 10);
         }
 
-        $this->comment('Coilpack supports the following ExpressionEngine Versions');
-
         if ($this->option('install')) {
             $release = ($this->option('install') == 'latest') ? $releases->first()['tag_name'] : $this->option('install');
         } else {
-            $release = $this->choice('Which Release would you like to install?', $releases->pluck('tag_name')->all(), 0);
+            $release = $releases->first()['tag_name'];
         }
 
         $this->installRelease($releases[$release]);
 
-        $this->info("Finish installing {$release} at ".url(config('coilpack.admin_url', 'admin.php')));
+        $this->info('Finish installing ExpressionEngine at '.url(config('coilpack.admin_url', 'admin.php')));
     }
 
     public function availableReleases()
@@ -214,13 +212,13 @@ class CoilpackCommand extends Command
         }
 
         // Download
-        $this->info("Downloading {$release['name']}...");
+        $this->comment("Downloading {$release['name']}...");
         if (! File::exists("{$localPath}/download.zip")) {
             copy($release['download_url'], "{$localPath}/download.zip");
         }
 
         // Unpack
-        $this->info("Unpacking file at {$localPath}/download.zip");
+        $this->comment("Unpacking file at {$localPath}/download.zip");
         if (count(File::glob("{$localPath}/unpacked/*", GLOB_NOSORT)) === 0) {
             $zip = new \ZipArchive;
             $res = $zip->open("{$localPath}/download.zip");
@@ -231,7 +229,7 @@ class CoilpackCommand extends Command
         }
 
         // Move and set permissions
-        $this->info("Moving installation to $installPath");
+        $this->comment("Moving installation to $installPath");
         if ($this->option('force') || count(File::glob("{$installPath}/*", GLOB_NOSORT)) === 0) {
             File::moveDirectory("{$localPath}/unpacked", $installPath, true);
 
@@ -286,7 +284,7 @@ class CoilpackCommand extends Command
         $command = array_key_exists(PHP_OS_FAMILY, $openUrlCommands) ? $openUrlCommands[PHP_OS_FAMILY] : null;
 
         if (! $command) {
-            $this->info("Oops, this is embarrassing. \n We can't open the url on your operating system but you can still star the repo: $url");
+            $this->comment("Oops, this is embarrassing. \n We can't open the url on your operating system but you can still star the repo: $url");
         }
 
         exec("$command $url");
