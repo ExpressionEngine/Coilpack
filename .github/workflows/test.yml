@@ -18,6 +18,9 @@ jobs:
           - php: 7.4
             os: ubuntu-latest
             laravel: 8
+          - php: 8.3
+            os: ubuntu-latest
+            laravel: 10
         exclude:
           - php: 8.0
             os: ubuntu-latest
