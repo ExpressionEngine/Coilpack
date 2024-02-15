@@ -1,17 +1,7 @@
--- -------------------------------------------------------------
--- TablePlus 4.5.2(402)
---
--- https://tableplus.com/
---
--- Database: cp_fresh
--- Generation Time: 2023-02-20 10:21:34.4650
--- -------------------------------------------------------------
-
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
@@ -98,6 +88,19 @@ CREATE TABLE `exp_category_fields` (
   KEY `group_id` (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `exp_category_group_settings`;
+CREATE TABLE `exp_category_group_settings` (
+  `category_group_settings_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_id` int(4) unsigned NOT NULL,
+  `channel_id` int(4) unsigned NOT NULL,
+  `group_id` int(6) unsigned NOT NULL,
+  `cat_required` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `cat_allow_multiple` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
+  PRIMARY KEY (`category_group_settings_id`,`channel_id`,`group_id`),
+  KEY `group_id` (`group_id`),
+  KEY `site_id` (`site_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `exp_category_groups`;
 CREATE TABLE `exp_category_groups` (
   `group_id` int(6) unsigned NOT NULL AUTO_INCREMENT,
@@ -117,6 +120,14 @@ CREATE TABLE `exp_category_posts` (
   `entry_id` int(10) unsigned NOT NULL,
   `cat_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`entry_id`,`cat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `exp_channel_category_groups`;
+CREATE TABLE `exp_channel_category_groups` (
+  `channel_id` int(4) unsigned NOT NULL,
+  `group_id` int(6) unsigned NOT NULL,
+  PRIMARY KEY (`channel_id`,`group_id`),
+  KEY `group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_channel_data`;
@@ -760,7 +771,7 @@ CREATE TABLE `exp_channels` (
   `default_entry_title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `title_field_label` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Title',
   `url_title_prefix` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `enforce_auto_url_title` char(1) COLLATE utf8mb4_unicode_ci NOT NULL default 'n',
+  `enforce_auto_url_title` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
   `preview_url` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `allow_preview` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
   `max_entries` int(10) unsigned NOT NULL DEFAULT '0',
@@ -834,7 +845,7 @@ CREATE TABLE `exp_config` (
   `value` text,
   PRIMARY KEY (`config_id`),
   KEY `site_key` (`site_id`,`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `exp_consent_audit_log`;
 CREATE TABLE `exp_consent_audit_log` (
@@ -853,8 +864,10 @@ CREATE TABLE `exp_consent_audit_log` (
 
 DROP TABLE IF EXISTS `exp_consent_request_version_cookies`;
 CREATE TABLE `exp_consent_request_version_cookies` (
+  `consent_request_version_cookies_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `consent_request_version_id` int(10) unsigned NOT NULL,
   `cookie_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`consent_request_version_cookies_id`),
   KEY `consent_request_version_cookies` (`consent_request_version_id`,`cookie_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -930,12 +943,14 @@ CREATE TABLE `exp_cp_log` (
   `action` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `site_id` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_dashboard_layout_widgets`;
 CREATE TABLE `exp_dashboard_layout_widgets` (
+  `dashboard_layout_widgets_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `layout_id` int(10) unsigned NOT NULL,
   `widget_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`dashboard_layout_widgets_id`),
   KEY `layouts_widgets` (`layout_id`,`widget_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -984,9 +999,11 @@ CREATE TABLE `exp_developer_log` (
 
 DROP TABLE IF EXISTS `exp_dock_prolets`;
 CREATE TABLE `exp_dock_prolets` (
+  `dock_prolets_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dock_id` int(10) unsigned NOT NULL,
-  `prolet_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `prolet_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`dock_prolets_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_docks`;
 CREATE TABLE `exp_docks` (
@@ -1001,7 +1018,7 @@ CREATE TABLE `exp_email_cache` (
   `cache_date` int(10) unsigned NOT NULL DEFAULT '0',
   `total_sent` int(6) unsigned NOT NULL,
   `from_name` varchar(70) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `from_email` varchar(75) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
   `recipient` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `cc` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `bcc` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1126,7 +1143,7 @@ CREATE TABLE `exp_field_groups` (
   `site_id` int(4) unsigned DEFAULT '1',
   `group_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `short_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `group_description` text COLLATE utf8mb4_unicode_ci NULL,
+  `group_description` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`group_id`),
   KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1139,7 +1156,7 @@ CREATE TABLE `exp_fieldtypes` (
   `settings` text COLLATE utf8mb4_unicode_ci,
   `has_global_settings` char(1) COLLATE utf8mb4_unicode_ci DEFAULT 'n',
   PRIMARY KEY (`fieldtype_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_file_categories`;
 CREATE TABLE `exp_file_categories` (
@@ -1187,13 +1204,15 @@ CREATE TABLE `exp_file_manager_views` (
 
 DROP TABLE IF EXISTS `exp_file_usage`;
 CREATE TABLE `exp_file_usage` (
+  `file_usage_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `file_id` int(10) unsigned NOT NULL,
   `entry_id` int(10) unsigned NOT NULL DEFAULT '0',
   `cat_id` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`file_usage_id`),
   KEY `file_id` (`file_id`),
   KEY `entry_id` (`entry_id`),
   KEY `cat_id` (`cat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_file_watermarks`;
 CREATE TABLE `exp_file_watermarks` (
@@ -1365,7 +1384,7 @@ CREATE TABLE `exp_member_fields` (
   `m_field_name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `m_field_label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `m_field_description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `m_field_type` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
+  `m_field_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
   `m_field_list_items` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `m_field_ta_rows` tinyint(2) DEFAULT '8',
   `m_field_maxl` smallint(3) DEFAULT NULL,
@@ -1385,6 +1404,17 @@ CREATE TABLE `exp_member_fields` (
   PRIMARY KEY (`m_field_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `exp_member_manager_views`;
+CREATE TABLE `exp_member_manager_views` (
+  `view_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(6) unsigned NOT NULL,
+  `member_id` int(10) unsigned NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `columns` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`view_id`),
+  KEY `role_id_member_id` (`role_id`,`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `exp_member_news_views`;
 CREATE TABLE `exp_member_news_views` (
   `news_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1393,6 +1423,25 @@ CREATE TABLE `exp_member_news_views` (
   PRIMARY KEY (`news_id`),
   KEY `member_id` (`member_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `exp_member_relationships`;
+CREATE TABLE `exp_member_relationships` (
+  `relationship_id` int(6) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned DEFAULT '0',
+  `child_id` int(10) unsigned DEFAULT '0',
+  `field_id` int(10) unsigned DEFAULT '0',
+  `fluid_field_data_id` int(10) unsigned DEFAULT '0',
+  `grid_field_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `grid_col_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `grid_row_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `order` int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (`relationship_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `child_id` (`child_id`),
+  KEY `field_id` (`field_id`),
+  KEY `fluid_field_data_id` (`fluid_field_data_id`),
+  KEY `grid_row_id` (`grid_row_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_member_search`;
 CREATE TABLE `exp_member_search` (
@@ -1423,7 +1472,7 @@ CREATE TABLE `exp_members` (
   `crypt_key` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `backup_mfa_code` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `authcode` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(75) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(254) COLLATE utf8mb4_unicode_ci NOT NULL,
   `signature` text COLLATE utf8mb4_unicode_ci,
   `avatar_filename` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `avatar_width` int(4) unsigned DEFAULT NULL,
@@ -1664,7 +1713,7 @@ CREATE TABLE `exp_permissions` (
   `permission` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`permission_id`),
   KEY `role_id_site_id` (`role_id`,`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_plugins`;
 CREATE TABLE `exp_plugins` (
@@ -1805,7 +1854,7 @@ CREATE TABLE `exp_prolets` (
   `source` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`prolet_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_relationships`;
 CREATE TABLE `exp_relationships` (
@@ -1886,6 +1935,7 @@ CREATE TABLE `exp_role_settings` (
   `cp_homepage_channel` int(10) unsigned NOT NULL DEFAULT '0',
   `cp_homepage_custom` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `require_mfa` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `show_field_names` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'y',
   PRIMARY KEY (`id`),
   KEY `role_id_site_id` (`role_id`,`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1898,6 +1948,7 @@ CREATE TABLE `exp_roles` (
   `description` text COLLATE utf8mb4_unicode_ci,
   `total_members` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `is_locked` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'n',
+  `highlight` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1905,7 +1956,8 @@ DROP TABLE IF EXISTS `exp_roles_role_groups`;
 CREATE TABLE `exp_roles_role_groups` (
   `role_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`role_id`,`group_id`)
+  PRIMARY KEY (`role_id`,`group_id`),
+  KEY `group_id_idx` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_rte_toolsets`;
@@ -1957,7 +2009,7 @@ CREATE TABLE `exp_security_hashes` (
   `hash` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`hash_id`),
   KEY `session_id` (`session_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_sessions`;
 CREATE TABLE `exp_sessions` (
@@ -2216,7 +2268,7 @@ CREATE TABLE `exp_update_log` (
   `line` int(10) unsigned DEFAULT NULL,
   `file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_upload_prefs`;
 CREATE TABLE `exp_upload_prefs` (
@@ -2246,6 +2298,14 @@ CREATE TABLE `exp_upload_prefs` (
   PRIMARY KEY (`id`),
   KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `exp_upload_prefs_category_groups`;
+CREATE TABLE `exp_upload_prefs_category_groups` (
+  `upload_location_id` int(4) unsigned NOT NULL,
+  `group_id` int(6) unsigned NOT NULL,
+  PRIMARY KEY (`upload_location_id`,`group_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_upload_prefs_roles`;
 CREATE TABLE `exp_upload_prefs_roles` (
@@ -2331,6 +2391,9 @@ INSERT INTO `exp_category_posts` (`entry_id`, `cat_id`) VALUES
 (9, 3),
 (11, 2),
 (12, 5);
+
+INSERT INTO `exp_channel_category_groups` (`channel_id`, `group_id`) VALUES
+(2, 1);
 
 INSERT INTO `exp_channel_data` (`entry_id`, `site_id`, `channel_id`) VALUES
 (1, 1, 3),
@@ -2639,11 +2702,11 @@ INSERT INTO `exp_channel_titles` (`entry_id`, `site_id`, `channel_id`, `author_i
 (12, 1, 2, 1, NULL, '127.0.0.1', 'Entry with SoundCloud audio', 'the-one-where-we-shake-it-ff', 'open', 1, 'n', 0, 0, 0, 0, 'y', 'n', 1666304930, '2022', '10', '20', 0, 0, 1666304930, NULL, 0),
 (13, 1, 4, 1, NULL, '127.0.0.1', 'Test Fieldtypes', 'test-fieldtypes', 'open', 1, 'n', 0, 0, 0, 0, 'y', 'n', 1667245500, '2022', '10', '31', 0, 0, 1675990150, NULL, 0);
 
-INSERT INTO `exp_channels` (`channel_id`, `site_id`, `channel_name`, `channel_title`, `channel_url`, `channel_description`, `channel_lang`, `total_entries`, `total_records`, `total_comments`, `last_entry_date`, `last_comment_date`, `cat_group`, `deft_status`, `search_excerpt`, `deft_category`, `deft_comments`, `channel_require_membership`, `channel_max_chars`, `channel_html_formatting`, `channel_allow_img_urls`, `channel_auto_link_urls`, `channel_notify`, `channel_notify_emails`, `sticky_enabled`, `enable_entry_cloning`, `comment_url`, `comment_system_enabled`, `comment_require_membership`, `comment_moderate`, `comment_max_chars`, `comment_timelock`, `comment_require_email`, `comment_text_formatting`, `comment_html_formatting`, `comment_allow_img_urls`, `comment_auto_link_urls`, `comment_notify`, `comment_notify_authors`, `comment_notify_emails`, `comment_expiration`, `search_results_url`, `rss_url`, `enable_versioning`, `max_revisions`, `default_entry_title`, `title_field_label`, `url_title_prefix`, `preview_url`, `allow_preview`, `max_entries`, `conditional_sync_required`, `title_field_instructions`) VALUES
-(1, 1, 'about', 'About', '', NULL, 'en', 3, 3, 0, 1666304880, 0, NULL, 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, '', 'y', 0, 'n', NULL),
-(2, 1, 'blog', 'Blog', '{base_url}blog/entry', NULL, 'en', 8, 8, 0, 1666304930, 0, '1', 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, '', 'y', 0, 'n', NULL),
-(3, 1, 'contact', 'Contact', '', NULL, 'en', 1, 1, 0, 1666304930, 0, NULL, 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, '', 'y', 0, 'n', NULL),
-(4, 1, 'testing', 'Testing', 'http://coilpack-test.test/index.php', '', 'en', 1, 1, 0, 1667245500, 0, '', 'open', NULL, '', 'y', 'y', NULL, 'all', 'y', 'n', 'n', '', 'n', 'y', '', 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', '', 0, '', '', 'n', 10, '', 'Title', '', '', 'y', 0, 'n', NULL);
+INSERT INTO `exp_channels` (`channel_id`, `site_id`, `channel_name`, `channel_title`, `channel_url`, `channel_description`, `channel_lang`, `total_entries`, `total_records`, `total_comments`, `last_entry_date`, `last_comment_date`, `cat_group`, `deft_status`, `search_excerpt`, `deft_category`, `deft_comments`, `channel_require_membership`, `channel_max_chars`, `channel_html_formatting`, `channel_allow_img_urls`, `channel_auto_link_urls`, `channel_notify`, `channel_notify_emails`, `sticky_enabled`, `enable_entry_cloning`, `comment_url`, `comment_system_enabled`, `comment_require_membership`, `comment_moderate`, `comment_max_chars`, `comment_timelock`, `comment_require_email`, `comment_text_formatting`, `comment_html_formatting`, `comment_allow_img_urls`, `comment_auto_link_urls`, `comment_notify`, `comment_notify_authors`, `comment_notify_emails`, `comment_expiration`, `search_results_url`, `rss_url`, `enable_versioning`, `max_revisions`, `default_entry_title`, `title_field_label`, `url_title_prefix`, `enforce_auto_url_title`, `preview_url`, `allow_preview`, `max_entries`, `conditional_sync_required`, `title_field_instructions`) VALUES
+(1, 1, 'about', 'About', '', NULL, 'en', 3, 3, 0, 1666304880, 0, NULL, 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, 'n', '', 'y', 0, 'n', NULL),
+(2, 1, 'blog', 'Blog', '{base_url}blog/entry', NULL, 'en', 8, 8, 0, 1666304930, 0, '1', 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, 'n', '', 'y', 0, 'n', NULL),
+(3, 1, 'contact', 'Contact', '', NULL, 'en', 1, 1, 0, 1666304930, 0, NULL, 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, 'n', '', 'y', 0, 'n', NULL),
+(4, 1, 'testing', 'Testing', 'http://coilpack-test.test/index.php', '', 'en', 1, 1, 0, 1667245500, 0, '', 'open', NULL, '', 'y', 'y', NULL, 'all', 'y', 'n', 'n', '', 'n', 'y', '', 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', '', 0, '', '', 'n', 10, '', 'Title', '', 'n', '', 'y', 0, 'n', NULL);
 
 INSERT INTO `exp_channels_channel_field_groups` (`channel_id`, `group_id`) VALUES
 (1, 2),
@@ -2842,7 +2905,8 @@ INSERT INTO `exp_config` (`config_id`, `site_id`, `key`, `value`) VALUES
 (155, 0, 'enable_mfa', 'y'),
 (156, 0, 'autosave_interval_seconds', '10'),
 (157, 1, 'save_tmpl_files', 'y'),
-(158, 1, 'enable_comments', 'y');
+(158, 1, 'enable_comments', 'y'),
+(159, 0, 'week_start', 'sunday');
 
 INSERT INTO `exp_consent_request_versions` (`consent_request_version_id`, `consent_request_id`, `request`, `request_format`, `create_date`, `author_id`) VALUES
 (1, 1, 'These cookies help us personalize content and functionality for you, including remembering changes you have made to parts of the website that you can customize, or selections for services made on previous visits. If you do not allow these cookies, some portions of our website may be less friendly and easy to use, forcing you to enter content or set your preferences on each visit.', 'none', 1666304930, 0),
@@ -2921,7 +2985,8 @@ INSERT INTO `exp_cp_log` (`id`, `site_id`, `member_id`, `username`, `ip_address`
 (36, 1, 1, 'admin', '127.0.0.1', 1675980392, 'Logged in'),
 (37, 1, 1, 'admin', '127.0.0.1', 1675980396, 'Logged in'),
 (38, 1, 1, 'admin', '127.0.0.1', 1675986535, 'Logged in'),
-(39, 1, 1, 'admin', '127.0.0.1', 1676511348, 'Logged in');
+(39, 1, 1, 'admin', '127.0.0.1', 1676511348, 'Logged in'),
+(40, 1, 1, 'admin', '127.0.0.1', 1708026524, 'Logged in');
 
 INSERT INTO `exp_dashboard_widgets` (`widget_id`, `widget_name`, `widget_data`, `widget_type`, `widget_source`, `widget_file`) VALUES
 (1, NULL, NULL, 'php', 'pro', 'comments'),
@@ -2931,10 +2996,11 @@ INSERT INTO `exp_dashboard_widgets` (`widget_id`, `widget_name`, `widget_data`, 
 (5, NULL, NULL, 'php', 'pro', 'recent_templates'),
 (6, NULL, NULL, 'html', 'pro', 'support');
 
-INSERT INTO `exp_dock_prolets` (`dock_id`, `prolet_id`) VALUES
-(1, 1),
-(1, 2),
-(1, 3);
+INSERT INTO `exp_dock_prolets` (`dock_prolets_id`, `dock_id`, `prolet_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3),
+(4, 1, 4);
 
 INSERT INTO `exp_docks` (`dock_id`, `site_id`) VALUES
 (1, 0);
@@ -2965,13 +3031,13 @@ INSERT INTO `exp_extensions` (`extension_id`, `class`, `method`, `hook`, `settin
 (23, 'Pro_search_ext', 'after_category_delete', 'after_category_delete', 'a:17:{s:12:\"encode_query\";s:1:\"y\";s:15:\"min_word_length\";s:1:\"4\";s:14:\"excerpt_length\";s:2:\"50\";s:14:\"excerpt_hilite\";s:0:\"\";s:12:\"title_hilite\";s:0:\"\";s:10:\"batch_size\";s:3:\"100\";s:19:\"default_result_page\";s:14:\"search/results\";s:15:\"search_log_size\";s:3:\"500\";s:12:\"ignore_words\";s:20:\"a an and the or of s\";s:16:\"disabled_filters\";a:0:{}s:10:\"stop_words\";s:3945:\"a\'s able about above according accordingly across actually after afterwards again against ain\'t\n            all allow allows almost alone along already also although always am among amongst an and another\n            any anybody anyhow anyone anything anyway anyways anywhere apart appear appreciate appropriate are\n            aren\'t around as aside ask asking associated at available away awfully be became because become\n            becomes becoming been before beforehand behind being believe below beside besides best better between\n            beyond both brief but by c\'mon c\'s came can can\'t cannot cant cause causes certain certainly changes\n            clearly co com come comes concerning consequently consider considering contain containing contains\n            corresponding could couldn\'t course currently definitely described despite did didn\'t different do\n            does doesn\'t doing don\'t done down downwards during each edu eg eight either else elsewhere enough\n            entirely especially et etc even ever every everybody everyone everything everywhere ex exactly example\n            except far few fifth first five followed following follows for former formerly forth four from further\n            furthermore get gets getting given gives go goes going gone got gotten greetings had hadn\'t happens\n            hardly has hasn\'t have haven\'t having he he\'s hello help hence her here here\'s hereafter hereby herein\n            hereupon hers herself hi him himself his hither hopefully how howbeit however i\'d i\'ll i\'m i\'ve ie if\n            ignored immediate in inasmuch inc indeed indicate indicated indicates inner insofar instead into\n            inward is isn\'t it it\'d it\'ll it\'s its itself just keep keeps kept know known knows last lately later\n            latter latterly least less lest let let\'s like liked likely little look looking looks ltd mainly many\n            may maybe me mean meanwhile merely might more moreover most mostly much must my myself name namely nd\n            near nearly necessary need needs neither never nevertheless new next nine no nobody non none noone nor\n            normally not nothing novel now nowhere obviously of off often oh ok okay old on once one ones only\n            onto or other others otherwise ought our ours ourselves out outside over overall own particular\n            particularly per perhaps placed please plus possible presumably probably provides que quite qv rather\n            rd re really reasonably regarding regardless regards relatively respectively right said same saw say\n            saying says second secondly see seeing seem seemed seeming seems seen self selves sensible sent\n            serious seriously seven several shall she should shouldn\'t since six so some somebody somehow someone\n            something sometime sometimes somewhat somewhere soon sorry specified specify specifying still sub such\n            sup sure t\'s take taken tell tends th than thank thanks thanx that that\'s thats the their theirs them\n            themselves then thence there there\'s thereafter thereby therefore therein theres thereupon these they\n            they\'d they\'ll they\'re they\'ve think third this thorough thoroughly those though three through\n            throughout thru thus to together too took toward towards tried tries truly try trying twice two un\n            under unfortunately unless unlikely until unto up upon us use used useful uses using usually value\n            various very via viz vs want wants was wasn\'t way we we\'d we\'ll we\'re we\'ve welcome well went were\n            weren\'t what what\'s whatever when whence whenever where where\'s whereafter whereas whereby wherein\n            whereupon wherever whether which while whither who who\'s whoever whole whom whose why will willing\n            wish with within without won\'t wonder would wouldn\'t yes yet you you\'d you\'ll you\'re you\'ve your\n            yours yourself yourselves zero\";s:10:\"can_manage\";a:0:{}s:20:\"can_manage_shortcuts\";a:0:{}s:18:\"can_manage_lexicon\";a:0:{}s:11:\"can_replace\";a:0:{}s:19:\"can_view_search_log\";a:0:{}s:20:\"can_view_replace_log\";a:0:{}}', 10, '8.0.0', 'y'),
 (24, 'Pro_search_ext', 'after_channel_field_delete', 'after_channel_field_delete', 'a:17:{s:12:\"encode_query\";s:1:\"y\";s:15:\"min_word_length\";s:1:\"4\";s:14:\"excerpt_length\";s:2:\"50\";s:14:\"excerpt_hilite\";s:0:\"\";s:12:\"title_hilite\";s:0:\"\";s:10:\"batch_size\";s:3:\"100\";s:19:\"default_result_page\";s:14:\"search/results\";s:15:\"search_log_size\";s:3:\"500\";s:12:\"ignore_words\";s:20:\"a an and the or of s\";s:16:\"disabled_filters\";a:0:{}s:10:\"stop_words\";s:3945:\"a\'s able about above according accordingly across actually after afterwards again against ain\'t\n            all allow allows almost alone along already also although always am among amongst an and another\n            any anybody anyhow anyone anything anyway anyways anywhere apart appear appreciate appropriate are\n            aren\'t around as aside ask asking associated at available away awfully be became because become\n            becomes becoming been before beforehand behind being believe below beside besides best better between\n            beyond both brief but by c\'mon c\'s came can can\'t cannot cant cause causes certain certainly changes\n            clearly co com come comes concerning consequently consider considering contain containing contains\n            corresponding could couldn\'t course currently definitely described despite did didn\'t different do\n            does doesn\'t doing don\'t done down downwards during each edu eg eight either else elsewhere enough\n            entirely especially et etc even ever every everybody everyone everything everywhere ex exactly example\n            except far few fifth first five followed following follows for former formerly forth four from further\n            furthermore get gets getting given gives go goes going gone got gotten greetings had hadn\'t happens\n            hardly has hasn\'t have haven\'t having he he\'s hello help hence her here here\'s hereafter hereby herein\n            hereupon hers herself hi him himself his hither hopefully how howbeit however i\'d i\'ll i\'m i\'ve ie if\n            ignored immediate in inasmuch inc indeed indicate indicated indicates inner insofar instead into\n            inward is isn\'t it it\'d it\'ll it\'s its itself just keep keeps kept know known knows last lately later\n            latter latterly least less lest let let\'s like liked likely little look looking looks ltd mainly many\n            may maybe me mean meanwhile merely might more moreover most mostly much must my myself name namely nd\n            near nearly necessary need needs neither never nevertheless new next nine no nobody non none noone nor\n            normally not nothing novel now nowhere obviously of off often oh ok okay old on once one ones only\n            onto or other others otherwise ought our ours ourselves out outside over overall own particular\n            particularly per perhaps placed please plus possible presumably probably provides que quite qv rather\n            rd re really reasonably regarding regardless regards relatively respectively right said same saw say\n            saying says second secondly see seeing seem seemed seeming seems seen self selves sensible sent\n            serious seriously seven several shall she should shouldn\'t since six so some somebody somehow someone\n            something sometime sometimes somewhat somewhere soon sorry specified specify specifying still sub such\n            sup sure t\'s take taken tell tends th than thank thanks thanx that that\'s thats the their theirs them\n            themselves then thence there there\'s thereafter thereby therefore therein theres thereupon these they\n            they\'d they\'ll they\'re they\'ve think third this thorough thoroughly those though three through\n            throughout thru thus to together too took toward towards tried tries truly try trying twice two un\n            under unfortunately unless unlikely until unto up upon us use used useful uses using usually value\n            various very via viz vs want wants was wasn\'t way we we\'d we\'ll we\'re we\'ve welcome well went were\n            weren\'t what what\'s whatever when whence whenever where where\'s whereafter whereas whereby wherein\n            whereupon wherever whether which while whither who who\'s whoever whole whom whose why will willing\n            wish with within without won\'t wonder would wouldn\'t yes yet you you\'d you\'ll you\'re you\'ve your\n            yours yourself yourselves zero\";s:10:\"can_manage\";a:0:{}s:20:\"can_manage_shortcuts\";a:0:{}s:18:\"can_manage_lexicon\";a:0:{}s:11:\"can_replace\";a:0:{}s:19:\"can_view_search_log\";a:0:{}s:20:\"can_view_replace_log\";a:0:{}}', 10, '8.0.0', 'y');
 
-INSERT INTO `exp_field_groups` (`group_id`, `site_id`, `group_name`) VALUES
-(1, 0, 'contact'),
-(2, 0, 'about'),
-(3, 0, 'blog'),
-(4, 0, 'common'),
-(5, 0, 'seo'),
-(6, 0, 'testing');
+INSERT INTO `exp_field_groups` (`group_id`, `site_id`, `group_name`, `short_name`, `group_description`) VALUES
+(1, 0, 'contact', 'field_group_contact', NULL),
+(2, 0, 'about', 'field_group_about', NULL),
+(3, 0, 'blog', 'field_group_blog', NULL),
+(4, 0, 'common', 'field_group_common', NULL),
+(5, 0, 'seo', 'field_group_seo', NULL),
+(6, 0, 'testing', 'field_group_testing', NULL);
 
 INSERT INTO `exp_fieldtypes` (`fieldtype_id`, `name`, `version`, `settings`, `has_global_settings`) VALUES
 (1, 'select', '1.0.0', 'YTowOnt9', 'n'),
@@ -2998,7 +3064,8 @@ INSERT INTO `exp_fieldtypes` (`fieldtype_id`, `name`, `version`, `settings`, `ha
 (22, 'selectable_buttons', '1.0.0', 'YTowOnt9', 'n'),
 (23, 'notes', '1.0.0', 'YTowOnt9', 'n'),
 (24, 'structure', '6.0.0', 'YToxOntzOjE5OiJzdHJ1Y3R1cmVfbGlzdF90eXBlIjtzOjU6InBhZ2VzIjt9', 'n'),
-(25, 'pro_variables', '5.0.2', 'YTowOnt9', 'n');
+(25, 'pro_variables', '5.0.2', 'YTowOnt9', 'n'),
+(26, 'member', '2.4.0', 'YTowOnt9', 'n');
 
 INSERT INTO `exp_file_dimensions` (`id`, `site_id`, `upload_location_id`, `title`, `short_name`, `resize_type`, `width`, `height`, `quality`, `watermark_id`) VALUES
 (1, 1, 5, '', 'test', 'constrain', 100, 100, 90, 0);
@@ -3007,11 +3074,11 @@ INSERT INTO `exp_file_manager_views` (`view_id`, `viewtype`, `upload_id`, `membe
 (1, 'list', 0, 1, '', 's:59:\"[\"title\",\"file_name\",\"file_type\",\"upload_date\",\"file_size\"]\";'),
 (2, 'thumb', 0, 1, '', 's:21:\"[\"title\",\"file_size\"]\";');
 
-INSERT INTO `exp_file_usage` (`file_id`, `entry_id`, `cat_id`) VALUES
-(2, 3, 0),
-(2, 4, 0),
-(2, 2, 0),
-(1, 13, 0);
+INSERT INTO `exp_file_usage` (`file_usage_id`, `file_id`, `entry_id`, `cat_id`) VALUES
+(1, 2, 3, 0),
+(2, 2, 4, 0),
+(3, 2, 2, 0),
+(4, 1, 13, 0);
 
 INSERT INTO `exp_files` (`file_id`, `model_type`, `site_id`, `title`, `upload_location_id`, `directory_id`, `mime_type`, `file_type`, `file_name`, `file_size`, `description`, `credit`, `location`, `uploaded_by_member_id`, `upload_date`, `modified_by_member_id`, `modified_date`, `file_hw_original`, `total_records`) VALUES
 (1, 'File', 1, 'blog.jpg', 4, 0, 'image/jpeg', 'img', 'blog.jpg', 339111, NULL, NULL, NULL, 0, 1666304930, 0, 1666304930, '900 1200', 1),
@@ -3021,13 +3088,13 @@ INSERT INTO `exp_files` (`file_id`, `model_type`, `site_id`, `title`, `upload_lo
 (5, 'File', 1, 'lake.jpg', 6, 0, 'image/jpeg', 'img', 'lake.jpg', 286878, NULL, NULL, NULL, 0, 1666304930, 0, 1666304930, '502 1200', 0),
 (6, 'File', 1, 'ocean.jpg', 6, 0, 'image/jpeg', 'img', 'ocean.jpg', 111529, NULL, NULL, NULL, 0, 1666304930, 0, 1666304930, '502 1200', 0);
 
-INSERT INTO `exp_fluid_field_data` (`id`, `fluid_field_id`, `entry_id`, `field_id`, `field_data_id`, `order`) VALUES
-(1, 19, 13, 12, 2, 1),
-(2, 19, 13, 12, 3, 2),
-(3, 19, 13, 14, 2, 3),
-(6, 19, 13, 20, 3, 5),
-(7, 19, 13, 27, 2, 4),
-(8, 19, 13, 32, 3, 6);
+INSERT INTO `exp_fluid_field_data` (`id`, `fluid_field_id`, `entry_id`, `field_id`, `field_data_id`, `field_group_id`, `order`, `group`) VALUES
+(1, 19, 13, 12, 2, NULL, 1, NULL),
+(2, 19, 13, 12, 3, NULL, 2, NULL),
+(3, 19, 13, 14, 2, NULL, 3, NULL),
+(6, 19, 13, 20, 3, NULL, 5, NULL),
+(7, 19, 13, 27, 2, NULL, 4, NULL),
+(8, 19, 13, 32, 3, NULL, 6, NULL);
 
 INSERT INTO `exp_global_variables` (`variable_id`, `site_id`, `variable_name`, `variable_data`, `edit_date`) VALUES
 (1, 0, 'gv_comment_expired', 'Commenting for this entry has <b>expired</b>.', 1669131554),
@@ -3109,8 +3176,8 @@ INSERT INTO `exp_member_fields` (`m_field_id`, `m_field_name`, `m_field_label`, 
 INSERT INTO `exp_member_news_views` (`news_id`, `version`, `member_id`) VALUES
 (1, '7.0.2', 1);
 
-INSERT INTO `exp_members` (`member_id`, `role_id`, `pending_role_id`, `username`, `screen_name`, `password`, `salt`, `unique_id`, `crypt_key`, `backup_mfa_code`, `authcode`, `email`, `signature`, `avatar_filename`, `avatar_width`, `avatar_height`, `photo_filename`, `photo_width`, `photo_height`, `sig_img_filename`, `sig_img_width`, `sig_img_height`, `ignore_list`, `private_messages`, `accept_messages`, `last_view_bulletins`, `last_bulletin_date`, `ip_address`, `join_date`, `last_visit`, `last_activity`, `total_entries`, `total_comments`, `total_forum_topics`, `total_forum_posts`, `last_entry_date`, `last_comment_date`, `last_forum_post_date`, `last_email_date`, `in_authorlist`, `accept_admin_email`, `accept_user_email`, `notify_by_default`, `notify_of_pm`, `display_signatures`, `parse_smileys`, `smart_notifications`, `language`, `timezone`, `time_format`, `date_format`, `include_seconds`, `profile_theme`, `forum_theme`, `tracker`, `template_size`, `notepad`, `notepad_size`, `bookmarklets`, `quick_links`, `quick_tabs`, `show_sidebar`, `pmember_id`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `dismissed_banner`, `enable_mfa`) VALUES
-(1, 1, 0, 'admin', 'admin', '$2y$10$sf.1VbpWyqNahvV.bxmRj.QjBPVyt12HDWjyretatpGjekQqVXvUy', '', '90167eb04b94d8e9e75e7a69b3f0bc6b97f07fc7', 'a0ee918a3d2db6d41cb852a691a8a8211338dcde', NULL, NULL, 'bryan@packettide.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'y', 0, 0, '127.0.0.1', 1666304930, 1676005278, 1676527607, 13, 7, 0, 0, 1667245500, 1666304949, 0, 0, 'n', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'english', 'UTC', NULL, NULL, NULL, NULL, NULL, NULL, '28', NULL, '18', NULL, '', NULL, 'n', 0, NULL, NULL, NULL, 'n', 'n');
+INSERT INTO `exp_members` (`member_id`, `role_id`, `pending_role_id`, `username`, `screen_name`, `password`, `salt`, `unique_id`, `crypt_key`, `backup_mfa_code`, `authcode`, `email`, `signature`, `avatar_filename`, `avatar_width`, `avatar_height`, `photo_filename`, `photo_width`, `photo_height`, `sig_img_filename`, `sig_img_width`, `sig_img_height`, `ignore_list`, `private_messages`, `accept_messages`, `last_view_bulletins`, `last_bulletin_date`, `ip_address`, `join_date`, `last_visit`, `last_activity`, `total_entries`, `total_comments`, `total_forum_topics`, `total_forum_posts`, `last_entry_date`, `last_comment_date`, `last_forum_post_date`, `last_email_date`, `in_authorlist`, `accept_admin_email`, `accept_user_email`, `notify_by_default`, `notify_of_pm`, `display_signatures`, `parse_smileys`, `smart_notifications`, `language`, `timezone`, `time_format`, `date_format`, `week_start`, `include_seconds`, `profile_theme`, `forum_theme`, `tracker`, `template_size`, `notepad`, `notepad_size`, `bookmarklets`, `quick_links`, `quick_tabs`, `show_sidebar`, `pmember_id`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `dismissed_banner`, `enable_mfa`) VALUES
+(1, 1, 0, 'admin', 'admin', '$2y$10$sf.1VbpWyqNahvV.bxmRj.QjBPVyt12HDWjyretatpGjekQqVXvUy', '', '90167eb04b94d8e9e75e7a69b3f0bc6b97f07fc7', 'a0ee918a3d2db6d41cb852a691a8a8211338dcde', NULL, NULL, 'bryan@packettide.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'y', 0, 0, '127.0.0.1', 1666304930, 1676527607, 1708026525, 13, 7, 0, 0, 1667245500, 1666304949, 0, 0, 'n', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'english', 'UTC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '28', NULL, '18', NULL, '', NULL, 'n', 0, NULL, NULL, NULL, 'n', 'n');
 
 INSERT INTO `exp_members_roles` (`member_id`, `role_id`) VALUES
 (1, 1);
@@ -3237,7 +3304,8 @@ INSERT INTO `exp_permissions` (`permission_id`, `role_id`, `site_id`, `permissio
 (97, 5, 1, 'can_edit_html_buttons'),
 (98, 5, 1, 'can_delete_self'),
 (99, 5, 1, 'can_send_private_messages'),
-(100, 5, 1, 'can_attach_in_private_messages');
+(100, 5, 1, 'can_attach_in_private_messages'),
+(101, 1, 1, 'can_edit_member_fields');
 
 INSERT INTO `exp_plugins` (`plugin_id`, `plugin_name`, `plugin_package`, `plugin_version`, `is_typography_related`) VALUES
 (1, 'Request', 'request', '1.0.1', 'n');
@@ -3259,24 +3327,25 @@ INSERT INTO `exp_pro_variables` (`variable_id`, `group_id`, `variable_label`, `v
 INSERT INTO `exp_prolets` (`prolet_id`, `source`, `class`) VALUES
 (1, 'pro', 'Entries_pro'),
 (2, 'structure', 'Structure_pro'),
-(3, 'pro_variables', 'Pro_variables_pro');
+(3, 'pro_variables', 'Pro_variables_pro'),
+(4, 'channel', 'Channel_pro');
 
 INSERT INTO `exp_relationships` (`relationship_id`, `parent_id`, `child_id`, `field_id`, `fluid_field_data_id`, `grid_field_id`, `grid_col_id`, `grid_row_id`, `order`) VALUES
 (9, 13, 12, 26, 0, 0, 0, 0, 1);
 
-INSERT INTO `exp_role_settings` (`id`, `role_id`, `site_id`, `menu_set_id`, `mbr_delete_notify_emails`, `exclude_from_moderation`, `search_flood_control`, `prv_msg_send_limit`, `prv_msg_storage_limit`, `include_in_authorlist`, `include_in_memberlist`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `require_mfa`) VALUES
-(1, 1, 1, 1, NULL, 'y', 0, 20, 60, 'y', 'y', NULL, 0, NULL, 'n'),
-(2, 2, 1, 1, NULL, 'n', 60, 20, 60, 'n', 'n', NULL, 0, NULL, 'n'),
-(3, 3, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n'),
-(4, 4, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n'),
-(5, 5, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n');
+INSERT INTO `exp_role_settings` (`id`, `role_id`, `site_id`, `menu_set_id`, `mbr_delete_notify_emails`, `exclude_from_moderation`, `search_flood_control`, `prv_msg_send_limit`, `prv_msg_storage_limit`, `include_in_authorlist`, `include_in_memberlist`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `require_mfa`, `show_field_names`) VALUES
+(1, 1, 1, 1, NULL, 'y', 0, 20, 60, 'y', 'y', NULL, 0, NULL, 'n', 'y'),
+(2, 2, 1, 1, NULL, 'n', 60, 20, 60, 'n', 'n', NULL, 0, NULL, 'n', 'y'),
+(3, 3, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n', 'y'),
+(4, 4, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n', 'y'),
+(5, 5, 1, 1, NULL, 'n', 10, 20, 60, 'n', 'y', NULL, 0, NULL, 'n', 'y');
 
-INSERT INTO `exp_roles` (`role_id`, `name`, `short_name`, `description`, `total_members`, `is_locked`) VALUES
-(1, 'Super Admin', 'super_admin', NULL, 0, 'y'),
-(2, 'Banned', 'banned', NULL, 0, 'n'),
-(3, 'Guests', 'guests', NULL, 0, 'n'),
-(4, 'Pending', 'pending', NULL, 0, 'n'),
-(5, 'Members', 'members', NULL, 0, 'n');
+INSERT INTO `exp_roles` (`role_id`, `name`, `short_name`, `description`, `total_members`, `is_locked`, `highlight`) VALUES
+(1, 'Super Admin', 'super_admin', NULL, 0, 'y', ''),
+(2, 'Banned', 'banned', NULL, 0, 'n', ''),
+(3, 'Guests', 'guests', NULL, 0, 'n', ''),
+(4, 'Pending', 'pending', NULL, 0, 'n', ''),
+(5, 'Members', 'members', NULL, 0, 'n', '');
 
 INSERT INTO `exp_rte_toolsets` (`toolset_id`, `toolset_name`, `toolset_type`, `settings`) VALUES
 (1, 'CKEditor Basic', 'ckeditor', 'YTo1OntzOjQ6InR5cGUiO3M6ODoiY2tlZGl0b3IiO3M6NzoidG9vbGJhciI7YTo2OntpOjA7czo0OiJib2xkIjtpOjE7czo2OiJpdGFsaWMiO2k6MjtzOjk6InVuZGVybGluZSI7aTozO3M6MTI6Im51bWJlcmVkTGlzdCI7aTo0O3M6MTI6ImJ1bGxldGVkTGlzdCI7aTo1O3M6NDoibGluayI7fXM6NjoiaGVpZ2h0IjtzOjM6IjIwMCI7czoxMDoidXBsb2FkX2RpciI7czozOiJhbGwiO3M6MTA6Im1lZGlhRW1iZWQiO2E6MTp7czoxNDoicHJldmlld3NJbkRhdGEiO2I6MTt9fQ=='),
@@ -3288,7 +3357,11 @@ INSERT INTO `exp_security_hashes` (`hash_id`, `date`, `session_id`, `hash`) VALU
 (12, 1667329378, 'b569046174967322d9d7c2ec861d2094d42e2a5e', 'd0fa8b46c9efb6bfe1d3ff741f9eb139703b2481'),
 (14, 1673297485, 'a073d3b4c2b696a43ff5b5a7ef96a74e672f2f77', '67abf6b4742755f9f57a95c6bae99b15be273562'),
 (16, 1673973829, '04e544fd6258ff9d55e59bf7cd4a663afd6c4733', '7902993c433e89c3737008f34625e8f8d1ebc960'),
-(17, 1675298767, 'ae0c4d09a6ba4b69206285ac07cc82e0e674b71e', 'c43496743d8cdc897ecf135c44163fbb0b81fecd');
+(17, 1675298767, 'ae0c4d09a6ba4b69206285ac07cc82e0e674b71e', 'c43496743d8cdc897ecf135c44163fbb0b81fecd'),
+(18, 1708026525, 'da21852b8a7072234218c369740db14e6b374c57', '769c7b014e7598f45fc8ee59bf9c958ceeddd2b8');
+
+INSERT INTO `exp_sessions` (`session_id`, `member_id`, `admin_sess`, `ip_address`, `user_agent`, `login_state`, `fingerprint`, `sess_start`, `auth_timeout`, `last_activity`, `can_debug`, `mfa_flag`, `pro_banner_seen`) VALUES
+('da21852b8a7072234218c369740db14e6b374c57', 1, 1, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', NULL, '52862cea963ad92cb2dbf23a6df0e276', 1708026524, 0, 1708026597, '0', 'skip', 'n');
 
 INSERT INTO `exp_sites` (`site_id`, `site_label`, `site_name`, `site_description`, `site_color`, `site_bootstrap_checksums`, `site_pages`) VALUES
 (1, 'Default Site', 'default_site', NULL, '', 'YToyOntzOjUzOiIvVXNlcnMvYnJ5YW5uaWVsc2VuL0NvZGUvY29pbHBhY2stdGVzdC8uL2VlL2luZGV4LnBocCI7czozMjoiNGE4YTA5ZjhmMjQ0ZDQ5NDFmODFiZGU4MmIzNjliNjEiO3M6NTU6Ii9Vc2Vycy9icnlhbm5pZWxzZW4vQ29kZS9FRS9uZXh0L2xhcmF2ZWwvLi9lZS9pbmRleC5waHAiO3M6MzI6IjRhOGEwOWY4ZjI0NGQ0OTQxZjgxYmRlODJiMzY5YjYxIjt9', 'YToxOntpOjE7YTozOntzOjM6InVybCI7czoyMDoiaHR0cDovL2xhcmF2ZWwudGVzdC8iO3M6NDoidXJpcyI7YTozOntpOjI7czoyMToiL2Fib3V0LWRlZmF1bHQtdGhlbWUvIjtpOjM7czozNDoiL2Fib3V0LWRlZmF1bHQtdGhlbWUvc3ViLXBhZ2Utb25lLyI7aTo0O3M6MzQ6Ii9hYm91dC1kZWZhdWx0LXRoZW1lL3N1Yi1wYWdlLXR3by8iO31zOjk6InRlbXBsYXRlcyI7YTozOntpOjI7aToxNDtpOjM7aToxNDtpOjQ7aToxNDt9fX0=');
@@ -3447,13 +3520,13 @@ INSERT INTO `exp_templates` (`template_id`, `site_id`, `group_id`, `template_nam
 (38, 1, 12, 'index', 'webpage', NULL, '<html>\n    <body>\n        <div class=\"open\">\n            {exp:channel:entries entry_id=\"1\"} \n                {related_news} \n                    <p>{related_news:title}</p>\n                {/related_news}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"all\">\n            {exp:channel:entries entry_id=\"1\"} \n                {related_news status=\"open|Featured\"} \n                    <p>{related_news:title}</p>\n                {/related_news}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"not_open\">\n            {exp:channel:entries entry_id=\"1\"} \n                {related_news status=\"not open\"} \n                    <p>{related_news:title}</p>\n                {/related_news}\n            {/exp:channel:entries}\n        </div>\n    </body>\n</html>\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (39, 1, 12, 'reverse', 'webpage', NULL, '<html>\n    <body>\n        <div class=\"all\">\n            {exp:channel:entries entry_id=\"2\"} \n                {parents} \n                    <p>{parents:title}</p>\n                {/parents}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"not_open\">\n            {exp:channel:entries entry_id=\"2\"} \n                {parents status=\"not open\"} \n                    <p>{parents:title}</p>\n                {/parents}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"not_all\">\n            {exp:channel:entries entry_id=\"2\"} \n                {parents status=\"not open|Featured\"} \n                    <p>{parents:title}</p>\n                {/parents}\n            {/exp:channel:entries}\n        </div>\n    </body>\n</html>\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (40, 1, 12, 'siblings', 'webpage', NULL, '<html>\n    <body>\n        <div class=\"all\">\n            {exp:channel:entries entry_id=\"{segment_3}\" status=\"open|Featured\"} \n                {siblings status=\"open|Featured\"} \n                    <p>{siblings:title}</p>\n                {/siblings}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"open\">\n            {exp:channel:entries entry_id=\"{segment_3}\" status=\"open|Featured\"} \n                {siblings status=\"open\"} \n                    <p>{siblings:title}</p>\n                {/siblings}\n            {/exp:channel:entries}\n        </div>\n        <div class=\"not_open\">\n            {exp:channel:entries entry_id=\"{segment_3}\" status=\"open|Featured\"} \n                {siblings status=\"not open\"} \n                    <p>{siblings:title}</p>\n                {/siblings}\n            {/exp:channel:entries}\n        </div>\n    </body>\n</html>\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
-(41, 1, 13, 'index', 'webpage', NULL, '{!-- template:twig --}\n\n\n{% extends \"ee::default_site.twig._layout\" %}\n\n{% set entry = exp.channel.entries.channel(\'about\').first() %}\n\n{% block contents %}\n    <h1>{{ entry.title }}</h1>\n    <h2>{{ global.site_url}} </h2>\n    <div>{{ entry.page_content | raw }}</div>\n\n    {% include(\'ee::default_site.twig.twig_include\') %}\n\n{% endblock %}\n\n\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
-(42, 1, 13, '_layout', 'webpage', NULL, '<html>\n\n<body>\n    <h1>Layout</h1>\n    <div class=\"content\">\n        {% block contents %}{% endblock %}\n    </div>\n</body>\n\n</html>', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
+(41, 1, 13, 'index', 'webpage', NULL, '{!-- template:twig --}\n\n\n{% extends \"ee::default_site.twig._layout\" %}\n\n{% set entry = exp.channel.entries.channel(\'about\').first() %}\n\n{% block contents %}\n    <h1>{{ entry.title }}</h1>\n    <h2>{{ global.site_url}} </h2>\n    <div>{{ entry.page_content | raw }}</div>\n\n    {% include(\'ee::default_site.twig.twig_include\') %}\n\n{% endblock %}\n\n\n', NULL, 1708026595, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
+(42, 1, 13, '_layout', 'webpage', NULL, '<html>\n\n<body>\n    <h1>Layout</h1>\n    <div class=\"content\">\n        {% block contents %}{% endblock %}\n    </div>\n</body>\n\n</html>', NULL, 1708026595, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (43, 1, 13, 'test23', 'webpage', 'twig', 'test23333', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (44, 1, 13, 'another_test', 'webpage', NULL, '', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (45, 1, 13, 'ee', 'webpage', NULL, '{exp:channel:entries channel=\"about\" dynamic=\"no\"}\n	<h1>{title}</h1>\n	{embed=\"twig/_embed\" entry_id=\"{entry_id}\"}\n{/exp:channel:entries}', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (46, 1, 13, '_embed', 'webpage', NULL, '{!-- template:twig --}\n<h2>{{ embed.entry_id }} + 2 = {{ embed.entry_id + 2 }}</h2>', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
-(47, 1, 13, 'twig_include', 'webpage', NULL, '<div>\nvar: {{ entry.title }}\n</div>', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
+(47, 1, 13, 'twig_include', 'webpage', NULL, '<div>\nvar: {{ entry.title }}\n</div>', NULL, 1708026595, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (48, 1, 14, 'index', 'webpage', NULL, '', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (49, 1, 14, 'site_css', 'css', NULL, 'html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,hr{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}:focus{outline:0;}body{line-height:1;color:black;background:white;}ol,ul{list-style:none;}table{border-collapse:collapse;border-spacing:0;}caption,th,td{text-align:left;font-weight:normal;}blockquote:before,blockquote:after,q:before,q:after{content:\"\";}blockquote,q{quotes:\"\"\"\";}@font-face{font-family:\'miso\';src:url(\'{site_url}themes/site/default/fonts/miso-bold.ttf\');}body{background:#ccc url({site_url}themes/site/default/images/body_bg.jpg) top center;font-size:13px;font-family:Arial,sans-serif;}ul#nav_access{position:absolute;top:-9999px;left:-9999px;}p,ul,dl,ol{margin-bottom:22px;line-height:22px;}ul{list-style:url({site_url}themes/site/default/images/bullet.jpg);}ul li{margin-left:12px;}ol{list-style:decimal;list-style-position:inside;}hr{height:0;border-top:1px solid #ccc;margin-bottom:22px;}abbr{border-bottom:1px dotted;}strong{font-weight:bold;}em{font-style:italic;}h1,h2,h3,h4,h5{font-weight:bold;}h2{color:#48482d;font-size:16px;margin-bottom:10px;}h3{margin-bottom:20px;}h4{margin-bottom:10px;}h5{margin-bottom:10px;}h6{text-transform:uppercase;font-size:11px;color:#666;letter-spacing:1px;margin-bottom:10px;}a:link,a:visited{color:#333;text-decoration:underline;}a:hover,a:focus{color:#111;}h2 a:link,h2 a:visited,h3 a:link,h3 a:visited,h4 a:link,h4 a:visited{text-decoration:none;}\n\n/* Tables */\n/* site_url explanation: https://docs.expressionengine.com/latest/templates/globals/single_variables.html#var_site_url */\n/* only site_url will be parsed, other variables will not be parsed unless you call the stylesheet using path= instead of stylesheet=:\n\nhttps://docs.expressionengine.com/latest/templates/globals/stylesheet.html */\n\ntable{background:url({site_url}themes/site/default/images/white_40.png);font-size:12px;}\ntr{border-bottom:1px dotted #999;}\ntr.alt{background:url({site_url}themes/site/default/images/white_20.png);}\nth,td{padding:10px;}\nth{background:url({site_url}themes/site/default/images/white_20.png);color:#666;font-weight:bold;font-size:13px;}\n.member_table{width:60%; margin:10px;}\n.member_console{width:100%;}\n\n/* Page Styles */\ndiv#branding{height:290px;background:url({site_url}themes/site/default/images/branding_bg.png) repeat-x center top;position:relative;z-index:2;}\ndiv#branding_sub{width:930px;margin:0 auto;position:relative;}\ndiv#page{width:950px;padding-top:50px;margin:0 auto;position:relative;top:0px;margin-top:-80px;z-index:1;background:url({site_url}themes/site/default/images/white_40.png);}\ndiv#content_wrapper{padding-top:30px;}\ndiv#feature{width:950px;background:url({site_url}themes/site/default/images/white_70.png);float:left;padding-top:30px;position:relative;bottom:30px;margin-bottom:-30px;}\n\ndiv.feature_end {background:transparent url({site_url}themes/site/default/images/agile_sprite.png) no-repeat scroll left -747px; border:none;outline:none;clear:both;height:35px;margin-top:-6px;margin-bottom:20px;width:950px;}\n\ndiv#legend{width:950px;background:url({site_url}themes/site/default/images/white_70.png);overflow:hidden;position:relative;top:30px;margin-top:-30px;padding:10px 0 30px 0;font-size:11px;}\nhr.legend_start{width:950px;clear:both;background:url({site_url}themes/site/default/images/white_70_top.png) no-repeat top left;height:35px;margin:0;margin-top:20px;border:none;}\ndiv#content_pri{width:610px;float:left;margin:0 30px 0 10px;}\ndiv#content_sec{width:270px;float:left;}\n\ninput.input { border:1px solid #aaa; position:relative; left:5px; background:url({site_url}themes/site/default/images/white_50.png);}\ninput.input:focus { background:url({site_url}themes/site/default/images/white_70.png); }\ntextarea { border:1px solid #aaa; background:url({site_url}themes/site/default/images/white_50.png); }\ntextarea:focus { background:url({site_url}themes/site/default/images/white_70.png); }\n\n\n\n\n/* Branding */\ndiv#branding_logo{background:url({site_url}themes/site/default/images/agile_sprite.png) no-repeat 9px -428px;margin:0 auto;position:relative;left:-80px;margin-bottom:-230px;height:230px;width:950px;}\ndiv#branding_logo img{display:none;}\ndiv#branding_sub h1 a {width:182px;height:196px;display:block;text-indent:-9999em;background:url({site_url}themes/site/default/images/agile_sprite.png) no-repeat -264px 15px;  padding-top:15px;}\ndiv#branding_sub form{position:absolute; right:130px;top:25px;width:240px;height:51px;background:url({site_url}themes/site/default/images/agile_sprite.png) no-repeat -534px -21px;}\ndiv#branding_sub form fieldset{position:relative;}\ndiv#branding_sub form label{text-indent:-9999em;margin-top:10px;width:60px;padding:5px;position:absolute;left:0px;display:inline;}\ndiv#branding_sub form input#search{background:none;border:none;position:absolute;top:13px;left:70px;width:100px;padding:2px 5px;font-size:11px;color:#fff;}\n\ndiv#branding_sub form input#submit{position:absolute;right:30px;top:6px; background:transparent url({site_url}themes/site/default/images/agile_sprite.png) no-repeat -587px -77px; width:24px; height:24px; display:block; font-size:1px; border:none; outline:none;}\n\ndiv#branding_sub div#member{position:absolute;right:0;top:20px;background:url({site_url}themes/site/default/images/brown_40.png);border:1px solid #846f65;color:#ccc;font-size:11px;padding:8px;}\ndiv#branding_sub div#member ul{margin:0;line-height:13px;list-style:disc;}\ndiv#branding_sub div#member h4{margin-bottom:4px;}\ndiv#branding_sub div#member a:link, div#branding_sub div#member a:visited{color:#ccc;}\ndiv#branding_sub div#member a:hover, div#branding_sub div#member a:focus{color:#fff;}\n\n/* Navigation */\nul#navigation_pri{list-style:none;margin:0 auto;padding:5px 15px;width:340px;max-height:100px;background:#2f261d;position:absolute;right:0;bottom:20px;}\nul#navigation_pri li{margin:0;float:left;font-size:16px;width:33%;}\nul#navigation_pri li a{font-family:\'Cooper Black\',miso,\'Georgia\',serif;font-weight:bold;color:#999999;text-decoration:none}\nul#navigation_pri li a:hover{color:#efefef;}\nul#navigation_pri li.cur a{color:#f47424}\n\n/* Footer */\ndiv#siteinfo{background:url({site_url}themes/site/default/images/agile_sprite.png) no-repeat left -287px;height:80px;padding-top:40px;position:relative;clear:both;font-size:12px;z-index:3;}\ndiv#siteinfo p{color:#5b5b42;font-weight:bold;margin:0 0 0 10px;}\ndiv#siteinfo p.logo{width:65px;height:70px;background:url({site_url}themes/site/default/images/agile_sprite.png); text-indent:-9999em;position:absolute;left:865px;bottom:15px;}\ndiv#siteinfo a {color:#5b5b42;text-decoration:underline;}\ndiv#siteinfo a:hover {color:#3B3A25;text-decoration:underline;}\ndiv#siteinfo p.logo a{display:block;}\n\n\n/* 11.PAGEHEADERS\n---------------------------------------------------------------------- */\n\ndiv#page_header { background:url({site_url}themes/site/default/images/agile_sprite.png) no-repeat left -205px; height:72px; z-index:3; position:relative; top:-25px; margin-bottom:-15px; }\n\ndiv#page_header h2 { float:left; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-weight: normal; text-transform:uppercase; color:#ebebeb; letter-spacing: -0.01em; }\ndiv#page_header h2 a { display:block; }\n\ndiv#page_header h2 { margin:0; width:400px; height:15px; padding-top:30px; margin-left:10px;}\n\ndiv#page_header ol#breadcrumbs { float:left; list-style:none; margin:0; margin-left:10px; margin-top:26px; padding:0px 0 0 20px; background:url({site_url}themes/site/default/images/breadcrumbs_bg.png) no-repeat left center; }\ndiv#page_header ol#breadcrumbs li { margin:0; float:left; font-weight:bold; color:#d6d6d6; text-transform:uppercase; font-size:12px; }\ndiv#page_header ol#breadcrumbs li a { color:#d6d6d6; text-decoration:none; }\n\n\n/*  Featured Band / Welcome\n-------------------------------- */\ndiv#featured_band {width:450px; float:left; position:relative; z-index:5; bottom:52px; margin-bottom:-52px;}\ndiv#welcome {width:450px; float:left; margin:0 30px 0 10px;}\ndiv#welcome img {float:left; margin:0 30px 10px 0;}\ndiv#featured_band h2 {margin-bottom:38px; width:135px; height:14px; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-weight: normal; text-transform:uppercase; color:#ebebeb; letter-spacing: -0.01em;}\n\ndiv#featured_band div.image { float:right; width:323px; height:243px; position:relative; left:50px; bottom:75px; margin: 0 0 -75px -50px; }\ndiv#featured_band div.image h4 { width:324px; height:243px; background:url({site_url}themes/site/default/images/featuredband_border.png) no-repeat top left; position:absolute; top:0; left:0; z-index:2; }\ndiv#featured_band div.image h4 span { position:absolute; top:177px; left:30px; background:url({site_url}themes/site/default/images/white_70.png); font-size:11px; padding:2px; padding-left:60px; }\ndiv#featured_band div.image img { position:absolute; top:20px; left:15px;}\n.green40 {background:transparent url({site_url}themes/site/default/images/green_40.png) repeat scroll 0 0; color:#EEEEEE; float:left; padding:10px;}\ndiv#feature p {margin-left:10px;}\n\n/* News\n---------------- */\nh3.oldernews {}\nul#news_listing { list-style:none; }\nul#news_listing li { margin:0 0 30px 0; overflow:hidden; }\nul#news_listing li img { float:left; margin:0 10px 10px 0;}\nul#news_listing li p { margin-bottom:10px; }\n\ndiv#news_archives { overflow:hidden; }\ndiv#news_archives div#categories_box {width:120px; float: left;}\ndiv#news_archives div#months_box {width:120px; float: right;}\ndiv#news_archives ul#categories { width:120px; float:left; margin-right:30px; }\ndiv#news_archives ul#months { width:120px; float:left; }\n\ndiv#news_calendar { padding:10px; background:url({site_url}themes/site/default/images/white_50.png); margin-bottom:40px; }\n\ndiv#news_calendar a:link,\ndiv#news_calendar a:visited { color:#666; }\ndiv#news_calendar a:hover,\ndiv#news_calendar a:focus { color:#333; }\n\ndiv#news_calendar h6 { position:relative; text-align:center; text-transform:uppercase; color:#666; padding:0 0 10px 0; }\ndiv#news_calendar h6 a.prev { position:absolute; left:0; top:-3px; font-size:16px; }\ndiv#news_calendar h6 a.next { position:absolute; right:0; top:-3px; font-size:16px; }\n\ndiv#news_calendar table { background:none; font-size:11px; width:250px; color:#666; }\ndiv#news_calendar table th { background:url({site_url}themes/site/default/images/green_50.png); color:#ccc; }\ndiv#news_calendar table th,\ndiv#news_calendar table td  { padding:5px 0; text-align:center; }\ndiv#news_calendar table tr { border:none; }\ndiv#news_calendar table td.unused { color:#999; }\ndiv#news_calendar table td.post { background:url({site_url}themes/site/default/images/white_20.png); }\ndiv#news_calendar table td.post:hover { background:url({site_url}themes/site/default/images/white_40.png); }\n\ndiv#news_rss { padding:10px; background:url({site_url}themes/site/default/images/white_50.png); color:#666; }\ndiv#news_rss ul { list-style:url({site_url}themes/site/default/images/bullet.jpg); margin:0; }\ndiv#news_rss a:link,\ndiv#news_rss a:visited { color:#666; }\ndiv#news_rss a:hover,\ndiv#news_rss a:focus { color:#333; }\n\n\n/* Staff Profiles */\ndiv#content_sec.staff_profiles {\nbackground:transparent url({site_url}themes/site/default/images/staff_bg.jpg) repeat scroll 0 0;float:right;margin-bottom:-110px;padding:10px;position:relative;top:-140px; right:10px; width:430px;}\n\n/* Comments */\ndiv#news_comments { border-top:#bfbebf 1px solid; padding-top:20px; }\n\ndiv#news_comments ol { list-style:none; border-top:1px dotted #ccc; margin-bottom:30px; }\ndiv#news_comments ol li { border-bottom:1px dotted #ccc; background:url({site_url}themes/site/default/images/white_70.png); padding:20px 10px 0 160px; font-size:12px; line-height:20px; }\ndiv#news_comments ol li.alt { background:url({site_url}themes/site/default/images/white_50.png); }\n\ndiv#news_comments ol li h5.commentdata { width:120px; float:left; position:relative; left:-150px; margin-right:-150px; font-size:13px; line-height:20px; }\ndiv#news_comments ol li h5.commentdata span { display:block; font-weight:normal; font-size:11px; }\ndiv#news_comments ol li h5.commentdata img { margin-top:10px; }\n\ndiv#news_comments h3.leavecomment {color:#47472C; font-family:\'Cooper Black\', miso, \'Georgia\', serif; font-size:20px;}\ndiv#news_comments form { position:relative; margin-bottom:30px; }\n\ndiv#news_comments fieldset#comment_fields label { display:block; overflow:hidden; font-size:12px; margin-bottom:20px; }\ndiv#news_comments fieldset#comment_fields label span { width:80px; float:left; position:relative; top:5px; }\ndiv#news_comments fieldset#comment_fields label input { border:1px solid #aaa; width:228px; float:left; background:url({site_url}themes/site/default/images/white_50.png); }\ndiv#news_comments fieldset#comment_fields label input:focus { background:url({site_url}themes/site/default/images/white_70.png); }\ndiv#news_comments fieldset#comment_fields label textarea { border:1px solid #aaa; float:left; height:150px; width:438px; background:url({site_url}themes/site/default/images/white_50.png); }\ndiv#news_comments fieldset#comment_fields label textarea:focus { background:url({site_url}themes/site/default/images/white_70.png); }\n\ndiv#news_comments div#comment_guidelines { width:418px; padding:10px; margin:10px 0 10px 80px; color:#fff; background:#9f9995; }\ndiv#news_comments div#comment_guidelines h6 { font-weight:normal; font-size:12px; margin-bottom:0; }\ndiv#news_comments div#comment_guidelines p { margin:10px 0 0 0 ; font-size:11px; line-height:16px; font-style:italic; }\n\ndiv#news_comments fieldset#comment_action { background:url({site_url}themes/site/default/images/orange_20.png); padding:10px; font-size:11px; position:relative; }\ndiv#news_comments fieldset#comment_action label { display:block; padding:5px 0; }\ndiv#news_comments fieldset#comment_action label input { position:relative; left:5px; }\ndiv#news_comments fieldset#comment_action input#submit_comment { position:absolute; bottom:10px; right:10px; font-size:12px; }\n\ndiv#captcha_box img {margin-left: 5px;}\n\ninput#captcha {display:block; margin: 5px 0 0 0; border:1px solid #aaa; width:228px; background:url({site_url}themes/site/default/images/white_50.png);}\ninput#captcha:focus {background:url({site_url}themes/site/default/images/white_70.png);}\n\n/* News Archive Page */\ndiv.archive ul#news_listing li img {float:right; margin:auto auto 10px 10px;}\ndiv.archive ul#news_listing li p {margin-bottom:10px; padding-left:0;}\n\n/* About */\ndiv#content_pri.about {width:450px;}\ndiv#feature.about p {color:#666666;font-weight:bold;margin-left:10px;width:450px;}\ndiv#feature h3.about {font-size:22px; font-family:\'Cooper Black\',miso,\'Georgia\',serif;font-weight:bold;color:#47472C;text-decoration:none; margin:10px 0 20px 10px; width:300px;}\n\n\ndiv#content_sec ul.staff_member li {float:left;height:180px;margin:0 35px 40px 0;overflow:hidden;position:relative;width:120px;}\n\ndiv#content_sec ul.staff_member { list-style:none; overflow:hidden; margin-bottom:-20px; }\ndiv#content_sec ul.staff_member li { width:120px; height:180px; overflow:hidden; position:relative; float:left; margin:0 35px 40px 0; }\ndiv#content_sec ul.staff_member li.end { margin-right:0; }\ndiv#content_sec ul.staff_member li h4 { font-size:12px; padding:5px 5px; background:#afafa8; position:absolute; bottom:0; left:0; z-index:3; color:#fff; width:110px; height:20px; cursor:pointer; }\ndiv#content_sec ul.staff_member li h4 a { position:absolute; right:5px; color:#eee; font-family:Georgia, \"Times New Roman\", Times, serif; font-style:italic; font-weight:bold; }\ndiv#content_sec ul.staff_member li div.profile { position:absolute; bottom:40px; left:0; background:url({site_url}themes/site/default/images/white_50.png); z-index:2; padding:5px; width:110px; }\ndiv#content_sec ul.staff_member li img { position:absolute; top:0; left:0; }\ndiv.profile {color:#000;}\n\n\n/* Contact */\ndiv#content_pri.contact { width:530px; margin-right:110px; }\ndiv#content_sec.contact {  width:270px; float:left; padding:10px; padding-bottom:0; background:url({site_url}themes/site/default/images/staff_bg.jpg); position:relative; top:-170px; margin-bottom:-140px; color:#eee; }\ndiv#feature.contact p {color:#666666;font-weight:bold;margin-left:10px;width:600px;}\n\n/*div#feature { padding-left:10px; padding-right:410px; width:530px; }*/\ndiv#feature h3.getintouch { width:140px; font-family:\'Cooper Black\',miso,\'Georgia\',serif;font-size:20px; color:#47472C;text-decoration:none; margin-left:10px;}\n\ndiv#content_pri form { position:relative; margin-bottom:30px; }\n\ndiv#content_pri fieldset#contact_fields label { display:block; overflow:hidden; font-size:12px; margin-bottom:20px; }\ndiv#content_pri fieldset#contact_fields label span { width:80px; float:left; position:relative; top:5px; }\ndiv#content_pri fieldset#contact_fields label input { border:1px solid #aaa; width:228px; float:left; background:url({site_url}themes/site/default/images/white_50.png); }\ndiv#content_pri fieldset#contact_fields label input:focus { background:url({site_url}themes/site/default/images/white_70.png); }\ndiv#content_pri fieldset#contact_fields label textarea { border:1px solid #aaa; float:left; height:150px; width:438px; background:url({site_url}themes/site/default/images/white_50.png); }\ndiv#content_pri fieldset#contact_fields label textarea:focus { background:url({site_url}themes/site/default/images/white_70.png); }\n\ndiv#content_pri div#contact_guidelines { position:absolute; top:0; right:0; width:170px; padding:10px; color:#fff; background:#9f9995; }\ndiv#content_pri div#contact_guidelines h6 { font-weight:normal; font-size:12px; margin-bottom:10px; }\ndiv#content_pri div#contact_guidelines p { margin:0; font-size:11px; line-height:16px; font-style:italic; }\n\ndiv#content_pri fieldset#contact_action { background:url({site_url}themes/site/default/images/orange_20.png); padding:10px; font-size:11px; position:relative; }\ndiv#content_pri fieldset#contact_action label { display:block; padding:5px 0; }\ndiv#content_pri fieldset#contact_action label input { position:relative; left:5px; }\ndiv#content_pri fieldset#contact_action input#contactSubmit { position:absolute; bottom:10px; right:10px; font-size:12px; }\n\n\n\n\n/*  Member Templates */\n/* 22.MEMBERS\n---------------------------------------------------------------------- */\n\n/* CONTROL PANEL */\ndiv#navigation_sec.member_cp { width:270px; padding:10px; float:left; background:url({site_url}themes/site/default/images/green_40.png); margin:35px 30px 30px 10px; font-size:11px; line-height:16px; }\n/*div#content_pri.member_cp  { width:610px; margin:0 0 0 10px; }*/\n\ndiv#page_header.member_cp  a.viewprofile { display:block; width:182px; height:22px; background:url({site_url}themes/site/default/images/member_viewprofile.jpg) no-repeat left top; text-indent:-9999em; position:absolute; right:10px; top:25px; }\n.member_cp div#page_header a.viewprofile:hover,\n.member_cp div#page_header a.viewprofile:focus { background-position:left bottom; }\n\ndiv#navigation_sec.member_cp h4 { color:#fff; border-bottom:1px solid #b1b1a9; font-size:12px; padding-bottom:5px; position:relative; }\ndiv#navigation_sec.member_cp h4 a.expand { position:absolute; right:0; top:0; display:block; height:14px; width:14px; background:url({site_url}themes/site/default/images/controlpanel_expand.jpg) no-repeat bottom left; text-indent:-9999em; }\ndiv#navigation_sec.member_cp h4 a.expand.open { background:url({site_url}themes/site/default/images/controlpanel_expand.jpg) no-repeat top left; }\ndiv#navigation_sec.member_cp a:link,\ndiv#navigation_sec.member_cp a:visited { color:#ddd; }\ndiv#navigation_sec.member_cp a:hover,\ndiv#navigation_sec.member_cp a:focus { color:#fff; }\n\ndiv#content_pri table { width:610px; background:none;}\ndiv#content_pri table th { background:none; }\ndiv#content_pri table tr { background:url({site_url}themes/site/default/images/white_60.png); }\ndiv#content_pri table tr.alt { background:url({site_url}themes/site/default/images/white_40.png); }\n\n/* PROFILE */\ndiv#content_pri.member_profile, div#content_pri.member_cp  { width:450px; float:left; margin:0 30px 30px 10px; }\ndiv#content_sec.member_profile, div#content_sec.member_cp  { width:450px; float:left; margin:0 0 30px 0; }\n\nh3.statistics {height:11px; font-family:\'Cooper Black\',miso,\'Georgia\',serif; color:#f47424; font-size:18px; }\nh3.personalinfo {height:11px; color:#47472C; font-family:\'Cooper Black\',miso,\'Georgia\',serif; font-size:18px;}\nh3.biography {height:11px; color:#47472C; font-family:\'Cooper Black\',miso,\'Georgia\',serif; font-size:18px; margin-top:20px;}\n\ndiv#memberprofile_main { background:url({site_url}themes/site/default/images/green_20.png); width:300px; padding:10px; margin:40px 0 0 10px; float:left; }\ndiv#memberprofile_main img { float:left; margin:0 10px 10px 0; }\ndiv#memberprofile_main h3 { margin:5px 0 10px 0; }\ndiv#memberprofile_main ul { clear:both; margin:0; padding:10px 0; font-size:12px; }\ndiv#memberprofile_main ul a { color:#666; }\n\ndiv#memberprofile_photo { float:left; width:250px; height:220px; background:url({site_url}themes/site/default/images/memberprofile_photo_bg.png) no-repeat center center; position:relative; left:-20px; }\ndiv#memberprofile_photo img { width:206px; height:176px; border:3px solid #6b5f57; position:absolute; top:20px; left:20px; }\n\ndiv#memberprofile_communicate { width:270px; padding:10px; margin:20px 10px 0 0; float:right; background:url({site_url}themes/site/default/images/green_40.png); }\ndiv#memberprofile_communicate h3.communicate { width:83px; height:12px; font-family:\"Helvetica Neue\",Helvetica,Arial,sans-serif; color:#EBEBEB; text-transform: uppercase; margin-bottom:10px; }\ndiv#memberprofile_communicate table { width:270px; font-size:10px; background:none; }\ndiv#memberprofile_communicate table tr { background:url({site_url}themes/site/default/images/white_40.png); }\ndiv#memberprofile_communicate table tr.alt { background:url({site_url}themes/site/default/images/white_20.png); }\ndiv#memberprofile_communicate table th { font-weight:normal; font-size:10px; background:none; padding:4px; }\ndiv#feature div#memberprofile_communicate table td { padding:4px; color:#444;}\n\ndiv#content_pri.member_cp table,\ndiv#content_sec.member_cp table { width:100%; background:none; margin-bottom:30px; }\ndiv#content_pri.member_cp table th,\ndiv#content_sec.member_cp table th { background:none; }\ndiv#content_pri.member_cp table tr,\ndiv#content_sec.member_cp table tr { background:url({site_url}themes/site/default/images/white_60.png); }\ndiv#content_pri.member_cp table tr.alt,\ndiv#content_sec.member_cp table tr.alt  { background:url({site_url}themes/site/default/images/white_40.png); }\n\n/* Private Messages: Move and Copy pop-up menu control */\n#movemenu {position: absolute !important; top: 410px !important; left: 390px !important; border: 0 !important;}\n#copymenu {position: absolute !important; top: 410px !important; left: 332px !important; border: 0 !important;}\n\n/* Search Results */\n.pagination ul { overflow: auto; }\n.pagination li { float: left; list-style: none; background: transparent url(http://expressionengine2/themes/site/default/images/green_40.png) repeat scroll 0 0; padding: 1px 7px; margin: 0 3px; }\n.pagination li.active { background: none; }\n.pagination li.active a { text-decoration: none; }', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (50, 1, 14, '_top_nav', 'webpage', NULL, ' <ul id=\"navigation_pri\">\n            <li id=\"home\" {if embed:loc== \"home\"}class=\"cur\"{/if}><a href=\"{homepage}\">Home</a></li>\n            <li id=\"events\" {if embed:loc == \"about\"}class=\"cur\"{/if}><a href=\"{path=\'about/index\'}\">About</a></li>\n            <li id=\"contact\" {if embed:loc==\"contact\"}class=\"cur\"{/if}><a href=\"{path=\'about/contact\'}\">Contact</a></li>\n        </ul>', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
@@ -3480,7 +3553,7 @@ INSERT INTO `exp_templates` (`template_id`, `site_id`, `group_id`, `template_nam
 (71, 1, 16, 'relationships-grid', 'webpage', NULL, '<p>Testing Relationships in Grid</p>\n{exp:channel:entries dynamic=\"no\" entry_id=\"3\" limit=\"1\"}\n<div id=\"with-tag\">\n{about_grid}\n{about_grid:rel} \n    <h3>{about_grid:rel:title}</h3>\n{/about_grid:rel}\n{/about_grid}\n\n</div>\n\n{/exp:channel:entries}\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (72, 1, 16, 'encode', 'webpage', NULL, '<html>\n    <body>\n        {exp:channel:entries dynamic=\"no\" entry_id=\"3\" limit=\"1\"}\n        <p>{encode=\"{about_staff_title}\"}</p>\n\n        {/exp:channel:entries}\n    </body>\n</html>\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
 (73, 1, 16, 'mfa', 'webpage', NULL, '{if logged_in}\n  <p>{logged_in_username}</p>\n{/if}\n{exp:member:mfa_links}\n{if mfa_enabled}\n  <a href=\"{disable_mfa_link}\" id=\"disable_mfa_link\">Disable MFA</a>\n{if:else}\n  <a href=\"{enable_mfa_link}\" id=\"enable_mfa_link\">Enable MFA</a>\n{/if}\n{/exp:member:mfa_links}\n', NULL, 1676512207, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y'),
-(74, 1, 4, 'test', 'webpage', NULL, '{exp:structure:entries parent_id=\"2\"}\n<h1>{title}</h1>\n{/exp:structure:entries}', '', 1676512487, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y');
+(74, 1, 4, 'test', 'webpage', NULL, '{exp:structure:entries parent_id=\"2\"}\n<h1>{title}</h1>\n{/exp:structure:entries}\n\n<hr>\n\n{exp:channel:entries search:entry_title=\"Test\"}\n<h2>{title}</h2>\n{/exp:channel:entries}', '', 1677271411, 1, 'n', 0, '', 'n', 'n', 'o', 0, 'n', 'y');
 
 INSERT INTO `exp_templates_roles` (`role_id`, `template_id`) VALUES
 (1, 1),
@@ -3868,7 +3941,33 @@ INSERT INTO `exp_update_log` (`log_id`, `timestamp`, `message`, `method`, `line`
 (13, 1676512205, 'Running database update step: runUpdateFile[ud_7_02_07.php]', NULL, NULL, NULL),
 (14, 1676512205, 'Running database update step: runUpdateFile[ud_7_02_08.php]', NULL, NULL, NULL),
 (15, 1676512205, 'Running database update step: runUpdateFile[ud_7_02_09.php]', NULL, NULL, NULL),
-(16, 1676512205, 'Update complete. Now running version 7.2.9', NULL, NULL, NULL);
+(16, 1676512205, 'Update complete. Now running version 7.2.9', NULL, NULL, NULL),
+(17, 1708026588, 'Running database update step: runUpdateFile[ud_7_02_10.php]', NULL, NULL, NULL),
+(18, 1708026588, 'Running database update step: runUpdateFile[ud_7_02_11.php]', NULL, NULL, NULL),
+(19, 1708026588, 'Running database update step: runUpdateFile[ud_7_02_12.php]', NULL, NULL, NULL),
+(20, 1708026588, 'Running database update step: runUpdateFile[ud_7_02_13.php]', NULL, NULL, NULL),
+(21, 1708026589, 'Running database update step: runUpdateFile[ud_7_02_14.php]', NULL, NULL, NULL),
+(22, 1708026589, 'Running database update step: runUpdateFile[ud_7_02_15.php]', NULL, NULL, NULL),
+(23, 1708026590, 'Running database update step: runUpdateFile[ud_7_02_16.php]', NULL, NULL, NULL),
+(24, 1708026590, 'Running database update step: runUpdateFile[ud_7_02_17.php]', NULL, NULL, NULL),
+(25, 1708026590, 'Running database update step: runUpdateFile[ud_7_03_00.php]', NULL, NULL, NULL),
+(26, 1708026590, 'Running database update step: runUpdateFile[ud_7_03_01.php]', NULL, NULL, NULL),
+(27, 1708026590, 'Running database update step: runUpdateFile[ud_7_03_02.php]', NULL, NULL, NULL),
+(28, 1708026590, 'Running database update step: runUpdateFile[ud_7_03_03.php]', NULL, NULL, NULL),
+(29, 1708026590, 'Running database update step: runUpdateFile[ud_7_03_04.php]', NULL, NULL, NULL),
+(30, 1708026591, 'Running database update step: runUpdateFile[ud_7_03_05.php]', NULL, NULL, NULL),
+(31, 1708026591, 'Running database update step: runUpdateFile[ud_7_03_06.php]', NULL, NULL, NULL),
+(32, 1708026591, 'Running database update step: runUpdateFile[ud_7_03_07.php]', NULL, NULL, NULL),
+(33, 1708026592, 'Running database update step: runUpdateFile[ud_7_03_08.php]', NULL, NULL, NULL),
+(34, 1708026592, 'Running database update step: runUpdateFile[ud_7_03_09.php]', NULL, NULL, NULL),
+(35, 1708026592, 'Running database update step: runUpdateFile[ud_7_03_10.php]', NULL, NULL, NULL),
+(36, 1708026592, 'Running database update step: runUpdateFile[ud_7_03_11.php]', NULL, NULL, NULL),
+(37, 1708026593, 'Running database update step: runUpdateFile[ud_7_03_12.php]', NULL, NULL, NULL),
+(38, 1708026593, 'Running database update step: runUpdateFile[ud_7_03_13.php]', NULL, NULL, NULL),
+(39, 1708026593, 'Running database update step: runUpdateFile[ud_7_03_14.php]', NULL, NULL, NULL),
+(40, 1708026593, 'Running database update step: runUpdateFile[ud_7_03_15.php]', NULL, NULL, NULL),
+(41, 1708026593, 'Running database update step: runUpdateFile[ud_7_04_00.php]', NULL, NULL, NULL),
+(42, 1708026594, 'Update complete. Now running version 7.4.0', NULL, NULL, NULL);
 
 INSERT INTO `exp_upload_prefs` (`id`, `site_id`, `name`, `adapter`, `adapter_settings`, `server_path`, `url`, `allowed_types`, `allow_subfolders`, `subfolders_on_top`, `default_modal_view`, `max_size`, `max_height`, `max_width`, `properties`, `pre_format`, `post_format`, `file_properties`, `file_pre_format`, `file_post_format`, `cat_group`, `batch_location`, `module_id`) VALUES
 (1, 1, 'Avatars', 'local', NULL, '{base_path}images/avatars/', '{base_url}images/avatars/', 'img', 'n', 'y', 'list', '50', '100', '100', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
