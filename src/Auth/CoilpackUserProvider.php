@@ -2,66 +2,88 @@
 
 namespace Expressionengine\Coilpack\Auth;
 
-use Expressionengine\Coilpack\Models\Member\Member;
+use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\UserProvider;
 
-class CoilpackUserProvider implements UserProvider
+class CoilpackUserProvider extends EloquentUserProvider
 {
-    private $model;
-
-    public function __construct($userModel)
+    /**
+     * Retrieve a user by the given credentials.
+     *
+     * @param  array  $credentials
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function retrieveByCredentials(array $credentials)
     {
-        $this->model = $userModel;
-    }
+        $key = array_key_exists('username', $credentials) ? 'username' : 'email';
+        $value = $credentials[$key];
 
-    public function retrieveById($identifier)
-    {
-        return $this->model->find($identifier)->first();
-    }
-
-    public function retrieveByCredentials(array $credentials) {
-        $check = array_key_exists('username', $credentials) ? 'username' : 'email';
-        $check = $credentials[$check];
-
-        return $this->model->query()
-            ->where('username', $check)
-            ->orWhere('email', $check)
+        return $this->newModelQuery()
+            ->where('username', $value)
+            ->when(strpos($value, '@'), function ($query) use ($value) {
+                $query->orWhere('email', $value);
+            })
             ->first();
     }
 
-    public function validateCredentials(Authenticatable $user, array $credentials) {
+    /**
+     * Validate a user against the given credentials.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  array  $credentials
+     * @return bool
+     */
+    public function validateCredentials(Authenticatable $user, array $credentials)
+    {
         ee()->load->library('auth');
 
-        $hashed = ee()->auth->hash_password($credentials['password']);
-        $sess = false;
+        $result = false;
 
-        if(array_key_exists('username', $credentials))
-        {
-            $sess = ee()->auth->authenticate_username($credentials['username'], $credentials['password']);
+        if (array_key_exists('username', $credentials)) {
+            $result = ee()->auth->authenticate_username($credentials['username'], $credentials['password']);
+        } elseif (array_key_exists('email', $credentials)) {
+            $result = ee()->auth->authenticate_email($credentials['email'], $credentials['password']);
         }
 
-        if(array_key_exists('email', $credentials))
-        {
-            $sess = ee()->auth->authenticate_email($credentials['email'], $credentials['password']);
-        }
-
-        if(!$sess)
-        {
+        if (! $result) {
             return false;
         }
 
-        $sess->start_session();
+        $result->start_session();
 
-        return $sess;
+        return $result !== false;
     }
 
+    /**
+     * Retrieve a user by their unique identifier and "remember me" token.
+     *
+     * @param  mixed  $identifier
+     * @param  string  $token
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     public function retrieveByToken($identifier, $token)
     {
-        return null;
+        if (! ee()->remember->exists()) {
+            return null;
+        }
+
+        $model = $this->createModel();
+
+        return $this->newModelQuery($model)->where(
+            $model->getAuthIdentifierName(),
+            ee()->remember->data('member_id')
+        )->first();
     }
 
-    public function updateRememberToken(Authenticatable $user, $token) {
-        return null;
+    /**
+     * Update the "remember me" token for the given user in storage.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $token
+     * @return void
+     */
+    public function updateRememberToken(Authenticatable $user, $token)
+    {
+        ee()->remember->exists() ? ee()->remember->refresh() : ee()->remember->create();
     }
 }

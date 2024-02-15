@@ -8,7 +8,9 @@ use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\Models\Permission\Permission;
 use Expressionengine\Coilpack\Models\Role;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
@@ -18,9 +20,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * provided by the Member module.  This is a single user of
  * the website.
  */
-class Member extends Model implements AuthorizableContract
+class Member extends Model implements AuthorizableContract, AuthenticatableContract
 {
-    use Authorizable;
+    use Authorizable, Authenticatable;
 
     protected $primaryKey = 'member_id';
 

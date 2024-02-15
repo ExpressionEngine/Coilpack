@@ -98,10 +98,6 @@ class CoilpackServiceProvider extends ServiceProvider
                 app(FieldtypeRegistrar::class)->boot();
             }
         });
-
-        \Illuminate\Support\Facades\Auth::provider('coilpack', function($app, array $config) {
-            return new CoilpackUserProvider($app->make($config['model']));
-        });
     }
 
     /**
