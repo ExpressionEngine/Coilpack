@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- A custom user provider to enable the `coilpack` guard to be used for logging in ExpressionEngine members through Laravel's authentication manager.
+
 ### Fixed
 
 - Bug retrieving dynamic Structure entry from Structure Entries tag
