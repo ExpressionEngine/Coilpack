@@ -47,6 +47,18 @@ class SessionGuard extends \Illuminate\Auth\SessionGuard
         return $this->user;
     }
 
+
+    /**
+     * Remove the user data from the session and cookies.
+     *
+     * @return void
+     */
+    protected function clearUserDataFromStorage()
+    {
+        $this->session->remove($this->getName());
+        ee()->session->destroy();
+    }
+
     /**
      * Get a unique identifier for the auth session value.
      *
