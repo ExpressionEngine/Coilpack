@@ -5,6 +5,7 @@
 ### Fixed
 
 - Bug retrieving dynamic Structure entry from Structure Entries tag
+- GraphQL response error when site has no content populated
 
 ## [1.2.2] - 2023-12-05
 

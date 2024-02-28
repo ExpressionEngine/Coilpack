@@ -124,7 +124,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 // 'prefix' => 'Channel_Entries',
                 'description' => 'Search for entries matching a certain criteria',
                 'type' => function () {
-                    return app(FieldtypeManager::class)->allFields()->map(function ($field) {
+                    return app(FieldtypeManager::class)->allFields()->toBase()->map(function ($field) {
                         return new Parameter([
                             'name' => $field->field_name,
                             'type' => 'string',
