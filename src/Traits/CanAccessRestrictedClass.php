@@ -17,6 +17,8 @@ trait CanAccessRestrictedClass
     {
         $reflection = new \ReflectionClass($object);
         $prop = $reflection->getProperty($property);
+        $prop->setAccessible(true);
+
         $prop->setValue($object, $value);
     }
 
