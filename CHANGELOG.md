@@ -10,6 +10,7 @@
 
 - Bug retrieving dynamic Structure entry from Structure Entries tag
 - GraphQL response error when site has no content populated
+- Improve handling of LegacyTag to preserve a tag's string output when structured data exists
 
 ## [1.2.2] - 2023-12-05
 
