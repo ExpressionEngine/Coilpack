@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Ability to pass a 'tagdata' parameter to the ExpressionEngine Template library
+
 ### Fixed
 
 - Bug retrieving dynamic Structure entry from Structure Entries tag
