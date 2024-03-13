@@ -175,6 +175,25 @@ class ChannelEntriesTest extends TestCase
             ->assertJsonFragment(['type' => ['value' => 'soundcloud']]);
     }
 
+    public function test_entries_member()
+    {
+        $this->postJson('graphql', [
+            'query' => <<<'GQL'
+            {
+                exp_channel_entries(search: {title:"Test Fieldtypes"} limit:1){
+                    data {
+                        entry_id
+                        test_members {
+                            screen_name
+                        }
+                    }
+                }
+            }
+          GQL
+        ])
+            ->assertJsonFragment(['screen_name' => 'admin']);
+    }
+
     public function test_entries_fluid()
     {
         /**

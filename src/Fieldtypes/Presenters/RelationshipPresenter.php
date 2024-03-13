@@ -3,17 +3,20 @@
 namespace Expressionengine\Coilpack\Fieldtypes\Presenters;
 
 use Expressionengine\Coilpack\FieldtypeManager;
+use ExpressionEngine\Coilpack\Models\Category\Category;
 use ExpressionEngine\Coilpack\Models\Channel\ChannelEntry;
+use ExpressionEngine\Coilpack\Models\Channel\Scopes;
 use Expressionengine\Coilpack\Models\FieldContent;
 use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
 use Expressionengine\Coilpack\Support\Arguments\ListArgument;
 use Expressionengine\Coilpack\Support\Arguments\SearchArgument;
+use Expressionengine\Coilpack\Support\Arguments\Term;
 use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Traits\HasArgumentsAndParameters;
 
 class RelationshipPresenter extends Presenter
 {
-    use HasArgumentsAndParameters;
+    use HasArgumentsAndParameters, Traits\QueriesRelationships;
 
     private $fieldtypeManager;
 
@@ -24,34 +27,7 @@ class RelationshipPresenter extends Presenter
 
     public function present(FieldContent $content, $arguments)
     {
-        $isGrid = $content->field->field_type === 'grid';
-        $isFluid = $content->hasAttribute('fluid_field');
-        $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
-        $this->arguments($arguments);
-
-        $query = ChannelEntry::query();
-
-        if ($content->entry->isPreview()) {
-            $query->whereIn('entry_id', $content->data['data'] ?? [0]);
-        } else {
-            $query->select('channel_titles.*')
-                ->join('relationships', 'entry_id', '=', 'child_id')
-                ->when($isFluid, function ($query) use ($fluidFieldId) {
-                    $query->where('relationships.fluid_field_data_id', $fluidFieldId);
-                }, function ($query) {
-                    $query->where('relationships.fluid_field_data_id', 0);
-                })
-                ->when($isGrid, function ($query) use ($content) {
-                    $query->where('relationships.grid_field_id', $content->field->field_id)
-                        ->where('relationships.grid_row_id', $content->grid_row_id)
-                        ->where('relationships.grid_col_id', $content->grid_col_id);
-                }, function ($query) use ($content) {
-                    $query->where('relationships.field_id', $content->field->field_id)
-                        ->where('relationships.grid_field_id', 0);
-                })
-                ->where('relationships.parent_id', $content->entry_id)
-                ->orderBy('order');
-        }
+        $query = $this->buildRelationshipQuery($content, new ChannelEntry, 'relationships');
 
         // Author
         $query->when($this->hasArgument('author'), function ($query) {
