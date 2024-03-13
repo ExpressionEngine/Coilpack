@@ -5,6 +5,7 @@
 ### Added
 
 - Ability to pass a 'tagdata' parameter to the ExpressionEngine Template library
+- Support for the Member fieldtype introduced in ExpressionEngine 7.4
 
 ### Fixed
 
