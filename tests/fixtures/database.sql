@@ -431,6 +431,16 @@ CREATE TABLE `exp_channel_data_field_35` (
   KEY `entry_id` (`entry_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `exp_channel_data_field_36`;
+CREATE TABLE `exp_channel_data_field_36` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `entry_id` int(10) unsigned NOT NULL,
+  `field_id_36` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `field_ft_36` tinytext COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `entry_id` (`entry_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `exp_channel_data_field_4`;
 CREATE TABLE `exp_channel_data_field_4` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -573,7 +583,7 @@ CREATE TABLE `exp_channel_fields` (
   PRIMARY KEY (`field_id`),
   KEY `field_type` (`field_type`),
   KEY `site_id` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_channel_form_settings`;
 CREATE TABLE `exp_channel_form_settings` (
@@ -943,7 +953,7 @@ CREATE TABLE `exp_cp_log` (
   `action` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `site_id` (`site_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_dashboard_layout_widgets`;
 CREATE TABLE `exp_dashboard_layout_widgets` (
@@ -1212,7 +1222,7 @@ CREATE TABLE `exp_file_usage` (
   KEY `file_id` (`file_id`),
   KEY `entry_id` (`entry_id`),
   KEY `cat_id` (`cat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_file_watermarks`;
 CREATE TABLE `exp_file_watermarks` (
@@ -1441,7 +1451,7 @@ CREATE TABLE `exp_member_relationships` (
   KEY `field_id` (`field_id`),
   KEY `fluid_field_data_id` (`fluid_field_data_id`),
   KEY `grid_row_id` (`grid_row_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_member_search`;
 CREATE TABLE `exp_member_search` (
@@ -1873,7 +1883,7 @@ CREATE TABLE `exp_relationships` (
   KEY `field_id` (`field_id`),
   KEY `fluid_field_data_id` (`fluid_field_data_id`),
   KEY `grid_row_id` (`grid_row_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `exp_remember_me`;
 CREATE TABLE `exp_remember_me` (
@@ -2466,7 +2476,7 @@ INSERT INTO `exp_channel_data_field_18` (`id`, `entry_id`, `field_id_18`, `field
 (1, 13, NULL, 'xhtml');
 
 INSERT INTO `exp_channel_data_field_19` (`id`, `entry_id`, `field_id_19`, `field_ft_19`) VALUES
-(1, 13, 'one two  1664639700 <p>Test <strong>rich text</strong></p>  Textarea', 'xhtml');
+(1, 13, '', 'xhtml');
 
 INSERT INTO `exp_channel_data_field_2` (`id`, `entry_id`, `field_id_2`, `field_ft_2`) VALUES
 (1, 1, '(555) 123-4567', 'none');
@@ -2524,6 +2534,9 @@ INSERT INTO `exp_channel_data_field_34` (`id`, `entry_id`, `field_id_34`, `field
 
 INSERT INTO `exp_channel_data_field_35` (`id`, `entry_id`, `field_id_35`, `field_ft_35`) VALUES
 (1, 13, 5, 'xhtml');
+
+INSERT INTO `exp_channel_data_field_36` (`id`, `entry_id`, `field_id_36`, `field_ft_36`) VALUES
+(1, 13, NULL, 'xhtml');
 
 INSERT INTO `exp_channel_data_field_4` (`id`, `entry_id`, `field_id_4`, `field_ft_4`) VALUES
 (1, 2, NULL, 'xhtml'),
@@ -2614,7 +2627,8 @@ INSERT INTO `exp_channel_field_groups_fields` (`field_id`, `group_id`) VALUES
 (32, 6),
 (33, 6),
 (34, 6),
-(35, 6);
+(35, 6),
+(36, 6);
 
 INSERT INTO `exp_channel_fields` (`field_id`, `site_id`, `field_name`, `field_label`, `field_instructions`, `field_type`, `field_list_items`, `field_pre_populate`, `field_pre_channel_id`, `field_pre_field_id`, `field_ta_rows`, `field_maxl`, `field_required`, `field_text_direction`, `field_search`, `field_is_hidden`, `field_is_conditional`, `field_fmt`, `field_show_fmt`, `field_order`, `field_content_type`, `field_settings`, `legacy_field_data`, `enable_frontedit`) VALUES
 (1, 0, 'contact_email', 'Contact Email', 'Email address someone can send Email to.', 'text', '', 'n', NULL, NULL, 8, 256, 'n', 'ltr', 'n', 'n', 'n', 'none', 'y', 6, '', 'YTo0OntzOjEwOiJmaWVsZF9tYXhsIjtpOjI1NjtzOjE4OiJmaWVsZF9jb250ZW50X3R5cGUiO3M6MDoiIjtzOjE4OiJmaWVsZF9zaG93X3NtaWxleXMiO3M6MToibiI7czoyNDoiZmllbGRfc2hvd19maWxlX3NlbGVjdG9yIjtzOjE6Im4iO30=', 'n', 'y'),
@@ -2651,7 +2665,8 @@ INSERT INTO `exp_channel_fields` (`field_id`, `site_id`, `field_name`, `field_la
 (32, 0, 'test_textarea', 'test_textarea', '', 'textarea', '', 'n', NULL, NULL, 0, NULL, 'n', 'ltr', 'n', 'n', 'n', 'none', 'n', 32, 'any', 'YTo0OntzOjI0OiJmaWVsZF9zaG93X2ZpbGVfc2VsZWN0b3IiO3M6MDoiIjtzOjE0OiJkYl9jb2x1bW5fdHlwZSI7czo0OiJ0ZXh0IjtzOjE4OiJmaWVsZF9zaG93X3NtaWxleXMiO3M6MToibiI7czoyNjoiZmllbGRfc2hvd19mb3JtYXR0aW5nX2J0bnMiO3M6MDoiIjt9', 'n', 'y'),
 (33, 0, 'test_toggle', 'test_toggle', '', 'toggle', '', 'n', NULL, NULL, 8, NULL, 'n', 'ltr', 'n', 'n', 'n', 'xhtml', 'y', 33, 'any', 'YToxOntzOjE5OiJmaWVsZF9kZWZhdWx0X3ZhbHVlIjtzOjE6IjAiO30=', 'n', 'y'),
 (34, 0, 'test_url', 'test_url', '', 'url', '', 'n', NULL, NULL, 8, NULL, 'n', 'ltr', 'n', 'n', 'n', 'xhtml', 'y', 34, 'any', 'YToyOntzOjE5OiJhbGxvd2VkX3VybF9zY2hlbWVzIjthOjI6e2k6MDtzOjc6Imh0dHA6Ly8iO2k6MTtzOjg6Imh0dHBzOi8vIjt9czoyMjoidXJsX3NjaGVtZV9wbGFjZWhvbGRlciI7czo3OiJodHRwOi8vIjt9', 'n', 'y'),
-(35, 0, 'test_value_slider', 'test_value_slider', '', 'slider', '', 'n', NULL, NULL, 8, NULL, 'n', 'ltr', 'n', 'n', 'n', 'xhtml', 'y', 35, 'numeric', 'YTo3OntzOjE1OiJmaWVsZF9taW5fdmFsdWUiO3M6MToiMCI7czoxNToiZmllbGRfbWF4X3ZhbHVlIjtzOjM6IjEwMCI7czoxMDoiZmllbGRfc3RlcCI7czoxOiIxIjtzOjEyOiJmaWVsZF9wcmVmaXgiO3M6MDoiIjtzOjEyOiJmaWVsZF9zdWZmaXgiO3M6MDoiIjtzOjE0OiJkYXRhbGlzdF9pdGVtcyI7czowOiIiO3M6MTg6ImZpZWxkX2NvbnRlbnRfdHlwZSI7czo3OiJudW1lcmljIjt9', 'n', 'y');
+(35, 0, 'test_value_slider', 'test_value_slider', '', 'slider', '', 'n', NULL, NULL, 8, NULL, 'n', 'ltr', 'n', 'n', 'n', 'xhtml', 'y', 35, 'numeric', 'YTo3OntzOjE1OiJmaWVsZF9taW5fdmFsdWUiO3M6MToiMCI7czoxNToiZmllbGRfbWF4X3ZhbHVlIjtzOjM6IjEwMCI7czoxMDoiZmllbGRfc3RlcCI7czoxOiIxIjtzOjEyOiJmaWVsZF9wcmVmaXgiO3M6MDoiIjtzOjEyOiJmaWVsZF9zdWZmaXgiO3M6MDoiIjtzOjE0OiJkYXRhbGlzdF9pdGVtcyI7czowOiIiO3M6MTg6ImZpZWxkX2NvbnRlbnRfdHlwZSI7czo3OiJudW1lcmljIjt9', 'n', 'y'),
+(36, 0, 'test_members', 'test_members', '', 'member', '', 'n', NULL, NULL, 8, NULL, 'n', 'ltr', 'n', 'n', 'n', 'xhtml', 'y', 36, 'any', 'YTo5OntzOjU6InJvbGVzIjthOjA6e31zOjU6ImxpbWl0IjtzOjA6IiI7czoxMToib3JkZXJfZmllbGQiO3M6MTE6InNjcmVlbl9uYW1lIjtzOjk6Im9yZGVyX2RpciI7czozOiJhc2MiO3M6MTQ6ImFsbG93X211bHRpcGxlIjtiOjE7czo3OiJyZWxfbWluIjtzOjE6IjAiO3M6NzoicmVsX21heCI7czowOiIiO3M6MTc6ImRpc3BsYXlfbWVtYmVyX2lkIjtiOjA7czoxNjoiZGVmZXJyZWRfbG9hZGluZyI7YjowO30=', 'n', 'y');
 
 INSERT INTO `exp_channel_form_settings` (`channel_form_settings_id`, `site_id`, `channel_id`, `default_status`, `allow_guest_posts`, `default_author`) VALUES
 (1, 1, 4, '', 'n', 1);
@@ -2700,7 +2715,7 @@ INSERT INTO `exp_channel_titles` (`entry_id`, `site_id`, `channel_id`, `author_i
 (10, 1, 2, 1, NULL, '127.0.0.1', 'Super old entry.', 'super-old-entry', 'open', 1, 'n', 0, 0, 0, 0, 'n', 'n', 1666304930, '2022', '10', '20', 0, 0, 1666304930, NULL, 0),
 (11, 1, 2, 1, NULL, '127.0.0.1', 'Entry with a lot of text, and comments disabled.', 'bacon-blog', 'open', 1, 'n', 0, 0, 0, 0, 'n', 'n', 1666304930, '2022', '10', '20', 0, 0, 1666304930, NULL, 0),
 (12, 1, 2, 1, NULL, '127.0.0.1', 'Entry with SoundCloud audio', 'the-one-where-we-shake-it-ff', 'open', 1, 'n', 0, 0, 0, 0, 'y', 'n', 1666304930, '2022', '10', '20', 0, 0, 1666304930, NULL, 0),
-(13, 1, 4, 1, NULL, '127.0.0.1', 'Test Fieldtypes', 'test-fieldtypes', 'open', 1, 'n', 0, 0, 0, 0, 'y', 'n', 1667245500, '2022', '10', '31', 0, 0, 1675990150, NULL, 0);
+(13, 1, 4, 1, NULL, '127.0.0.1', 'Test Fieldtypes', 'test-fieldtypes', 'open', 1, 'n', 0, 0, 0, 0, 'y', 'n', 1667245500, '2022', '10', '31', 0, 0, 1710181784, NULL, 0);
 
 INSERT INTO `exp_channels` (`channel_id`, `site_id`, `channel_name`, `channel_title`, `channel_url`, `channel_description`, `channel_lang`, `total_entries`, `total_records`, `total_comments`, `last_entry_date`, `last_comment_date`, `cat_group`, `deft_status`, `search_excerpt`, `deft_category`, `deft_comments`, `channel_require_membership`, `channel_max_chars`, `channel_html_formatting`, `channel_allow_img_urls`, `channel_auto_link_urls`, `channel_notify`, `channel_notify_emails`, `sticky_enabled`, `enable_entry_cloning`, `comment_url`, `comment_system_enabled`, `comment_require_membership`, `comment_moderate`, `comment_max_chars`, `comment_timelock`, `comment_require_email`, `comment_text_formatting`, `comment_html_formatting`, `comment_allow_img_urls`, `comment_auto_link_urls`, `comment_notify`, `comment_notify_authors`, `comment_notify_emails`, `comment_expiration`, `search_results_url`, `rss_url`, `enable_versioning`, `max_revisions`, `default_entry_title`, `title_field_label`, `url_title_prefix`, `enforce_auto_url_title`, `preview_url`, `allow_preview`, `max_entries`, `conditional_sync_required`, `title_field_instructions`) VALUES
 (1, 1, 'about', 'About', '', NULL, 'en', 3, 3, 0, 1666304880, 0, NULL, 'open', NULL, NULL, 'y', 'y', NULL, 'all', 'y', 'n', 'n', NULL, 'n', 'y', NULL, 'y', 'n', 'n', 5000, 0, 'y', 'xhtml', 'safe', 'n', 'y', 'n', 'n', NULL, 0, NULL, NULL, 'n', 10, NULL, 'Title', NULL, 'n', '', 'y', 0, 'n', NULL),
@@ -2986,7 +3001,9 @@ INSERT INTO `exp_cp_log` (`id`, `site_id`, `member_id`, `username`, `ip_address`
 (37, 1, 1, 'admin', '127.0.0.1', 1675980396, 'Logged in'),
 (38, 1, 1, 'admin', '127.0.0.1', 1675986535, 'Logged in'),
 (39, 1, 1, 'admin', '127.0.0.1', 1676511348, 'Logged in'),
-(40, 1, 1, 'admin', '127.0.0.1', 1708026524, 'Logged in');
+(40, 1, 1, 'admin', '127.0.0.1', 1708026524, 'Logged in'),
+(41, 1, 1, 'admin', '127.0.0.1', 1708029914, 'Logged in'),
+(42, 1, 1, 'admin', '127.0.0.1', 1710180767, 'Logged in');
 
 INSERT INTO `exp_dashboard_widgets` (`widget_id`, `widget_name`, `widget_data`, `widget_type`, `widget_source`, `widget_file`) VALUES
 (1, NULL, NULL, 'php', 'pro', 'comments'),
@@ -3078,7 +3095,7 @@ INSERT INTO `exp_file_usage` (`file_usage_id`, `file_id`, `entry_id`, `cat_id`) 
 (1, 2, 3, 0),
 (2, 2, 4, 0),
 (3, 2, 2, 0),
-(4, 1, 13, 0);
+(5, 1, 13, 0);
 
 INSERT INTO `exp_files` (`file_id`, `model_type`, `site_id`, `title`, `upload_location_id`, `directory_id`, `mime_type`, `file_type`, `file_name`, `file_size`, `description`, `credit`, `location`, `uploaded_by_member_id`, `upload_date`, `modified_by_member_id`, `modified_date`, `file_hw_original`, `total_records`) VALUES
 (1, 'File', 1, 'blog.jpg', 4, 0, 'image/jpeg', 'img', 'blog.jpg', 339111, NULL, NULL, NULL, 0, 1666304930, 0, 1666304930, '900 1200', 1),
@@ -3089,12 +3106,12 @@ INSERT INTO `exp_files` (`file_id`, `model_type`, `site_id`, `title`, `upload_lo
 (6, 'File', 1, 'ocean.jpg', 6, 0, 'image/jpeg', 'img', 'ocean.jpg', 111529, NULL, NULL, NULL, 0, 1666304930, 0, 1666304930, '502 1200', 0);
 
 INSERT INTO `exp_fluid_field_data` (`id`, `fluid_field_id`, `entry_id`, `field_id`, `field_data_id`, `field_group_id`, `order`, `group`) VALUES
-(1, 19, 13, 12, 2, NULL, 1, NULL),
-(2, 19, 13, 12, 3, NULL, 2, NULL),
-(3, 19, 13, 14, 2, NULL, 3, NULL),
-(6, 19, 13, 20, 3, NULL, 5, NULL),
-(7, 19, 13, 27, 2, NULL, 4, NULL),
-(8, 19, 13, 32, 3, NULL, 6, NULL);
+(1, 19, 13, 12, 2, 0, 1, 1),
+(2, 19, 13, 12, 3, 0, 2, 2),
+(3, 19, 13, 14, 2, 0, 3, 3),
+(6, 19, 13, 20, 3, 0, 5, 5),
+(7, 19, 13, 27, 2, 0, 4, 4),
+(8, 19, 13, 32, 3, 0, 6, 6);
 
 INSERT INTO `exp_global_variables` (`variable_id`, `site_id`, `variable_name`, `variable_data`, `edit_date`) VALUES
 (1, 0, 'gv_comment_expired', 'Commenting for this entry has <b>expired</b>.', 1669131554),
@@ -3176,8 +3193,11 @@ INSERT INTO `exp_member_fields` (`m_field_id`, `m_field_name`, `m_field_label`, 
 INSERT INTO `exp_member_news_views` (`news_id`, `version`, `member_id`) VALUES
 (1, '7.0.2', 1);
 
+INSERT INTO `exp_member_relationships` (`relationship_id`, `parent_id`, `child_id`, `field_id`, `fluid_field_data_id`, `grid_field_id`, `grid_col_id`, `grid_row_id`, `order`) VALUES
+(1, 13, 1, 36, 0, 0, 0, 0, 1);
+
 INSERT INTO `exp_members` (`member_id`, `role_id`, `pending_role_id`, `username`, `screen_name`, `password`, `salt`, `unique_id`, `crypt_key`, `backup_mfa_code`, `authcode`, `email`, `signature`, `avatar_filename`, `avatar_width`, `avatar_height`, `photo_filename`, `photo_width`, `photo_height`, `sig_img_filename`, `sig_img_width`, `sig_img_height`, `ignore_list`, `private_messages`, `accept_messages`, `last_view_bulletins`, `last_bulletin_date`, `ip_address`, `join_date`, `last_visit`, `last_activity`, `total_entries`, `total_comments`, `total_forum_topics`, `total_forum_posts`, `last_entry_date`, `last_comment_date`, `last_forum_post_date`, `last_email_date`, `in_authorlist`, `accept_admin_email`, `accept_user_email`, `notify_by_default`, `notify_of_pm`, `display_signatures`, `parse_smileys`, `smart_notifications`, `language`, `timezone`, `time_format`, `date_format`, `week_start`, `include_seconds`, `profile_theme`, `forum_theme`, `tracker`, `template_size`, `notepad`, `notepad_size`, `bookmarklets`, `quick_links`, `quick_tabs`, `show_sidebar`, `pmember_id`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `dismissed_banner`, `enable_mfa`) VALUES
-(1, 1, 0, 'admin', 'admin', '$2y$10$sf.1VbpWyqNahvV.bxmRj.QjBPVyt12HDWjyretatpGjekQqVXvUy', '', '90167eb04b94d8e9e75e7a69b3f0bc6b97f07fc7', 'a0ee918a3d2db6d41cb852a691a8a8211338dcde', NULL, NULL, 'bryan@packettide.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'y', 0, 0, '127.0.0.1', 1666304930, 1676527607, 1708026525, 13, 7, 0, 0, 1667245500, 1666304949, 0, 0, 'n', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'english', 'UTC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '28', NULL, '18', NULL, '', NULL, 'n', 0, NULL, NULL, NULL, 'n', 'n');
+(1, 1, 0, 'admin', 'admin', '$2y$10$sf.1VbpWyqNahvV.bxmRj.QjBPVyt12HDWjyretatpGjekQqVXvUy', '', '90167eb04b94d8e9e75e7a69b3f0bc6b97f07fc7', 'a0ee918a3d2db6d41cb852a691a8a8211338dcde', NULL, NULL, 'bryan@packettide.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'y', 0, 0, '127.0.0.1', 1666304930, 1708033342, 1710187086, 13, 7, 0, 0, 1667245500, 1666304949, 0, 0, 'n', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'english', 'UTC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '28', NULL, '18', NULL, '', NULL, 'n', 0, NULL, NULL, NULL, 'n', 'n');
 
 INSERT INTO `exp_members_roles` (`member_id`, `role_id`) VALUES
 (1, 1);
@@ -3331,7 +3351,7 @@ INSERT INTO `exp_prolets` (`prolet_id`, `source`, `class`) VALUES
 (4, 'channel', 'Channel_pro');
 
 INSERT INTO `exp_relationships` (`relationship_id`, `parent_id`, `child_id`, `field_id`, `fluid_field_data_id`, `grid_field_id`, `grid_col_id`, `grid_row_id`, `order`) VALUES
-(9, 13, 12, 26, 0, 0, 0, 0, 1);
+(10, 13, 12, 26, 0, 0, 0, 0, 1);
 
 INSERT INTO `exp_role_settings` (`id`, `role_id`, `site_id`, `menu_set_id`, `mbr_delete_notify_emails`, `exclude_from_moderation`, `search_flood_control`, `prv_msg_send_limit`, `prv_msg_storage_limit`, `include_in_authorlist`, `include_in_memberlist`, `cp_homepage`, `cp_homepage_channel`, `cp_homepage_custom`, `require_mfa`, `show_field_names`) VALUES
 (1, 1, 1, 1, NULL, 'y', 0, 20, 60, 'y', 'y', NULL, 0, NULL, 'n', 'y'),
@@ -3357,11 +3377,7 @@ INSERT INTO `exp_security_hashes` (`hash_id`, `date`, `session_id`, `hash`) VALU
 (12, 1667329378, 'b569046174967322d9d7c2ec861d2094d42e2a5e', 'd0fa8b46c9efb6bfe1d3ff741f9eb139703b2481'),
 (14, 1673297485, 'a073d3b4c2b696a43ff5b5a7ef96a74e672f2f77', '67abf6b4742755f9f57a95c6bae99b15be273562'),
 (16, 1673973829, '04e544fd6258ff9d55e59bf7cd4a663afd6c4733', '7902993c433e89c3737008f34625e8f8d1ebc960'),
-(17, 1675298767, 'ae0c4d09a6ba4b69206285ac07cc82e0e674b71e', 'c43496743d8cdc897ecf135c44163fbb0b81fecd'),
-(18, 1708026525, 'da21852b8a7072234218c369740db14e6b374c57', '769c7b014e7598f45fc8ee59bf9c958ceeddd2b8');
-
-INSERT INTO `exp_sessions` (`session_id`, `member_id`, `admin_sess`, `ip_address`, `user_agent`, `login_state`, `fingerprint`, `sess_start`, `auth_timeout`, `last_activity`, `can_debug`, `mfa_flag`, `pro_banner_seen`) VALUES
-('da21852b8a7072234218c369740db14e6b374c57', 1, 1, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', NULL, '52862cea963ad92cb2dbf23a6df0e276', 1708026524, 0, 1708026597, '0', 'skip', 'n');
+(17, 1675298767, 'ae0c4d09a6ba4b69206285ac07cc82e0e674b71e', 'c43496743d8cdc897ecf135c44163fbb0b81fecd');
 
 INSERT INTO `exp_sites` (`site_id`, `site_label`, `site_name`, `site_description`, `site_color`, `site_bootstrap_checksums`, `site_pages`) VALUES
 (1, 'Default Site', 'default_site', NULL, '', 'YToyOntzOjUzOiIvVXNlcnMvYnJ5YW5uaWVsc2VuL0NvZGUvY29pbHBhY2stdGVzdC8uL2VlL2luZGV4LnBocCI7czozMjoiNGE4YTA5ZjhmMjQ0ZDQ5NDFmODFiZGU4MmIzNjliNjEiO3M6NTU6Ii9Vc2Vycy9icnlhbm5pZWxzZW4vQ29kZS9FRS9uZXh0L2xhcmF2ZWwvLi9lZS9pbmRleC5waHAiO3M6MzI6IjRhOGEwOWY4ZjI0NGQ0OTQxZjgxYmRlODJiMzY5YjYxIjt9', 'YToxOntpOjE7YTozOntzOjM6InVybCI7czoyMDoiaHR0cDovL2xhcmF2ZWwudGVzdC8iO3M6NDoidXJpcyI7YTozOntpOjI7czoyMToiL2Fib3V0LWRlZmF1bHQtdGhlbWUvIjtpOjM7czozNDoiL2Fib3V0LWRlZmF1bHQtdGhlbWUvc3ViLXBhZ2Utb25lLyI7aTo0O3M6MzQ6Ii9hYm91dC1kZWZhdWx0LXRoZW1lL3N1Yi1wYWdlLXR3by8iO31zOjk6InRlbXBsYXRlcyI7YTozOntpOjI7aToxNDtpOjM7aToxNDtpOjQ7aToxNDt9fX0=');

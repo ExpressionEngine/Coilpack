@@ -4,11 +4,16 @@
 
 ### Added
 
+- Ability to pass a 'tagdata' parameter to the ExpressionEngine Template library
+- Support for the Member fieldtype introduced in ExpressionEngine 7.4
 - A custom user provider to enable the `coilpack` guard to be used for logging in ExpressionEngine members through Laravel's authentication manager.
 
 ### Fixed
 
 - Bug retrieving dynamic Structure entry from Structure Entries tag
+- GraphQL response error when site has no content populated
+- Improve handling of LegacyTag to preserve a tag's string output when structured data exists
+- Setting proper visibility when setting protected values through reflection
 
 ## [1.2.2] - 2023-12-05
 

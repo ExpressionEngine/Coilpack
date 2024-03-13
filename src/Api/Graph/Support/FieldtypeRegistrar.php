@@ -21,6 +21,8 @@ class FieldtypeRegistrar
 
     protected $booted = false;
 
+    protected $fieldtypeManager;
+
     public function __construct(FieldtypeManager $manager)
     {
         $this->fieldtypeManager = $manager;

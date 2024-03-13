@@ -25,16 +25,34 @@ class LegacyTag extends Tag implements \IteratorAggregate
 
     public function run()
     {
-        $output = Coilpack::isolateTemplateLibrary(function ($template) {
+        return Coilpack::isolateTemplateLibrary(function ($template) {
             $output = $this->getInstanceClass()->{$this->method}();
+            $templateData = $template->get_data();
+            $templateOutput = \Expressionengine\Coilpack\TemplateOutput::make();
+
+            // If the tag generated non-empty string output we should pass that along to the TemplateOutput class
+            // this could be a single tag that is passing along its final value while also parsing/setting data
+            // that will be available through $template->get_data()
+            if (! empty($output) && is_string($output)) {
+                $templateOutput->string($output);
+            }
 
             // If the Tag stored data for us in the template library that is preferable to the generated output
-            return $template->get_data() ?: $output;
-        }, $this->getArguments());
+            $templateData = $templateData ?: $output;
 
-        return is_array($output) && is_array(current($output)) ? collect($output)->map(function ($row) {
-            return \Expressionengine\Coilpack\TemplateOutput::make()->value($row);
-        }) : \Expressionengine\Coilpack\TemplateOutput::make()->value($output);
+            // If our template data is an array of arrays we will transform it into a collection of TemplateOutputs
+            if (is_array($templateData) && is_array(current($templateData))) {
+                $templateData = collect($templateData)->map(function ($row) {
+                    return \Expressionengine\Coilpack\TemplateOutput::make()->value($row);
+                });
+            }
+
+            if (! empty($templateData)) {
+                $templateOutput->value($templateData);
+            }
+
+            return $templateOutput;
+        }, $this->getArguments());
     }
 
     private function getInstanceClass()

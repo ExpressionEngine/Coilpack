@@ -18,6 +18,13 @@ class Coilpack
         $template = new View\TemplateStub;
         ee()->set('TMPL', $template);
 
+        // Allow setting the EE Template Library's tagdata with a parameter
+        if ($parameters['tagdata'] ?? false) {
+            ee()->TMPL->tagdata = $parameters['tagdata'];
+            unset($parameters['tagdata']);
+        }
+
+        // Assign parameters to the template library
         if ($parameters) {
             $template->tagparams = $parameters;
         }

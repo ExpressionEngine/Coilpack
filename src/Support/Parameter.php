@@ -32,6 +32,11 @@ class Parameter implements ConvertsToGraphQL
         return $this->attributes[$key];
     }
 
+    public function __set($key, $value)
+    {
+        return $this->attributes[$key] = $value;
+    }
+
     public function __isset($key)
     {
         return array_key_exists($key, $this->attributes);
