@@ -6,6 +6,7 @@
 
 - Ability to pass a 'tagdata' parameter to the ExpressionEngine Template library
 - Support for the Member fieldtype introduced in ExpressionEngine 7.4
+- A custom user provider to enable the `coilpack` guard to be used for logging in ExpressionEngine members through Laravel's authentication manager.
 
 ### Fixed
 

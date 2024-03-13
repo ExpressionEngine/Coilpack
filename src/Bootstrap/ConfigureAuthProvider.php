@@ -49,17 +49,27 @@ class ConfigureAuthProvider
             $session->start(); // This is usually handled in middleware
             $provider = $app->make('auth')->createUserProvider($config['provider'] ?? null);
 
-            return new \Expressionengine\Coilpack\Auth\SessionGuard($name, $provider, $session);
+            $guard = new \Expressionengine\Coilpack\Auth\SessionGuard($name, $provider, $session);
+            $guard->setCookieJar($app['cookie']);
+
+            return $guard;
+        });
+
+        app('auth')->provider('coilpack', function ($app, array $config) {
+            return new \Expressionengine\Coilpack\Auth\CoilpackUserProvider(
+                $app['hash'],
+                $config['model']
+            );
         });
 
         // Configure our 'coilpack' guard which uses the 'members' provider below
         app('config')->set('auth.guards.coilpack', [
             'driver' => 'exp_sessions',
-            'provider' => 'members',
+            'provider' => 'coilpack',
         ]);
 
-        app('config')->set('auth.providers.members', [
-            'driver' => 'eloquent',
+        app('config')->set('auth.providers.coilpack', [
+            'driver' => 'coilpack',
             'model' => $this->getMemberModel(),
         ]);
 
