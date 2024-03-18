@@ -32,8 +32,8 @@ abstract class ContentModel extends VariableColumnModel
     /**
      * A link back to the owning Structure object.
      *
-     * @return	Structure	A link back to the Structure object that defines
-     *						this Content's structure.
+     * @return Structure A link back to the Structure object that defines
+     *                   this Content's structure.
      */
     abstract public function getStructure();
 
@@ -150,7 +150,7 @@ abstract class ContentModel extends VariableColumnModel
     /**
      * Get the layout for this content.
      */
-    public function getDisplay(LayoutInterface $layout = null)
+    public function getDisplay(?LayoutInterface $layout = null)
     {
         $this->usesCustomFields();
 
@@ -172,7 +172,7 @@ abstract class ContentModel extends VariableColumnModel
      * Safely updates any properties that might exist,
      * passing them through the getters along the way.
      *
-     * @param  array  $data Data to update
+     * @param  array  $data  Data to update
      * @return $this
      */
     public function set(array $data = [])
@@ -414,7 +414,7 @@ abstract class ContentModel extends VariableColumnModel
      * tables. If the list of changed properties is not supplied we will get
      * the list of dirty properties.
      *
-     * @param  array  $changed An associative array of class properties that have changed
+     * @param  array  $changed  An associative array of class properties that have changed
      */
     public function saveFieldData($changed = null)
     {

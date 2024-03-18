@@ -17,7 +17,7 @@ class LayoutDisplay
     /**
      * Adds a LayoutTab to the display
      *
-     * @param  LayoutTab  $tab The LayoutTab to add
+     * @param  LayoutTab  $tab  The LayoutTab to add
      * @return void
      */
     public function addTab(LayoutTab $tab)
@@ -28,7 +28,7 @@ class LayoutDisplay
     /**
      * Sets the tabs (in bulk) to the display
      *
-     * @param  array  $tab An array of LayoutTabs
+     * @param  array  $tab  An array of LayoutTabs
      * @return void
      */
     public function setTabs(array $tabs)
@@ -41,7 +41,7 @@ class LayoutDisplay
     /**
      * Fetches a LayoutTab based on its tab id.
      *
-     * @param  mixed  $tab_id The id of the tab
+     * @param  mixed  $tab_id  The id of the tab
      * @return LayoutTab The requested LayoutTab
      *
      * @throws InvalidArgumentException When no tab with the given id is available

@@ -178,7 +178,7 @@ class Site extends Model
      * Given a type loops through config's divination method and sets the
      * default property values as indicated.
      *
-     * @param  string  $type The type of preference ('system', 'channel', 'template', or 'member')
+     * @param  string  $type  The type of preference ('system', 'channel', 'template', or 'member')
      * @return void
      */
     protected function setDefaultPreferences($type)

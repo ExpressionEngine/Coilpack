@@ -20,9 +20,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * provided by the Member module.  This is a single user of
  * the website.
  */
-class Member extends Model implements AuthorizableContract, AuthenticatableContract
+class Member extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authorizable, Authenticatable;
+    use Authenticatable, Authorizable;
 
     protected $primaryKey = 'member_id';
 

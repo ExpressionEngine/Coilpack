@@ -18,10 +18,10 @@ class CacheDriver
      * Look for a value in the cache. If it exists, return the data
      * if not, return FALSE
      *
-     * @param  string  $key 	Key name
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
-     *		local or global scoping of the cache item
-     * @return	mixed	value matching $key or FALSE on failure
+     * @param  string  $key  Key name
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
+     *                        local or global scoping of the cache item
+     * @return mixed value matching $key or FALSE on failure
      */
     public function get($key, $scope = Cache::LOCAL_SCOPE)
     {
@@ -39,12 +39,12 @@ class CacheDriver
     /**
      * Save value to cache
      *
-     * @param  string  $key		Key name
-     * @param  mixed  $data		Data to store
-     * @param  int  $ttl = 60	Cache TTL (in seconds)
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
-     *		local or global scoping of the cache item
-     * @return	bool	TRUE on success, FALSE on failure
+     * @param  string  $key  Key name
+     * @param  mixed  $data  Data to store
+     * @param  int  $ttl  = 60	Cache TTL (in seconds)
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
+     *                        local or global scoping of the cache item
+     * @return bool TRUE on success, FALSE on failure
      */
     public function save($key, $data, $ttl = 60, $scope = Cache::LOCAL_SCOPE)
     {
@@ -67,10 +67,10 @@ class CacheDriver
      *
      * ee()->cache->delete('/namespace_name/');
      *
-     * @param  string  $key	Key name
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
-     *		local or global scoping of the cache item
-     * @return	bool	TRUE on success, FALSE on failure
+     * @param  string  $key  Key name
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
+     *                        local or global scoping of the cache item
+     * @return bool TRUE on success, FALSE on failure
      */
     public function delete($key, $scope = Cache::LOCAL_SCOPE)
     {
@@ -84,9 +84,9 @@ class CacheDriver
     /**
      * Clean the cache
      *
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
-     *		local or global scoping of the cache item
-     * @return	bool	TRUE on success, FALSE on failure
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
+     *                        local or global scoping of the cache item
+     * @return bool TRUE on success, FALSE on failure
      */
     public function clean($scope = Cache::LOCAL_SCOPE)
     {
@@ -100,7 +100,7 @@ class CacheDriver
     /**
      * Cache Info
      *
-     * @return	mixed	array containing cache info on success OR FALSE on failure
+     * @return mixed array containing cache info on success OR FALSE on failure
      */
     public function cache_info()
     {
@@ -110,10 +110,10 @@ class CacheDriver
     /**
      * Get Cache Metadata
      *
-     * @param  string  $key	Key to get cache metadata on
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
-     *		local or global scoping of the cache item
-     * @return	mixed	cache item metadata
+     * @param  string  $key  Key to get cache metadata on
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE for
+     *                        local or global scoping of the cache item
+     * @return mixed cache item metadata
      */
     public function get_metadata($key, $scope = Cache::LOCAL_SCOPE)
     {
@@ -173,10 +173,10 @@ class CacheDriver
      *
      * For the file driver, namespaces will be actual folders
      *
-     * @param  string  $key	Key name
-     * @param  const  $scope	Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE
-     *		 for local or global scoping of the cache item
-     * @return	string	Key prefixed with namespace
+     * @param  string  $key  Key name
+     * @param  const  $scope  Cache::LOCAL_SCOPE or Cache::GLOBAL_SCOPE
+     *                        for local or global scoping of the cache item
+     * @return string Key prefixed with namespace
      */
     protected function _namespaced_key($key, $scope = Cache::LOCAL_SCOPE)
     {

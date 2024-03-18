@@ -70,7 +70,7 @@ class CacheManager
     /**
      * Returns the name of the adapter currently in use
      *
-     * @return	string	Name of adapter
+     * @return string Name of adapter
      */
     public function get_adapter()
     {
@@ -82,7 +82,7 @@ class CacheManager
      * Configuration screen, and also optionally an error message if the driver
      * selected cannot be used
      *
-     * @return	string	HTML dropdown and optional error message
+     * @return string HTML dropdown and optional error message
      */
     public function admin_setting()
     {

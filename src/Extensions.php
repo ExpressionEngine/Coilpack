@@ -24,7 +24,7 @@ class Extensions extends \EE_Extensions
      *
      * @param	string	Name of the  extension hook
      * @param	mixed
-     * @return	mixed
+     * @return mixed
      */
     public function call($which)
     {
@@ -64,7 +64,7 @@ class Extensions extends \EE_Extensions
      * Check If Hook Has Activated Extension
      *
      * @param	string	Name of the  extension hook
-     * @return	bool
+     * @return bool
      */
     public function active_hook($which)
     {

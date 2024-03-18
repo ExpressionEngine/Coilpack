@@ -237,7 +237,7 @@ abstract class FieldModel extends Model
     /**
      * Modify columns that were changed
      *
-     * @param  array  $columns List of [column name => column definition]
+     * @param  array  $columns  List of [column name => column definition]
      */
     private function modifyColumns($columns)
     {
@@ -265,8 +265,8 @@ abstract class FieldModel extends Model
     /**
      * Drop columns, including the defaults
      *
-     * @param  array  $columns List of column definitions as in createColumns, but
-     *						 only the keys are actually used
+     * @param  array  $columns  List of column definitions as in createColumns, but
+     *                          only the keys are actually used
      */
     private function dropColumns($columns)
     {
@@ -288,7 +288,7 @@ abstract class FieldModel extends Model
     /**
      * Add the default columns if they don't exist
      *
-     * @param  array  $columns Column definitions
+     * @param  array  $columns  Column definitions
      * @return array Updated column definitions
      */
     private function ensureDefaultColumns($columns)
@@ -348,7 +348,7 @@ abstract class FieldModel extends Model
     /**
      * Set a prefix on the default columns we manage for fields
      *
-     * @return	string	Prefix string to use
+     * @return string Prefix string to use
      */
     public function getColumnPrefix()
     {
@@ -427,13 +427,13 @@ abstract class FieldModel extends Model
     /**
      * TEMPORARY, VOLATILE, DO NOT USE
      *
-     * @param  mixed  $data			Data for this field
-     * @param  int  $content_id		Content ID to pass to the fieldtype
-     * @param  string  $content_type	Content type to pass to the fieldtype
-     * @param  array  $variable_mods		Variable modifiers and parameters, if present
-     * @param  string  $tagdata		Tagdata to perform the replacement in
-     * @param  string  $row			Row array to set on the fieldtype
-     * @return	string	String with variable parsed
+     * @param  mixed  $data  Data for this field
+     * @param  int  $content_id  Content ID to pass to the fieldtype
+     * @param  string  $content_type  Content type to pass to the fieldtype
+     * @param  array  $variable_mods  Variable modifiers and parameters, if present
+     * @param  string  $tagdata  Tagdata to perform the replacement in
+     * @param  string  $row  Row array to set on the fieldtype
+     * @return string String with variable parsed
      */
     public function parse($data, $content_id, $content_type, $variable_mods, $tagdata, $row, $tag = false)
     {

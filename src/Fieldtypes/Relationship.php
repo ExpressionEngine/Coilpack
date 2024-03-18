@@ -25,7 +25,7 @@ class Relationship extends Fieldtype implements ListsGraphType
         return FieldtypeOutput::for($this)->value($data);
     }
 
-    public function parametersForField(Field $field = null): array
+    public function parametersForField(?Field $field = null): array
     {
         return $this->presenter->defineParameters();
     }

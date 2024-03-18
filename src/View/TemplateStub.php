@@ -78,7 +78,7 @@ class TemplateStub extends \EE_Template
      *
      * @param   string
      * @param   string
-     * @return  void
+     * @return void
      */
     public function parse(&$str, $is_embed = false, $site_id = '', $is_layout = false)
     {

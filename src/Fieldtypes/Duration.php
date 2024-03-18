@@ -7,7 +7,7 @@ use Expressionengine\Coilpack\Support\Parameter;
 
 class Duration extends Generic
 {
-    public function parametersForField(Field $field = null): array
+    public function parametersForField(?Field $field = null): array
     {
         return [
             new Parameter([

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2024-03-18
+
 ### Added
 
 - Ability to pass a 'tagdata' parameter to the ExpressionEngine Template library
@@ -216,7 +218,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.2...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.0...HEAD
+
+[1.3.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.2...1.3.0
 
 [1.2.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.2.1...1.2.2
 

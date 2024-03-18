@@ -120,7 +120,7 @@ abstract class FormTag extends Tag
     /**
      * Encrypt a given string of data
      *
-     * @param  string  $data Raw data to encrypt
+     * @param  string  $data  Raw data to encrypt
      * @return string encrypted and base64 encoded string of data
      */
     protected function encrypt($data)
@@ -131,7 +131,7 @@ abstract class FormTag extends Tag
     /**
      * Decrypt a given string of data, assumed to be base64_encoded
      *
-     * @param  string  $data Base64 encoded encrypted string of data
+     * @param  string  $data  Base64 encoded encrypted string of data
      * @return string Decrypted data
      */
     protected function decrypt($data)

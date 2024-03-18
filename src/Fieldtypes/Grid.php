@@ -55,7 +55,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
         ]);
     }
 
-    public function parametersForField(Field $field = null): array
+    public function parametersForField(?Field $field = null): array
     {
         $parameters = $this->presenter->defineParameters();
         $parameters[] = new Parameter([

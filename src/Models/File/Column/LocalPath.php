@@ -33,7 +33,7 @@ class LocalPath extends SerializedType
      * readPath will instatiate a collection of file models for every file in
      * this column's path.
      *
-     * @return Collection  A Collection of File objects
+     * @return Collection A Collection of File objects
      */
     protected function readPath()
     {

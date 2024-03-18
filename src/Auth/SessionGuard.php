@@ -47,7 +47,6 @@ class SessionGuard extends \Illuminate\Auth\SessionGuard
         return $this->user;
     }
 
-
     /**
      * Remove the user data from the session and cookies.
      *

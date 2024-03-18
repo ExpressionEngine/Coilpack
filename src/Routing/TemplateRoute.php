@@ -15,7 +15,7 @@ class TemplateRoute
 
     // public function templates($segment, $path, callable $callback = null)
     // {
-    public function __invoke($segment, $path, callable $callback = null)
+    public function __invoke($segment, $path, ?callable $callback = null)
     {
         $path = trim($path);
         $viewPath = null;

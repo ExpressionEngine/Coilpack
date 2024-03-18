@@ -184,7 +184,7 @@ class Nav extends Tag implements ConvertsToGraphQL
             // Next is deeper start new parent
             if ($node['depth'] < @$tree[$i + 1]['depth']) {
                 $parent = &$node;
-            // Next is shallower reset parent
+                // Next is shallower reset parent
             } elseif ($node['depth'] > @$tree[$i + 1]['depth']) {
                 $diff = (array_key_exists($i + 1, $tree)) ? $tree[$i]['depth'] - $tree[$i + 1]['depth'] : $tree[$i]['depth'] - 1;
 
