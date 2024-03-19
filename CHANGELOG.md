@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Now supporting Laravel 11
+
+### Changed
+
+- Dropped support for Laravel 8
+- Minimum PHP version increased to 8.1
+- Updated Rebing/GraphQL[https://github.com/rebing/graphql-laravel] Dependency from version 8.6 to 9.2
+- Updated Rcrowe/TwigBridge[https://github.com/rcrowe/TwigBridge] Dependency  from version 0.14.1 to 0.14.3
+
 ## [1.4.3] - 2024-10-17
 
 ### Fixed
