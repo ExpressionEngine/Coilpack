@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug where ExpressionEngine CSRF cookies could be encrypted by Laravel
+
 ## [1.3.0] - 2024-03-18
 
 ### Added

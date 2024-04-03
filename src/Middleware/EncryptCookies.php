@@ -2,27 +2,34 @@
 
 namespace Expressionengine\Coilpack\Middleware;
 
-use Closure;
 use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
 
 class EncryptCookies extends Middleware
 {
     /**
-     * Handle an incoming request.
+     * Determine whether encryption has been disabled for the given cookie.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  string  $name
+     * @return bool
      */
-    public function handle($request, Closure $next)
+    public function isDisabled($name)
     {
-        $prefix = app('ee')->config->item('cookie_prefix') ?: 'exp_';
-
-        foreach ($request->cookies->keys() as $key) {
-            if (strpos($key, $prefix) === 0) {
-                $this->disableFor($key);
-            }
+        // If this is not Laravel's session cookie and it matches ExpressionEngine's
+        // cookie prefix then we will disable Laravel's encryption on the cookie
+        if ($name !== config('session.cookie') && strpos($name, $this->getPrefix()) === 0) {
+            return true;
         }
 
-        return parent::handle($request, $next);
+        return parent::isDisabled($name);
+    }
+
+    /**
+     * Get the prefix ExpressionEngine is using for its cookie names
+     *
+     * @return string
+     */
+    protected function getPrefix()
+    {
+        return app('ee')->config->item('cookie_prefix') ?: 'exp_';
     }
 }
