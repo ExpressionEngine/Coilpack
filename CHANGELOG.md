@@ -5,6 +5,7 @@
 ### Fixed
 
 - Bug where ExpressionEngine CSRF cookies could be encrypted by Laravel
+- Twig compatibility issue in upstream dependency.  See [TwigBridge #440](https://github.com/rcrowe/TwigBridge/issues/440).
 
 ## [1.3.0] - 2024-03-18
 
