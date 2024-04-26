@@ -72,6 +72,8 @@ class EECliCommand extends Command
 
             return '{--'.$option.'=}';
         }, array_keys($options)));
+
+        $this->configureUsingFluentDefinition();
     }
 
     public function handle(): int
