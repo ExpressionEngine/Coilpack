@@ -32,6 +32,7 @@ class EECliCommand extends Command
             // If we have a help flag we need to get out early so that it can be
             // handled by the ExpressionEngine Command and not by Symfony/Laravel
             if ($arg == '--help') {
+                $this->cli->info("Coilpack Usage: $this->signature");
                 return $this->handle();
             }
         }
