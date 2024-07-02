@@ -5,6 +5,7 @@
 ### Fixed
 
 - Bug where ExpressionEngine CLI command proxy was not recognizing optional arguments
+- Bug where ExpressionEngine CLI command proxy would fail to handle interactive input
 
 ## [1.3.1] - 2024-04-24
 

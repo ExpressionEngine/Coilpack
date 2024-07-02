@@ -24,6 +24,7 @@ class EECliCommand extends Command
         }
 
         $core = (new \Expressionengine\Coilpack\Bootstrap\LoadExpressionEngine)->cli()->bootstrap(app());
+        $GLOBALS['argv'] = array_slice($_SERVER['argv'], 1);
         $this->cli = $core->runGlobal();
 
         $this->setupCommand($_SERVER['argv'][2] ?? 'list');
