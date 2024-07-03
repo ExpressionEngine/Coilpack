@@ -2,6 +2,4 @@
 
 namespace Expressionengine\Coilpack\Contracts;
 
-interface Field
-{
-}
+interface Field {}

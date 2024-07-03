@@ -2,6 +2,4 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-class Checkboxes extends OptionFieldtype
-{
-}
+class Checkboxes extends OptionFieldtype {}

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.2] - 2024-07-03
+
 ### Fixed
 
 - Bug where ExpressionEngine CLI command proxy was not recognizing optional arguments
@@ -230,7 +232,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.1...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.2...HEAD
+
+[1.3.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.1...1.3.2
 
 [1.3.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.0...1.3.1
 

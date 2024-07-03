@@ -7,6 +7,4 @@ use Expressionengine\Coilpack\Model;
 /**
  * Content Structure Model abstract
  */
-abstract class StructureModel extends Model implements Structure
-{
-}
+abstract class StructureModel extends Model implements Structure {}
