@@ -8,6 +8,10 @@
 - Control Panel access to Coilpack version information and GraphiQL for SuperAdmin Users
 - Dependency for updated GraphiQL [MLL\GraphiQL](https://github.com/mll-lab/laravel-graphiql)
 
+### Fixed
+
+- Handling of missing model attributes when Laravel is operating in strict mode
+
 ### Changed
 
 - Dropped support for Laravel 8
