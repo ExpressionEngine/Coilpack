@@ -30,6 +30,9 @@ class Core
 
         // ee()->remove('TMPL');
         // ee()->set('TMPL', new \Expressionengine\Coilpack\View\TemplateStub);
+        $this->core->overrideRouting([
+            'cp/coilpack' => 'Class',
+        ]);
     }
 
     public function loadSnippets()
@@ -70,6 +73,10 @@ class Core
 
         if (defined('REQ') && REQ == 'CLI') {
             return $this->runCli($request);
+        }
+
+        if (REQ == 'CP' && strpos(request()->getUri(), '%2Fcoilpack%2F') !== false) {
+            $GLOBALS['RTR']->namespace_prefix = 'Expressionengine\Coilpack\Controllers\Cp';
         }
 
         $response = $this->core->run($request);

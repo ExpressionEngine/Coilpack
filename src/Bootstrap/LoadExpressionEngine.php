@@ -231,6 +231,7 @@ class LoadExpressionEngine
 
             ee()->remove('extensions');
             ee()->set('extensions', new \Expressionengine\Coilpack\Extensions);
+            ee()->load->library('logger');
             ee()->load->library('session');
         }
 
@@ -274,6 +275,13 @@ class LoadExpressionEngine
 
         $this->bootstrapDependencies($app);
 
+        if (! $this->constants['INSTALL_MODE']) {
+            $this->replaceInjectionContainer($application);
+            ee()->di->overwrite('CP/NavigationSidebar', new \Expressionengine\Coilpack\Dependency\NavigationSidebar(ee('View')));
+
+            $application->addProvider(__DIR__.'/../../addon', 'addon.setup.php', 'coilpack');
+        }
+
         return $core;
     }
 
@@ -315,5 +323,13 @@ class LoadExpressionEngine
         // ending in `.twig` or `.blade` The TwigBridge sets up .twig ext
         app('view')->addExtension('blade', 'blade');
         // app('config')->push('view.paths', SYSPATH . 'user/templates/'); // PATH_TMPL not available yet
+    }
+
+    public function replaceInjectionContainer($application)
+    {
+        $di = ee()->di;
+        $container = (new \Expressionengine\Coilpack\Dependency\Container)->useContainer($di);
+        ee()->remove('di');
+        ee()->set('di', $container);
     }
 }

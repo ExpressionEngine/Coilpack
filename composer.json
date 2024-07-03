@@ -18,6 +18,7 @@
         "illuminate/contracts": "^9.0|^10.0|^11.0",
         "illuminate/database": "^9.0|^10.0|^11.0",
         "illuminate/support": "^9.0|^10.0|^11.0",
+        "mll-lab/laravel-graphiql": "^3.2",
         "rcrowe/twigbridge": "^0.14.3",
         "rebing/graphql-laravel": "^9.2.0"
     },

@@ -40,7 +40,7 @@ class SchemaManager
 
     public function disableGraphiQL()
     {
-        config()->set(['graphql.graphiql.display' => false]);
+        config()->set(['graphiql.enabled' => false]);
     }
 
     public function addQuery($className, $alias = null)
