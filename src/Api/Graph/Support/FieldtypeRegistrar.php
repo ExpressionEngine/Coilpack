@@ -116,6 +116,12 @@ class FieldtypeRegistrar
         $name = "Field__{$field->field_name}";
         $typeDefinition = $fieldtype->generateGraphType($field);
 
+        if (empty($typeDefinition)) {
+            app('log')->error(vsprintf('Field %s (%s) implements %s but returns an empty GraphQL Type.', [$field->field_name, $field->field_type, GeneratesGraphType::class]));
+
+            return null;
+        }
+
         if (! $typeDefinition instanceof GraphQLType) {
             throw new \Exception("Generated GraphQL Type for field {$field->field_name} must extend ".GraphQLType::class.'.');
         }
@@ -167,8 +173,12 @@ class FieldtypeRegistrar
         ]);
 
         $type = array_shift($possibleTypes);
+
+        // If we can't find a Type we log the error and fallback to String so the schema can still be constructed
         if ($type === null) {
-            dd($field->field_name, $field->field_type, $field->getFieldType(), $this->types);
+            app('log')->error(vsprintf('Cannot find GraphQL Type for field %s (%s)', [$field->field_name, $field->field_type]));
+
+            return null;
         }
 
         $type = ($field->getFieldtype() instanceof ListsGraphType && ! ($type instanceof ListOfType)) ? Type::listOf($type) : $type;

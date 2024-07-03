@@ -18,6 +18,7 @@
 - Minimum PHP version increased to 8.1
 - Updated [Rebing/GraphQL](https://github.com/rebing/graphql-laravel) Dependency from version 8.6 to 9.2
 - Updated [Rcrowe/TwigBridge](https://github.com/rcrowe/TwigBridge) Dependency  from version 0.14.1 to 0.14.3
+- Relaxed GraphQL handling of fieldtypes during schema generation. Now errors will be logged but schemas can still be built
 
 ## [1.4.3] - 2024-10-17
 
