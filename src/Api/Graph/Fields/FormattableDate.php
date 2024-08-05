@@ -40,6 +40,10 @@ class FormattableDate extends Field
     {
         $date = $root->{$this->getProperty()};
 
+        if (is_int($date) && $date !== 0) {
+            $date = \Carbon\Carbon::createFromTimestamp($date);
+        }
+
         if (! $date instanceof \Carbon\Carbon) {
             return null;
         }

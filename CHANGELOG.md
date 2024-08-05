@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Bug where integer dates were not handled properly when used as a GraphQL FormattableDate
+
 ## [1.3.2] - 2024-07-03
 
 ### Fixed
