@@ -33,6 +33,11 @@ class FormattableDate extends Field
                 'type' => Type::boolean(),
                 'defaultValue' => false,
             ],
+            'timezone' => [
+                'type' => Type::string(),
+                'defaultValue' => null,
+                'description' => 'Timezone defaults to UTC. Use "SYSTEM" for the value set in ExpressionEngine',
+            ],
         ];
     }
 
@@ -46,6 +51,16 @@ class FormattableDate extends Field
 
         if (! $date instanceof \Carbon\Carbon) {
             return null;
+        }
+
+        if ($args['timezone']) {
+            if ($args['timezone'] === 'SYSTEM') {
+                $args['timezone'] = ee()->config->item('default_site_timezone') ?: date_default_timezone_get();
+            }
+
+            if (in_array($args['timezone'], \DateTimeZone::listIdentifiers())) {
+                $date->setTimezone($args['timezone']);
+            }
         }
 
         if ($args['relative']) {

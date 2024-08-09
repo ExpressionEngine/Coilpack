@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Timezone argument for GraphQL FormattableDate types
+
 ### Fixed
 
 - Bug where integer dates were not handled properly when used as a GraphQL FormattableDate
