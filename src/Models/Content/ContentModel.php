@@ -161,7 +161,7 @@ abstract class ContentModel extends VariableColumnModel
             $this->getCustomFields()
         );
 
-        $layout = $layout ?: new DefaultLayout();
+        $layout = $layout ?: new DefaultLayout;
 
         return $layout->transform($fields);
     }

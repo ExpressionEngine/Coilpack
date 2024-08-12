@@ -100,7 +100,7 @@ class Core
         ee()->load->library('core');
         ee()->core->bootstrap();
 
-        $cli = new \ExpressionEngine\Cli\Cli();
+        $cli = new \ExpressionEngine\Cli\Cli;
 
         return $cli;
     }

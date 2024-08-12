@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2024-08-12
+
 ### Added
 
 - Timezone argument for GraphQL FormattableDate types
@@ -240,7 +242,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.2...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.0...HEAD
+
+[1.4.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.2...1.4.0
 
 [1.3.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.1...1.3.2
 

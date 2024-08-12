@@ -77,9 +77,9 @@ if (
     is_dir(SYSPATH.'ee/installer/') &&
     (! defined('INSTALL_MODE') or INSTALL_MODE != false)
 ) {
-    $core = new Core\Installer();
+    $core = new Core\Installer;
 } else {
-    $core = new Core\ExpressionEngine();
+    $core = new Core\ExpressionEngine;
 }
 
 /*

@@ -54,7 +54,7 @@ class DefaultLayout implements LayoutInterface
      */
     public function transform(array $fields)
     {
-        $display = new LayoutDisplay();
+        $display = new LayoutDisplay;
 
         // add the tabs they wanted
         foreach ($this->layout as $section) {

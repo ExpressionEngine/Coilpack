@@ -298,7 +298,7 @@ class LoadExpressionEngine
     {
         ee()->load->library('template');
         ee()->remove('TMPL');
-        ee()->set('TMPL', new \Expressionengine\Coilpack\View\TemplateStub());
+        ee()->set('TMPL', new \Expressionengine\Coilpack\View\TemplateStub);
         ee()->TMPL->log_item('Using Coilpack Template Library');
 
         ee()->load->library('api');
