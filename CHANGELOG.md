@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Support for arguments on custom Date fields
+
 ## [1.4.0] - 2024-08-12
 
 ### Added
