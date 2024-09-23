@@ -285,6 +285,10 @@ class CoilpackCommand extends Command
 
         $command = array_key_exists(PHP_OS_FAMILY, $openUrlCommands) ? $openUrlCommands[PHP_OS_FAMILY] : null;
 
+        if (! empty($_ENV['DDEV_PROJECT_TYPE'] ?? '')) {
+            return $this->comment("It looks like you're using DDEV. We can't open the url directly but you can still star the repo by running `ddev launch $url`");
+        }
+
         if (! $command) {
             $this->comment("Oops, this is embarrassing. \n We can't open the url on your operating system but you can still star the repo: $url");
         }

@@ -5,6 +5,7 @@
 ### Fixed
 
 - Support for arguments on custom Date fields
+- Displaying Coilpack's Github link after installation with DDEV
 
 ## [1.4.0] - 2024-08-12
 
