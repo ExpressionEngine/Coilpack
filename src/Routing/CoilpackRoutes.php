@@ -18,7 +18,7 @@ class CoilpackRoutes
             $this->group(['namespace' => $namespace], function () use ($options) {
                 if ($options['admin'] ?? true) {
                     $this->any(
-                        config('coilpack.admin_url', 'admin.php'), \Expressionengine\Coilpack\Controllers\AdminController::class
+                        config('coilpack.admin_url', 'admin'), \Expressionengine\Coilpack\Controllers\AdminController::class
                     )->name('coilpack.admin');
                 }
 

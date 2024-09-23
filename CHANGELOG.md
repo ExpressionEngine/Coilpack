@@ -19,6 +19,7 @@
 - Updated [Rebing/GraphQL](https://github.com/rebing/graphql-laravel) Dependency from version 8.6 to 9.2
 - Updated [Rcrowe/TwigBridge](https://github.com/rcrowe/TwigBridge) Dependency  from version 0.14.1 to 0.14.3
 - Relaxed GraphQL handling of fieldtypes during schema generation. Now errors will be logged but schemas can still be built
+- Default url for ExpressionEngine Control Panel is now `admin` instead of `admin.php`.  This can be changed in `config/coilpack.php`.
 
 ## [1.4.3] - 2024-10-17
 

@@ -83,8 +83,8 @@ class LoadExpressionEngine
         putenv('EE_INSTALL_MODE=FALSE');
         $this->constants['REQ'] = 'CP';
         $this->constants['MASKED_CP'] = true;
-        $this->constants['SELF'] = config('coilpack.admin_url', config('coilpack.admin_url', 'admin.php'));
-        $this->constants['EESELF'] = config('coilpack.admin_url', config('coilpack.admin_url', 'admin.php'));
+        $this->constants['SELF'] = config('coilpack.admin_url', 'admin');
+        $this->constants['EESELF'] = config('coilpack.admin_url', 'admin');
 
         return $this;
     }
@@ -116,8 +116,8 @@ class LoadExpressionEngine
             [
                 'REQ' => 'CP',
                 'MASKED_CP' => true,
-                'SELF' => config('coilpack.admin_url', 'admin.php'),
-                'EESELF' => config('coilpack.admin_url', 'admin.php'),
+                'SELF' => config('coilpack.admin_url', 'admin'),
+                'EESELF' => config('coilpack.admin_url', 'admin'),
                 'INSTALL_MODE' => true,
             ]
         );
@@ -130,8 +130,8 @@ class LoadExpressionEngine
         putenv('EE_INSTALL_MODE=TRUE');
         $this->constants['REQ'] = 'CP';
         $this->constants['MASKED_CP'] = true;
-        $this->constants['SELF'] = config('coilpack.admin_url', 'admin.php');
-        $this->constants['EESELF'] = config('coilpack.admin_url', 'admin.php');
+        $this->constants['SELF'] = config('coilpack.admin_url', 'admin');
+        $this->constants['EESELF'] = config('coilpack.admin_url', 'admin');
         $this->constants['INSTALL_MODE'] = true;
 
         // Offer some convenient defaults for install wizard
@@ -150,9 +150,9 @@ class LoadExpressionEngine
 
         // The SCRIPT_FILENAME must match EESELF constant defined above.
         // The installer/controller/wizard.php file uses both values to determine the base_path
-        $_SERVER['SCRIPT_FILENAME'] = realpath($this->basePath).Str::start(config('coilpack.admin_url', 'admin.php'), '/');
+        $_SERVER['SCRIPT_FILENAME'] = realpath($this->basePath).Str::start(config('coilpack.admin_url', 'admin'), '/');
         // PHP_SELF is used to determine the site_url in installer/controller/wizard
-        $_SERVER['PHP_SELF'] = Str::start(config('coilpack.admin_url', 'admin.php'), '/');
+        $_SERVER['PHP_SELF'] = Str::start(config('coilpack.admin_url', 'admin'), '/');
 
         return $this;
     }

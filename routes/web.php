@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::any(
-    config('coilpack.admin_url', 'admin.php'),
+    config('coilpack.admin_url', 'admin'),
     \Expressionengine\Coilpack\Controllers\AdminController::class
 )->name('coilpack.admin');
 

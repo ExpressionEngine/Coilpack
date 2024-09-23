@@ -164,7 +164,7 @@ class CoilpackCommand extends Command
 
         $this->installRelease($releases[$release]);
 
-        $this->info('Finish installing ExpressionEngine at '.url(config('coilpack.admin_url', 'admin.php')));
+        $this->info('Finish installing ExpressionEngine at '.url(config('coilpack.admin_url', 'admin')));
     }
 
     public function availableReleases()

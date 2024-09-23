@@ -20,7 +20,7 @@ return [
     /**
      * URL to access the ExpressionEngine control panel
      */
-    'admin_url' => 'admin.php',
+    'admin_url' => 'admin',
 
     /**
      * If you wish to provide your own implementation of the Member model
