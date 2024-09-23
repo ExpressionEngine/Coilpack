@@ -14,7 +14,7 @@ class Date extends Generic
 
         // If the fieldtype has already processed and changed the $data so that
         // it is no longer a unix timestamp we will end the processing here
-        if(!is_numeric((string) $data)) {
+        if (! is_numeric((string) $data)) {
             return $data;
         }
 

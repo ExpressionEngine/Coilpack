@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.1] - 2024-09-23
+
 ### Fixed
 
 - Support for arguments on custom Date fields
@@ -247,7 +249,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.0...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.1...HEAD
+
+[1.4.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.0...1.4.1
 
 [1.4.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.3.2...1.4.0
 
