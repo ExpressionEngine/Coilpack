@@ -5,6 +5,7 @@
 ### Fixed
 
 - Return value for Fluid Field when there are no children
+- Relationship Fieldtype support for non-grid fieldtypes that reference grid columns
 
 ## [1.4.1] - 2024-09-23
 

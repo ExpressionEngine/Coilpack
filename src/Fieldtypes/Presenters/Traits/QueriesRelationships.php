@@ -10,7 +10,7 @@ trait QueriesRelationships
 {
     public function buildRelationshipQuery(FieldContent $content, Model $model, $tableName = null)
     {
-        $isGrid = $content->field->field_type === 'grid';
+        $isGrid = $content->field->field_type === 'grid' || ! empty($content->grid_row_id ?? 0);
         $isFluid = $content->hasAttribute('fluid_field');
         $fluidFieldId = ($isFluid) ? $content->fluid_field_data_id : 0;
 
