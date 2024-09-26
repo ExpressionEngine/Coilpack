@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.2] - 2024-09-26
+
 ### Fixed
 
 - Return value for Fluid Field when there are no children
@@ -254,7 +256,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.1...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.2...HEAD
+
+[1.4.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.1...1.4.2
 
 [1.4.1]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.0...1.4.1
 
