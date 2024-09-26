@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Return value for Fluid Field when there are no children
+
 ## [1.4.1] - 2024-09-23
 
 ### Fixed

@@ -35,19 +35,19 @@ class FluidField extends Fieldtype implements GeneratesGraphType, ListsGraphType
 
     public function generateGraphType(ChannelField $field)
     {
-        $groupIds = $field->field_settings['field_channel_field_groups'] ?? [];
-        $fieldIds = $field->field_settings['field_channel_fields'] ?? [];
+        $groupIds = array_filter($field->field_settings['field_channel_field_groups'] ?? []);
+        $fieldIds = array_filter($field->field_settings['field_channel_fields'] ?? []);
         $fields = collect($groupIds)->reduce(function ($carry, $group) {
             return $carry->merge(app(FieldtypeManager::class)->fieldsForFieldGroup($group));
         }, collect())->merge(collect($fieldIds)->reduce(function ($carry, $field) {
             return $carry->push(app(FieldtypeManager::class)->getField($field));
         }, collect()));
 
-        $fields = collect($field->field_settings['field_channel_fields'] ?? [])->map(function ($id) {
+        $fields = collect($fieldIds)->map(function ($id) {
             return app(FieldtypeManager::class)->getField($id);
         });
 
-        $groups = collect($field->field_settings['field_channel_field_groups'] ?? [])->map(function ($id) {
+        $groups = collect($groupIds)->map(function ($id) {
             $fields = app(FieldtypeManager::class)->fieldsForFieldGroup($id);
 
             if ($fields->isEmpty()) {
