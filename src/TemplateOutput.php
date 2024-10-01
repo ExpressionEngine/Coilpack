@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate
+class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
 {
     protected $array = [];
 
@@ -136,7 +136,7 @@ class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate
         unset($this->array[$offset]);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if (empty($this->string) && count($this->array) === 1 && is_string(current($this->array))) {
             return current($this->array);
