@@ -2,6 +2,7 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
+use Expressionengine\Coilpack\Api\Graph\Support\GeneratedType;
 use Expressionengine\Coilpack\Facades\Coilpack;
 use Expressionengine\Coilpack\FieldtypeOutput;
 use Expressionengine\Coilpack\Models\FieldContent;
@@ -20,5 +21,33 @@ class RangeSlider extends Generic
 
             return FieldtypeOutput::for($this)->value($string)->array($array);
         });
+    }
+
+    public function graphType()
+    {
+        return new GeneratedType([
+            'fields' => function () {
+                return [
+                    'value' => [
+                        'type' => \GraphQL\Type\Definition\Type::string(),
+                        'resolve' => function ($root, array $args) {
+                            return $root;
+                        },
+                    ],
+                    'from' => [
+                        'type' => \GraphQL\Type\Definition\Type::string(),
+                        'resolve' => function ($root, array $args) {
+                            return $root->from;
+                        },
+                    ],
+                    'to' => [
+                        'type' => \GraphQL\Type\Definition\Type::string(),
+                        'resolve' => function ($root, array $args) {
+                            return $root->to;
+                        },
+                    ],
+                ];
+            },
+        ]);
     }
 }

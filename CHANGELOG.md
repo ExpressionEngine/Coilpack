@@ -21,6 +21,7 @@
 - Relaxed GraphQL handling of fieldtypes during schema generation. Now errors will be logged but schemas can still be built
 - Default url for ExpressionEngine Control Panel is now `admin` instead of `admin.php`.  This can be changed in `config/coilpack.php`.
 - TemplateOutput now implements the [Stringable](https://www.php.net/manual/en/class.stringable.php) interface
+- GraphQL query signature for the Range Slider Fieldtype to support querying `value`, `from`, and `to` fields
 
 ## [1.4.3] - 2024-10-17
 
