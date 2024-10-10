@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\View;
 
 use Expressionengine\Coilpack\Traits\HasArgumentsAndParameters;
 
-abstract class Tag
+abstract class Tag implements \Stringable
 {
     use HasArgumentsAndParameters;
 
@@ -31,7 +31,7 @@ abstract class Tag
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->run();
     }

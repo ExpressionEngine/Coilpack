@@ -130,7 +130,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
      *
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $key): mixed
     {
         if (! is_array($this->variables[$key])) {
             return $this->variables[$key];

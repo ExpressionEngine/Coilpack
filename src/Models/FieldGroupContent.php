@@ -205,7 +205,7 @@ class FieldGroupContent implements \ArrayAccess, \Countable, \IteratorAggregate,
      * @param  mixed  $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->getAttribute($offset);
     }

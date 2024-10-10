@@ -11,7 +11,7 @@ class LegacyTag extends Tag implements \IteratorAggregate
 
     protected $instance;
 
-    public function __toString()
+    public function __toString(): string
     {
         $output = $this->run();
 

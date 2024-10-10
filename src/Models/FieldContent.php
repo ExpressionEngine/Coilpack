@@ -4,7 +4,7 @@ namespace Expressionengine\Coilpack\Models;
 
 use Illuminate\Contracts\Support\Jsonable;
 
-class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, Jsonable
+class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable, Jsonable
 {
     /**
      * The model's attributes.
@@ -206,7 +206,7 @@ class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, Json
      * @param  mixed  $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->getAttribute($offset);
     }
@@ -260,7 +260,7 @@ class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, Json
         $this->offsetUnset($key);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->value();
     }
