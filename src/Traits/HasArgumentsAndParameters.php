@@ -108,6 +108,22 @@ trait HasArgumentsAndParameters
     }
 
     /**
+     * Determine whether or not any of the argument names are set
+     *
+     * @return bool
+     */
+    public function hasAnyArgument(...$keys)
+    {
+        foreach($keys as $key) {
+            if($this->hasArgument($key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve an argument value
      * If a value is not set the parameter's default value will be returned
      *

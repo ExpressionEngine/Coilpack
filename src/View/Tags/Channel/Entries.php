@@ -68,7 +68,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'show_expired',
                 'type' => 'boolean',
                 'description' => 'Include entries with an expiration date that has passed',
-                'defaulValue' => false,
+                'defaultValue' => false,
             ]),
             new Parameter([
                 'name' => 'show_future_entries',
@@ -118,6 +118,22 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'username',
                 'type' => 'string',
                 'description' => 'Limits the query by username',
+            ]),
+            new Parameter([
+                'name' => 'year',
+                'type' => 'integer',
+                'description' => 'Limits the query by year',
+                'defaultValue' => date('Y'),
+            ]),
+            new Parameter([
+                'name' => 'month',
+                'type' => 'integer',
+                'description' => 'Limits the query by month',
+            ]),
+            new Parameter([
+                'name' => 'day',
+                'type' => 'integer',
+                'description' => 'Limits the query by day',
             ]),
             new Parameter([
                 'name' => 'search',
@@ -259,6 +275,27 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         // Stop before
         $this->query->when($this->hasArgument('stop_before'), function ($query) {
             $query->where('entry_date', '<', $this->getArgument('stop_before')->value);
+        });
+
+        // Year/Month/Day
+        $this->query->when($this->hasAnyArgument('year', 'month', 'day'), function ($query) {
+            $year = $this->getArgument('year')->value;
+            $start = [
+                'month' => $this->hasArgument('month') ? $this->getArgument('month')->value : 1,
+                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : 1
+            ];
+            $end = [
+                'month' => $this->hasArgument('month') ? $this->getArgument('month')->value : 12,
+                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : null
+            ];
+            if(is_null($end['day'])) {
+                ee()->load->helper('date');
+                $end['day'] = \days_in_month($end['month'], $year);
+            }
+            $query->whereBetween('entry_date', [
+                ee()->localize->string_to_timestamp("{$year}-{$start['month']}-{$start['day']} 00:00"),
+                ee()->localize->string_to_timestamp("{$year}-{$end['month']}-{$end['day']} 23:59")
+            ]);
         });
 
         // Dynamic

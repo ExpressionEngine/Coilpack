@@ -7,6 +7,7 @@
 - Now supporting Laravel 11
 - Control Panel access to Coilpack version information and GraphiQL for SuperAdmin Users
 - Dependency for updated GraphiQL [MLL\GraphiQL](https://github.com/mll-lab/laravel-graphiql)
+- Support for year, month, and day parameters on Channel Entries tag
 
 ### Fixed
 
