@@ -123,7 +123,6 @@ class Entries extends ModelTag implements ConvertsToGraphQL
                 'name' => 'year',
                 'type' => 'integer',
                 'description' => 'Limits the query by year',
-                'defaultValue' => date('Y'),
             ]),
             new Parameter([
                 'name' => 'month',
@@ -279,7 +278,7 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Year/Month/Day
         $this->query->when($this->hasAnyArgument('year', 'month', 'day'), function ($query) {
-            $year = $this->getArgument('year')->value;
+            $year = $this->getArgument('year')->value ?: date('Y');
             $start = [
                 'month' => $this->hasArgument('month') ? $this->getArgument('month')->value : 1,
                 'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : 1
