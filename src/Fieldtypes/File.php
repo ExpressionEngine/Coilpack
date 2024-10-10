@@ -23,6 +23,12 @@ class File extends Generic
             $string = $handler->_wrap_it($data, $parameters['wrap'], $data['path'].$data['filename'].'.'.$data['extension']);
         }
 
+        $dates = ['upload_date', 'modified_date'];
+
+        foreach($dates as $date) {
+            $data[$date] = (is_int($data[$date])) ? \Carbon\Carbon::createFromTimestamp($data[$date]) : $data[$date];
+        }
+
         return FieldtypeOutput::for($this)->value($data)->string($string);
     }
 
