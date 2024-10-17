@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.3] - 2024-10-17
+
 ### Fixed
 
 - Incorrect column name used in a Relationship fieldtype query during a Live Preview request
@@ -260,7 +262,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.2...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.3...HEAD
+
+[1.4.3]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.2...1.4.3
 
 [1.4.2]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.1...1.4.2
 
