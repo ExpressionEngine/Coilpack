@@ -18,7 +18,7 @@ trait QueriesRelationships
         $tableName = $tableName ?: Str::singular($model->getTable()).'_relationships';
 
         if ($content->entry->isPreview()) {
-            $query->whereIn('member_id', $content->data['data'] ?? [0]);
+            $query->whereIn($model->getKeyName(), $content->data['data'] ?? [0]);
         } else {
             $query->select("{$model->getTable()}.*")
                 ->join($tableName, $model->getKeyName(), '=', 'child_id')

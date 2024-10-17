@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Incorrect column name used in a Relationship fieldtype query during a Live Preview request
+
 ## [1.4.2] - 2024-09-26
 
 ### Fixed
