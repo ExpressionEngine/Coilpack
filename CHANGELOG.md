@@ -12,6 +12,7 @@
 ### Fixed
 
 - Handling of missing model attributes when Laravel is operating in strict mode
+- Allow duplicate headers for ExpressionEngine cookies
 
 ### Changed
 

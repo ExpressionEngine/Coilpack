@@ -253,19 +253,22 @@ class Response
 
         // This is a list of headers that we will not pass along
         // - Content-Length may have changed by the time we output
-        $exclude = ['content-length'];
+        $exclude = ['content-length', 'set-cookie'];
+        $duplicates = ['set-cookie'];
 
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
-        $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude) {
+        $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude, $duplicates) {
             $header = $this->parseHeader($header);
 
             if (! in_array(strtolower($header->name), $exclude)) {
                 $carry[$header->name] = $header->value;
             }
 
-            // Remove the already set header to avoid duplicates in the response
-            header_remove($header->name);
+            // Remove the already set header to avoid duplicates (unless allowed) in the response
+            if (! in_array(strtolower($header->name), $duplicates)) {
+                header_remove($header->name);
+            }
 
             return $carry;
         }, []);
