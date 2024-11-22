@@ -23,6 +23,11 @@ class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, \Str
         $this->attributes = $attributes;
     }
 
+    /**
+     * Get the fieldtype responsible for managing this field content
+     *
+     * @return Expressionengine\Coilpack\Fieldtypes\Fieldtype
+     */
     public function getFieldtype()
     {
         if (isset($this->attributes['fieldtype'])) {
@@ -59,14 +64,54 @@ class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, \Str
         return $value;
     }
 
+    /**
+     * Retrieve an iterator for this Field Content's value
+     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->value()->getIterator());
     }
 
+    /**
+     * Number of elements in this Field Content's value
+     */
     public function count(): int
     {
         return $this->value()->count();
+    }
+
+    /**
+     * Get the type of content represented
+     */
+    protected function getContentType(): string
+    {
+        foreach (['entry', 'member', 'category'] as $type) {
+            if (isset($this->$type)) {
+                return $type;
+            }
+        }
+
+        return 'entry';
+    }
+
+    /**
+     * Get the content's model id
+     *
+     * @return mixed
+     */
+    public function getModelId()
+    {
+        return $this->{$this->getContentType().'_id'};
+    }
+
+    /**
+     * Get the content's model
+     *
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->{$this->getContentType()};
     }
 
     /**
@@ -202,9 +247,6 @@ class FieldContent implements \ArrayAccess, \Countable, \IteratorAggregate, \Str
 
     /**
      * Get the value for a given offset.
-     *
-     * @param  mixed  $offset
-     * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
     {

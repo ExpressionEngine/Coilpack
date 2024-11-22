@@ -54,9 +54,9 @@ class Generic extends Fieldtype
 
         // Set entry data on handler
         $handler->_init(array_merge($this->settings ?? [], [
-            'content_id' => $content->entry_id,
+            'content_id' => $content->getModelId(),
         ]));
-        $handler->row = $content->entry->toArray();
+        $handler->row = $content->getModel()->toArray();
 
         $data = $content->getAttribute('data');
 

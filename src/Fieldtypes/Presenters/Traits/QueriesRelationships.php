@@ -35,7 +35,7 @@ trait QueriesRelationships
                     $query->where("$tableName.field_id", $content->field->field_id)
                         ->where("$tableName.grid_field_id", 0);
                 })
-                ->where("$tableName.parent_id", $content->entry_id)
+                ->where("$tableName.parent_id", $content->getModelId())
                 ->orderBy('order');
         }
 
