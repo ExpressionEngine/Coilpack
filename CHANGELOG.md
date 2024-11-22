@@ -13,6 +13,7 @@
 
 - Handling of missing model attributes when Laravel is operating in strict mode
 - Allow duplicate headers for ExpressionEngine cookies
+- Retrieval of `null` global variables no longer throws an exception
 
 ### Changed
 

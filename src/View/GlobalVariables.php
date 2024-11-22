@@ -35,7 +35,7 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
         while (! empty($segments)) {
             $segment = array_pop($segments);
 
-            if (! isset($variables[$segment])) {
+            if (! array_key_exists($segment, $variables)) {
                 throw new \Exception("Global variable '$key' not defined.");
             }
 
