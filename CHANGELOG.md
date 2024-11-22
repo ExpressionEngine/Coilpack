@@ -28,6 +28,7 @@
 - Cast File fieldtype's date attributes to Carbon instances for easier manipulation and display
 - Cast Member model date attributes to Carbon instances for easier manipulation and display
 - Allow LegacyTag to parse the value of `Expressionengine\Coilpack\Support\Arguments\Argument` during execution
+- Deprecate `Expressionengine\Coilpack\View\FormTag` in favor of `Expressionengine\Coilpack\View\Traits\CreatesHtmlForm`.  Note this new trait does not automatically display Form `open` attribute when used as a string, you should explicitly call `->open()` instead.
 
 ## [1.4.3] - 2024-10-17
 

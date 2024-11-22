@@ -6,16 +6,19 @@ use Expressionengine\Coilpack\Models\Addon\Action;
 use Expressionengine\Coilpack\Models\Channel\ChannelEntry;
 use Expressionengine\Coilpack\Support\Arguments\FilterArgument;
 use Expressionengine\Coilpack\Support\Parameter;
-use Expressionengine\Coilpack\Traits\InteractsWithAddon;
-use Expressionengine\Coilpack\View\FormTag;
+use Expressionengine\Coilpack\View\Tag;
+use Expressionengine\Coilpack\View\Traits\CreatesHtmlForm;
 
-class Form extends FormTag
+class Form extends Tag
 {
-    use InteractsWithAddon;
+    use CreatesHtmlForm {
+        CreatesHtmlForm::open as parentOpen;
+        CreatesHtmlForm::close as parentClose;
+    }
 
     public function defineParameters(): array
     {
-        return array_merge(parent::defineParameters(), [
+        return array_merge(parent::defineParameters(), $this->getFormParameters(), [
             new Parameter([
                 'name' => 'entry_id',
                 'type' => 'string',
@@ -56,8 +59,6 @@ class Form extends FormTag
         // Load the form helper and session library
         ee()->load->helper('form');
         ee()->load->library('session');
-
-        $this->addonInstance = $this->getAddonInstance('email');
 
         // Conditionals
         $data = [
@@ -108,7 +109,7 @@ class Form extends FormTag
 
         $data['current_time'] = \Carbon\Carbon::now();
 
-        $this->attributes = $data;
+        $this->setFormAttributes($data);
     }
 
     public function open($data = [])
@@ -120,12 +121,12 @@ class Form extends FormTag
             'entry_id' => $this->entry->entry_id ?? '',
         ];
 
-        return parent::open(['hidden_fields' => $data]);
+        return $this->parentOpen(['hidden_fields' => $data]);
     }
 
     public function close()
     {
-        $res = parent::close();
+        $res = $this->parentClose();
         /**
          * 'comment_form_end' hook.
          *  Modify, add, etc. something to the comment form at end of processing
@@ -159,7 +160,7 @@ class Form extends FormTag
             'comments_expired' => $entry ? $this->commentsExpiredForEntry($entry) : null,
         ];
 
-        $this->attributes = array_merge($this->attributes, $attributes);
+        $this->setFormAttributes(array_merge($this->getFormAttributes(), $attributes));
 
         return parent::run();
     }
@@ -180,7 +181,7 @@ class Form extends FormTag
             /**  Remove page number
             /** --------------------------------------*/
             if (preg_match("#(^|/)P(\d+)(/|$)#", $qstring, $match)) {
-                $qstring = trim(reduce_double_slashes(str_replace($match['0'], '/', $qstring)), '/');
+                $qstring = trim(\reduce_double_slashes(str_replace($match['0'], '/', $qstring)), '/');
             }
 
             // If there is a slash in the entry ID we'll kill everything after it.

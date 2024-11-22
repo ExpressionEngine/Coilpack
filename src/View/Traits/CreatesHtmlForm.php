@@ -1,17 +1,16 @@
 <?php
 
-namespace Expressionengine\Coilpack\View;
+namespace Expressionengine\Coilpack\View\Traits;
 
 use Expressionengine\Coilpack\Support\Parameter;
 
-#[\Deprecated('Use Expressionengine\Coilpack\View\Traits\CreatesHtmlForm instead')]
-abstract class FormTag extends Tag
+trait CreatesHtmlForm
 {
-    protected $attributes = [];
+    protected $formAttributes = [];
 
-    public function defineParameters(): array
+    public function getFormParameters(): array
     {
-        return array_merge(parent::defineParameters(), [
+        return [
             new Parameter([
                 'name' => 'name',
                 'type' => 'string',
@@ -36,7 +35,7 @@ abstract class FormTag extends Tag
                 'name' => 'allow_attachments',
                 'type' => 'boolean',
                 'description' => 'Allows file input on your form',
-                'defaulValue' => false,
+                'defaultValue' => false,
             ]),
             new Parameter([
                 'name' => 'charset',
@@ -53,7 +52,7 @@ abstract class FormTag extends Tag
                 'type' => 'string',
                 'description' => 'How long to display success message before redirect',
             ]),
-        ]);
+        ];
     }
 
     public function setFormClassArgument($class)
@@ -63,6 +62,10 @@ abstract class FormTag extends Tag
 
     public function open($data = [])
     {
+        if ($this->hasFormAttribute('open')) {
+            return $this->getFormAttribute('open');
+        }
+
         // We're using EE's CSRF token and setting it up on Laravel's session
         // to satisfy Laravel's middleware as well as EE's CSRF check
         ee()->load->library('csrf');
@@ -99,10 +102,10 @@ abstract class FormTag extends Tag
         $form = str_replace('{csrf_token}', $token, $form);
 
         if ($this->hasArgument('form_attributes')) {
-            $attributes = collect($this->getArgument('form_attributes'))->map(function ($value, $key) {
+            $formAttributes = collect($this->getArgument('form_attributes'))->map(function ($value, $key) {
                 return ($value) ? "$key=\"$value\"" : $key;
             })->implode(' ');
-            $form = str_replace('<form ', "<form $attributes ", $form);
+            $form = str_replace('<form ', "<form $formAttributes ", $form);
         }
 
         return $form;
@@ -110,12 +113,56 @@ abstract class FormTag extends Tag
 
     public function close()
     {
-        return '</form>';
+        return $this->getFormAttribute('close', '</form>');
     }
 
     public function run()
     {
         return $this;
+    }
+
+    public function errors()
+    {
+        if ($this->hasFormAttribute('errors')) {
+            return collect($this->getFormAttribute('errors'));
+        }
+
+        $errors = [];
+
+        if (isset(ee()->session) && ! empty(ee()->session->flashdata('errors'))) {
+            $errors = ee()->session->flashdata('errors');
+            $errors = array_reduce(array_keys($errors), function ($carry, $key) use ($errors) {
+                $error = $errors[$key];
+
+                // Remove error: prefix from key if present
+                $key = (substr($key, 0, 6) === 'error:') ? substr($key, 6) : $key;
+                $carry[$key] = $error;
+
+                return $carry;
+            }, []);
+            ee()->session->_age_flashdata();
+        }
+
+        $this->setFormAttribute('errors', $errors);
+
+        return collect($errors);
+    }
+
+    public function old()
+    {
+        if ($this->hasFormAttribute('old')) {
+            return collect($this->getFormAttribute('old'));
+        }
+
+        $old = [];
+
+        if (isset(ee()->session) && ! empty(ee()->session->flashdata('old'))) {
+            $old = ee()->session->flashdata('old');
+        }
+
+        $this->setFormAttribute('old', $old);
+
+        return collect($old);
     }
 
     /**
@@ -140,21 +187,64 @@ abstract class FormTag extends Tag
         return ee('Encrypt')->decode($data, ee()->config->item('session_crypt_key'));
     }
 
-    public function __isset($key)
+    public function setFormAttributes($attributes)
     {
-        return array_key_exists($key, $this->attributes);
+        $this->formAttributes = $attributes;
+
+        // Split open and close
+        if (strpos($this->getFormAttribute('open'), '</form>') !== false) {
+            $open = $this->getFormAttribute('open');
+            $position = strpos($this->getFormAttribute('open'), '</form>');
+            $this->setFormAttribute('open', substr($open, 0, $position));
+            $this->setFormAttribute('close', substr($open, $position));
+        }
     }
 
-    public function __get($key)
+    public function setFormAttribute($key, $value)
     {
-        return (array_key_exists($key, $this->attributes)) ? $this->attributes[$key] : null;
+        $this->formAttributes[$key] = $value;
+    }
+
+    public function getFormAttributes()
+    {
+        return $this->formAttributes;
+    }
+
+    public function hasFormAttribute($key)
+    {
+        return array_key_exists($key, $this->formAttributes);
+    }
+
+    public function getFormAttribute($key, $default = null)
+    {
+        return $this->hasFormAttribute($key) ? $this->formAttributes[$key] : $default;
     }
 
     /**
      * Cast the tag to a string by invoking the open method
+     *
+     * @return string
      */
-    public function __toString(): string
+    // public function __toString(): string
+    // {
+    //     return $this->open();
+    // }
+
+    public function __isset($key)
     {
-        return $this->open();
+        if ($this->hasFormAttribute($key)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function __get($key)
+    {
+        if ($this->hasFormAttribute($key)) {
+            return $this->getFormAttribute($key);
+        }
+
+        return null;
     }
 }

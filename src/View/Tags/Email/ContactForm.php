@@ -5,11 +5,16 @@ namespace Expressionengine\Coilpack\View\Tags\Email;
 use Expressionengine\Coilpack\Models\Addon\Action;
 use Expressionengine\Coilpack\Support\Parameter;
 use Expressionengine\Coilpack\Traits\InteractsWithAddon;
-use Expressionengine\Coilpack\View\FormTag;
+use Expressionengine\Coilpack\View\Tag;
+use Expressionengine\Coilpack\View\Traits\CreatesHtmlForm;
 
-class ContactForm extends FormTag
+class ContactForm extends Tag
 {
-    use InteractsWithAddon;
+    use CreatesHtmlForm, InteractsWithAddon {
+        CreatesHtmlForm::open as parentOpen;
+    }
+
+    protected $addonInstance;
 
     protected $_user_recipients = false;
 
@@ -20,7 +25,7 @@ class ContactForm extends FormTag
 
     public function defineParameters(): array
     {
-        return array_merge(parent::defineParameters(), [
+        return array_merge(parent::defineParameters(), $this->getFormParameters(), [
             new Parameter([
                 'name' => 'markdown',
                 'type' => 'boolean',
@@ -90,7 +95,7 @@ class ContactForm extends FormTag
 
         $data['current_time'] = \Carbon\Carbon::now();
 
-        $this->attributes = $data;
+        $this->setFormAttributes($data);
     }
 
     public function open($data = [])
@@ -122,7 +127,7 @@ class ContactForm extends FormTag
             'markdown' => $this->encrypt(($this->getArgument('markdown')) ? 'y' : 'n'),
         ];
 
-        return parent::open(['hidden_fields' => $data]);
+        return $this->parentOpen(['hidden_fields' => $data]);
     }
 
     /**
