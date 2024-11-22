@@ -3,6 +3,7 @@
 namespace Expressionengine\Coilpack\View;
 
 use Expressionengine\Coilpack\Facades\Coilpack;
+use Expressionengine\Coilpack\Support\Arguments\Argument;
 use Traversable;
 
 class LegacyTag extends Tag implements \IteratorAggregate
@@ -25,6 +26,13 @@ class LegacyTag extends Tag implements \IteratorAggregate
 
     public function run()
     {
+        $arguments = $this->getArguments();
+        $templateParameters = array_reduce(array_keys($arguments), function($carry, $argument) use ($arguments) {
+            $value = $arguments[$argument];
+            $carry[$argument] = ($value instanceof Argument) ? $value->value : $value;
+            return $carry;
+        }, []);
+
         return Coilpack::isolateTemplateLibrary(function ($template) {
             $output = $this->getInstanceClass()->{$this->method}();
             $templateData = $template->get_data();
@@ -52,7 +60,7 @@ class LegacyTag extends Tag implements \IteratorAggregate
             }
 
             return $templateOutput;
-        }, $this->getArguments());
+        }, $templateParameters);
     }
 
     private function getInstanceClass()

@@ -27,6 +27,7 @@
 - GraphQL query signature for the Range Slider Fieldtype to support querying `value`, `from`, and `to` fields
 - Cast File fieldtype's date attributes to Carbon instances for easier manipulation and display
 - Cast Member model date attributes to Carbon instances for easier manipulation and display
+- Allow LegacyTag to parse the value of `Expressionengine\Coilpack\Support\Arguments\Argument` during execution
 
 ## [1.4.3] - 2024-10-17
 
