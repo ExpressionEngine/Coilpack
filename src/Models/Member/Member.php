@@ -30,6 +30,12 @@ class Member extends Model implements AuthenticatableContract, AuthorizableContr
 
     protected $casts = [
         'cp_homepage_channel' => 'json',
+        'last_visit' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
+        'last_activity' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
+        'join_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
+        'last_entry_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
+        'last_forum_post_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
+        'last_comment_date' => \Expressionengine\Coilpack\Casts\UnixTimestamp::class,
     ];
 
     protected static $_relationships = [
@@ -193,7 +199,7 @@ class Member extends Model implements AuthenticatableContract, AuthorizableContr
             $value = ($this->data && $this->data->fields()->has($key)) ? $this->data->fields()->get($key) : new FieldContent([
                 'field' => app(FieldtypeManager::class)->getField($key, 'member'),
                 'data' => null,
-                'entry' => $this,
+                'member' => $this,
             ]);
         }
 

@@ -26,6 +26,7 @@
 - TemplateOutput now implements the [Stringable](https://www.php.net/manual/en/class.stringable.php) interface
 - GraphQL query signature for the Range Slider Fieldtype to support querying `value`, `from`, and `to` fields
 - Cast File fieldtype's date attributes to Carbon instances for easier manipulation and display
+- Cast Member model date attributes to Carbon instances for easier manipulation and display
 
 ## [1.4.3] - 2024-10-17
 
