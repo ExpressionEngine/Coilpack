@@ -8,6 +8,7 @@
 - Control Panel access to Coilpack version information and GraphiQL for SuperAdmin Users
 - Dependency for updated GraphiQL [MLL\GraphiQL](https://github.com/mll-lab/laravel-graphiql)
 - Support for year, month, and day parameters on Channel Entries tag
+- Enhanced support for many template tags including `exp:channel:form, exp:member:custom_profile_data, exp:member:edit_avatar, exp:member:edit_profile, exp:member:forgot_password_form, exp:member:forgot_username_form, exp:member:login_form, exp:member:logout_form, exp:member:memberlist, exp:member:member_search, exp:member:registration_form`
 
 ### Fixed
 
