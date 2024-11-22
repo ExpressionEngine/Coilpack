@@ -16,6 +16,10 @@ class Coilpack
         $tmpl = ee()->TMPL;
         ee()->remove('TMPL');
         $template = new View\TemplateStub;
+        // Retain some information from previous Template instance
+        $template->template_engine = $tmpl->template_engine;
+        $template->template_type = $tmpl->template_type;
+
         ee()->set('TMPL', $template);
 
         // Allow setting the EE Template Library's tagdata with a parameter
