@@ -1,0 +1,1 @@
+Between {{ <?=$field_name?>.min }} and {{ <?=$field_name?>.max }} the selected value is {{ <?=$field_name?>.prefix }} {{ <?=$field_name?> }} {{ <?=$field_name?>.suffix }}

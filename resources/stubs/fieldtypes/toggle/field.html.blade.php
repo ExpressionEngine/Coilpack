@@ -1,0 +1,1 @@
+@if(<?=$field_name?> == '1')<span class="on">Yes</span>@else<span class="off">No</span>@endif

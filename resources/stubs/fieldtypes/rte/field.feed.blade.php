@@ -1,0 +1,1 @@
+{{ <?=$field_name?>->parameters(['text_only' => "yes"]) }}

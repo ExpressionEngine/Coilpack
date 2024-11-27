@@ -1,0 +1,1 @@
+{{ <?=$field_name?>->parameters(['format' => "%h hrs, %m min"]) }}

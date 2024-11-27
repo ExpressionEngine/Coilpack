@@ -1,0 +1,1 @@
+{% if <?=$field_name?> == '1' %}On/Yes{% else %}Off/No{% endif %}

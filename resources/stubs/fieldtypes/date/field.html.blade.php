@@ -1,0 +1,1 @@
+<time datetime="{{ <?=$field_name?>->parameters(['format' => '%c']) }}">{{ <?=$field_name?>->parameters(['format' => "%F %d %Y"]) }}</time>

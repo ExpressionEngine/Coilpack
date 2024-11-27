@@ -279,6 +279,10 @@ class LoadExpressionEngine
             $this->replaceInjectionContainer($application);
             ee()->di->overwrite('CP/NavigationSidebar', new \Expressionengine\Coilpack\Dependency\NavigationSidebar(ee('View')));
 
+            ee()->di->overwrite('View/Stub', function () use ($application) {
+                return new \Expressionengine\Coilpack\Dependency\StubFactory($application->get('ee'));
+            });
+
             $application->addProvider(__DIR__.'/../../addon', 'addon.setup.php', 'coilpack');
         }
 
