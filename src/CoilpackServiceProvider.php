@@ -52,6 +52,8 @@ class CoilpackServiceProvider extends ServiceProvider
         Route::macro('templates', new Routing\TemplateRoute);
         Route::mixin(new Routing\CoilpackRoutes);
 
+        \TwigBridge\Facade\Twig::addExtension(new \Expressionengine\Coilpack\View\Extensions\TwigVite);
+
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         Event::listen(function (\Illuminate\Routing\Events\RouteMatched $event) {
