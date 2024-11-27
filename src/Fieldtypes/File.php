@@ -25,7 +25,7 @@ class File extends Generic
 
         $dates = ['upload_date', 'modified_date'];
 
-        foreach($dates as $date) {
+        foreach ($dates as $date) {
             $data[$date] = (is_int($data[$date])) ? \Carbon\Carbon::createFromTimestamp($data[$date]) : $data[$date];
         }
 

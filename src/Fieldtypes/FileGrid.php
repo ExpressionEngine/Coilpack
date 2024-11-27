@@ -2,4 +2,6 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-class FileGrid extends Grid {}
+class FileGrid extends Grid
+{
+}

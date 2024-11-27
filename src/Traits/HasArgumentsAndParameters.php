@@ -114,8 +114,8 @@ trait HasArgumentsAndParameters
      */
     public function hasAnyArgument(...$keys)
     {
-        foreach($keys as $key) {
-            if($this->hasArgument($key)) {
+        foreach ($keys as $key) {
+            if ($this->hasArgument($key)) {
                 return true;
             }
         }

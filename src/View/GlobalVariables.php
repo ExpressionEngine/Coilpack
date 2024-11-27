@@ -127,8 +127,6 @@ class GlobalVariables implements ArrayAccess, IteratorAggregate
 
     /**
      * Get an item at a given offset.
-     *
-     * @return mixed
      */
     public function offsetGet(mixed $key): mixed
     {

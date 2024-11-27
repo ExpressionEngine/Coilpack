@@ -19,7 +19,7 @@ class Coilpack extends CP_Controller
     {
         ee()->view->cp_page_title = 'Coilpack Overview';
         ee()->view->cp_breadcrumbs = [
-            '' => 'Coilpack'
+            '' => 'Coilpack',
         ];
 
         ee()->cp->render('coilpack:overview', [
@@ -41,7 +41,7 @@ class Coilpack extends CP_Controller
         ee()->view->cp_page_title = 'Coilpack GraphQL';
         ee()->view->cp_breadcrumbs = [
             ee('CP/URL')->make('coilpack/overview')->compile() => 'Coilpack',
-            '' => 'GraphQL'
+            '' => 'GraphQL',
         ];
 
         ee()->cp->render('coilpack:graphql');

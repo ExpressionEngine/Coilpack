@@ -27,9 +27,10 @@ class LegacyTag extends Tag implements \IteratorAggregate
     public function run()
     {
         $arguments = $this->getArguments();
-        $templateParameters = array_reduce(array_keys($arguments), function($carry, $argument) use ($arguments) {
+        $templateParameters = array_reduce(array_keys($arguments), function ($carry, $argument) use ($arguments) {
             $value = $arguments[$argument];
             $carry[$argument] = ($value instanceof Argument) ? $value->value : $value;
+
             return $carry;
         }, []);
 

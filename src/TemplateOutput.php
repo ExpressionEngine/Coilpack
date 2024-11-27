@@ -102,9 +102,6 @@ class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate, \S
 
     /**
      * Get the value for a given offset.
-     *
-     * @param  mixed  $offset
-     * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
     {

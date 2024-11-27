@@ -31,7 +31,7 @@ class Container extends InjectionContainer
             $name = static::NATIVE_PREFIX.$name;
         }
 
-        if($this->has($name)) {
+        if ($this->has($name)) {
             $this->registry[$name] = (is_callable($object)) ? $object() : $object;
         }
 

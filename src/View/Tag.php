@@ -28,8 +28,6 @@ abstract class Tag implements \Stringable
 
     /**
      * Cast the tag to a string by invoking the run method
-     *
-     * @return string
      */
     public function __toString(): string
     {

@@ -2,4 +2,6 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-class Select extends OptionFieldtype {}
+class Select extends OptionFieldtype
+{
+}
