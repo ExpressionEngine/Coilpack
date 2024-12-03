@@ -281,19 +281,19 @@ class Entries extends ModelTag implements ConvertsToGraphQL
             $year = $this->getArgument('year')->value ?: date('Y');
             $start = [
                 'month' => $this->hasArgument('month') ? $this->getArgument('month')->value : 1,
-                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : 1
+                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : 1,
             ];
             $end = [
                 'month' => $this->hasArgument('month') ? $this->getArgument('month')->value : 12,
-                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : null
+                'day' => $this->hasArgument('day') ? $this->getArgument('day')->value : null,
             ];
-            if(is_null($end['day'])) {
+            if (is_null($end['day'])) {
                 ee()->load->helper('date');
                 $end['day'] = \days_in_month($end['month'], $year);
             }
             $query->whereBetween('entry_date', [
                 ee()->localize->string_to_timestamp("{$year}-{$start['month']}-{$start['day']} 00:00"),
-                ee()->localize->string_to_timestamp("{$year}-{$end['month']}-{$end['day']} 23:59")
+                ee()->localize->string_to_timestamp("{$year}-{$end['month']}-{$end['day']} 23:59"),
             ]);
         });
 
@@ -347,8 +347,8 @@ class Entries extends ModelTag implements ConvertsToGraphQL
 
         // Sticky
         if (! $this->hasArgument('sticky') || $this->getArgument('sticky')->value == 'yes') {
-            $this->setArgument('orderby', 'sticky|'.($this->arguments['orderby'] ?? ''));
-            $this->setArgument('sort', 'desc|'.($this->arguments['sort'] ?? ''));
+            $this->setArgument('orderby', 'sticky|'.($this->getArgument('orderby')->terms->map->value->implode('|') ?? ''));
+            $this->setArgument('sort', 'desc|'.($this->getArgument('sort')->terms->map->value->implode('|') ?? ''));
         }
 
         if ($this->hasArgument('sticky')) {

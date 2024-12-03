@@ -11,6 +11,7 @@
 - Enhanced support for many template tags including `exp:channel:form, exp:member:custom_profile_data, exp:member:edit_avatar, exp:member:edit_profile, exp:member:forgot_password_form, exp:member:forgot_username_form, exp:member:login_form, exp:member:logout_form, exp:member:memberlist, exp:member:member_search, exp:member:registration_form`
 - Template Generator support for Twig and Blade template engines
 - Twig extension to simplify using Vite in a template, e.g. `{{ vite('ee::assets/style.scss') | raw }}`
+- Support for `cache` parameter on model based tags (`exp.channel.entries`, `exp.channel.categories`)
 
 ### Fixed
 
