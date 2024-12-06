@@ -52,7 +52,12 @@ class CoilpackServiceProvider extends ServiceProvider
         Route::macro('templates', new Routing\TemplateRoute);
         Route::mixin(new Routing\CoilpackRoutes);
 
-        \TwigBridge\Facade\Twig::addExtension(new \Expressionengine\Coilpack\View\Extensions\TwigVite);
+        // Register additional Twig Extensions
+        $this->app->extend('twig.extensions', function ($extensions) {
+            return array_merge($extensions, [
+                \Expressionengine\Coilpack\View\Extensions\TwigVite::class,
+            ]);
+        });
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
