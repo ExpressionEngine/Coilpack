@@ -4,6 +4,7 @@ namespace Expressionengine\Coilpack\Dependency;
 
 use ExpressionEngine\Core\Provider;
 use ExpressionEngine\Service\View\StubFactory as Factory;
+use Illuminate\Support\Str;
 
 class StubFactory extends Factory
 {
@@ -25,9 +26,11 @@ class StubFactory extends Factory
         $paths = parent::getGeneratorStubPaths($provider, $generatorFolder, $theme);
 
         $basePath = realpath(__DIR__.'/../../resources/stubs');
+        // The path at index 0 is the user override path which should always be the highest priority
+        // If the path at index 1 is a user addon it should also take priority over our overrides
+        $offset = Str::contains($paths[1], 'system/user/addons') ? 2 : 1;
 
-        // The path at index 0 is the user override path which we still want to be the highest priority
-        array_splice($paths, 1, 0, [
+        array_splice($paths, $offset, 0, [
             $basePath.'/fieldtypes/'.$provider->getPrefix().($generatorFolder ? "/$generatorFolder" : ''),
             $basePath.'/fieldtypes',
             $basePath.'/templates/'.$provider->getPrefix().($generatorFolder ? "/$generatorFolder" : ''),
