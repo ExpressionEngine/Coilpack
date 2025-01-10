@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://github.com/user-attachments/assets/5f161c5d-3944-413a-869f-26bea39e32c6" width="400" alt="Coilpack Logo"></a>
+</p>
+
 # Coilpack
 
 Coilpack is a package that lets you harness the powerful Laravel ecosystem to bring your ExpressionEngine content forward in exciting new ways. Once installed in a standard Laravel application Coilpack loads ExpressionEngine and integrates many core services.
