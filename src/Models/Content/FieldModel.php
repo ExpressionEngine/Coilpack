@@ -446,7 +446,7 @@ abstract class FieldModel extends Model
 
         if ($this->field_type == 'date') {
             // Set 0 to NULL, kill any formatting
-            //$row['field_ft_'.$dval] = 'none';
+            // $row['field_ft_'.$dval] = 'none';
             $data = ($data == 0) ? null : $data;
         }
 

@@ -106,7 +106,7 @@ class TemplateStub extends \EE_Template
 
             // Write the cache file if needed
             if ($cache_status == 'EXPIRED') {
-                //if the template is not embedded, ensure the cache is restricted to current URI
+                // if the template is not embedded, ensure the cache is restricted to current URI
                 if (! $is_embed) {
                     $this->cache_prefix = '';
                 }

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-01-14
+
 ### Added
 
 - Now supporting Laravel 11
@@ -294,7 +296,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.3...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/2.0.0...HEAD
+
+[2.0.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.3...2.0.0
 
 [1.4.3]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.2...1.4.3
 

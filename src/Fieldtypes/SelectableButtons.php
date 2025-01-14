@@ -2,6 +2,4 @@
 
 namespace Expressionengine\Coilpack\Fieldtypes;
 
-class SelectableButtons extends OptionFieldtype
-{
-}
+class SelectableButtons extends OptionFieldtype {}

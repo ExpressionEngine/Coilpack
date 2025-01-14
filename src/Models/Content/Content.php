@@ -5,6 +5,4 @@ namespace Expressionengine\Coilpack\Models\Content;
 /**
  * Content interface
  */
-interface Content
-{
-}
+interface Content {}

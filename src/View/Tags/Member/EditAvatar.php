@@ -27,5 +27,4 @@ class EditAvatar extends AddonTag
     {
         return collect($this->getFormAttribute('fields', []));
     }
-
 }

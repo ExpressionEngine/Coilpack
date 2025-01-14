@@ -9,9 +9,7 @@ use Illuminate\Support\Str;
 
 class TemplateRoute
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     // public function templates($segment, $path, callable $callback = null)
     // {

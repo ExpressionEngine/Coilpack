@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ExpressionEngine (https://expressionengine.com)
  *

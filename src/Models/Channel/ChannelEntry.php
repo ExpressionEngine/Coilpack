@@ -180,13 +180,9 @@ class ChannelEntry extends Model
         );
     }
 
-    public function grids()
-    {
-    }
+    public function grids() {}
 
-    public function parents()
-    {
-    }
+    public function parents() {}
 
     public function children()
     {

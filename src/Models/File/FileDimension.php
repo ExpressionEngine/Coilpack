@@ -17,8 +17,8 @@ class FileDimension extends Model
     protected $table = 'file_dimensions';
 
     protected $casts = [
-        //'width'  => 'integer',
-        //'height' => 'integer'
+        // 'width'  => 'integer',
+        // 'height' => 'integer'
         'quality' => 'integer',
     ];
 

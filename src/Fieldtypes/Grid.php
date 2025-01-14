@@ -44,7 +44,7 @@ class Grid extends Fieldtype implements GeneratesGraphType, ListsGraphType
                             'selectable' => false,
                             // 'is_relation' => false,
                             'resolve' => function ($root, array $args) use ($column) {
-                                $value = $root->{$column->col_name}; //->value();
+                                $value = $root->{$column->col_name}; // ->value();
 
                                 return $value;
                             },
