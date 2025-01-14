@@ -59,7 +59,7 @@ jobs:
           commit_message: Prepare Release ${{ steps.update_changelog.outputs.version }}
 
       - name: Create the tag
-        run: git tag ${{ steps.update_changelog.outputs.version }}
+        run: git tag ${{ steps.update_changelog.outputs.version }} ${{ github.event.inputs.branch }}
 
       - name: Create the release
         uses: ncipollo/release-action@v1
