@@ -207,8 +207,10 @@ class LoadExpressionEngine
         // Override ExpressionEngine error handler with Laravel
         (new \Illuminate\Foundation\Bootstrap\HandleExceptions)->bootstrap($app);
 
+        $baseUrl = Str::finish(ee()->config->item('base_url') ?: config('app.url'), '/');
         $configOverrides = [
-            'base_url' => Str::finish(ee()->config->item('base_url') ?: config('app.url'), '/'),
+            'base_url' => $baseUrl,
+            'cp_url' => $baseUrl.ltrim(config('coilpack.admin_url', 'admin'), '/'),
         ];
 
         foreach ($configOverrides as $key => $value) {

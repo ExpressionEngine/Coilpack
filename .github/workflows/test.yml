@@ -103,7 +103,7 @@ jobs:
           php artisan test
 
       - name: Archive Laravel errors
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: laravel${{ matrix.containers }}-php${{ matrix.php }}.log

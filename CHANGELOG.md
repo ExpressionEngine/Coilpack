@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Prolet and other ExpressionEngine Control Panel URLs were using old admin route
+
 ## [2.0.0] - 2025-01-14
 
 ### Added
