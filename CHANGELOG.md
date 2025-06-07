@@ -5,6 +5,7 @@
 ### Fixed
 
 - Prolet and other ExpressionEngine Control Panel URLs were using old admin route
+- Channel Entries tag support for random ordering
 
 ## [2.0.0] - 2025-01-14
 

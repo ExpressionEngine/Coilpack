@@ -367,7 +367,10 @@ class Entries extends ModelTag implements ConvertsToGraphQL
         foreach ($fields->terms as $index => $field) {
             $direction = isset($directions[$index]) ? $directions[$index] : end($directions);
             $field = $field->value;
-            if ($this->fieldtypeManager->hasField($field)) {
+
+            if ($field === 'random') {
+                $this->query->inRandomOrder();
+            } elseif ($this->fieldtypeManager->hasField($field)) {
                 $this->query->orderByCustomField($field, $direction);
             } else {
                 $this->query->orderBy($this->query->qualifyColumn($field), $direction);
