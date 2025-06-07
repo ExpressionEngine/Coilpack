@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Laravel 12
+
+### Changed
+
+- Dropped support for Laravel 9
+
 ## [2.0.1] - 2025-06-09
 
 ### Fixed
