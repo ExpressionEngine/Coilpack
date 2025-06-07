@@ -162,7 +162,7 @@ class Form extends Tag
 
         $this->setFormAttributes(array_merge($this->getFormAttributes(), $attributes));
 
-        return parent::run();
+        return $this;
     }
 
     protected function findEntry()

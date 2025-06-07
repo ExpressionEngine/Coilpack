@@ -6,6 +6,7 @@
 
 - Prolet and other ExpressionEngine Control Panel URLs were using old admin route
 - Channel Entries tag support for random ordering
+- An issue preventing the Comment Form Tag from rendering
 
 ## [2.0.0] - 2025-01-14
 
