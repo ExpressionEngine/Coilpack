@@ -9,9 +9,10 @@ class Response
      * This code is taken from EE_Output::_display() with some modifications
      *
      * @param  int  $status
+     * @param array $headers
      * @return Illuminate\Http\Response
      */
-    public function fromOutput($status = 200)
+    public function fromOutput($status = 200, $headers = [])
     {
         $output = ee()->output->final_output;
         $response = ee('Response') ?: new \ExpressionEngine\Core\Response;
@@ -36,7 +37,6 @@ class Response
 
         // Content Type Headers
         // Also need to do some extra work for feeds
-
         switch (ee()->output->out_type) {
             case 'webpage':
                 if (! $response->hasHeader('Content-Type')) {
@@ -258,7 +258,7 @@ class Response
 
         // Transform headers that have already been set on the request
         // to the correct format ["header_name" => "value"]
-        $headers = array_reduce(headers_list(), function ($carry, $header) use ($exclude, $duplicates) {
+        $headers = array_merge($headers, array_reduce(headers_list(), function ($carry, $header) use ($exclude, $duplicates) {
             $header = $this->parseHeader($header);
 
             if (! in_array(strtolower($header->name), $exclude)) {
@@ -271,7 +271,7 @@ class Response
             }
 
             return $carry;
-        }, []);
+        }, []));
 
         // Transform and set headers that have been assigned to the Output class
         // but not yet set on the request to be ["header_name" => "value"]

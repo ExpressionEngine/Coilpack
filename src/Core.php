@@ -86,7 +86,7 @@ class Core
         $headers = $this->getRestrictedProperty($response, 'headers');
 
         if ($body == '') {
-            return (new Response)->fromOutput($status);
+            return (new Response)->fromOutput($status, $headers);
         }
 
         return new \Illuminate\Http\Response($body, $status, $headers);

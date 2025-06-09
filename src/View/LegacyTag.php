@@ -35,7 +35,7 @@ class LegacyTag extends Tag implements \IteratorAggregate
         }, []);
 
         return Coilpack::isolateTemplateLibrary(function ($template) {
-            $output = $this->getInstanceClass()->{$this->method}();
+            $output = $this->method ? $this->getInstanceClass()->{$this->method}() : $this->getInstanceClass();
             $templateData = $template->get_data();
             $templateOutput = \Expressionengine\Coilpack\TemplateOutput::make();
 

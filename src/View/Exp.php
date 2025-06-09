@@ -29,7 +29,7 @@ class Exp
         })->all();
 
         $plugins = Addon\Plugin::get()->keyBy(function ($plugin) {
-            return strtolower($plugin->plugin_name);
+            return strtolower($plugin->plugin_package);
         })->all();
 
         static::$addons = array_merge($plugins, $modules);
@@ -146,6 +146,19 @@ class Exp
         }
 
         return $fallback;
+    }
+
+    public function __call($method, $arguments)
+    {
+        static::boot();
+
+        if ($this->__isset($method)) {
+            $tag = $this->$method;
+
+            if ($tag && $tag instanceof Tag) {
+                return $tag(...$arguments);
+            }
+        }
     }
 
     public function __isset($key)

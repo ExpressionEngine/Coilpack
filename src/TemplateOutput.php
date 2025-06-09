@@ -26,7 +26,10 @@ class TemplateOutput implements \ArrayAccess, \Countable, \IteratorAggregate, \S
         if (is_array($value) || $value instanceof Arrayable) {
             $this->array(is_array($value) ? $value : $value->toArray());
         } else {
-            $this->string(is_string($value) ? $value : (string) $value);
+            try {
+                $this->string(is_string($value) ? $value : (string) $value);
+            } catch (\Throwable $e) {
+            }
         }
 
         return $this;
