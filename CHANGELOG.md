@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.1] - 2025-06-09
+
 ### Fixed
 
 - Prolet and other ExpressionEngine Control Panel URLs were using old admin route
@@ -303,7 +305,9 @@
 
 - Initial Beta Release
 
-[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/ExpressionEngine/Coilpack/compare/2.0.1...HEAD
+
+[2.0.1]: https://github.com/ExpressionEngine/Coilpack/compare/2.0.0...2.0.1
 
 [2.0.0]: https://github.com/ExpressionEngine/Coilpack/compare/1.4.3...2.0.0
 

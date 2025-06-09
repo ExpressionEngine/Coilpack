@@ -9,7 +9,7 @@ class Response
      * This code is taken from EE_Output::_display() with some modifications
      *
      * @param  int  $status
-     * @param array $headers
+     * @param  array  $headers
      * @return Illuminate\Http\Response
      */
     public function fromOutput($status = 200, $headers = [])
