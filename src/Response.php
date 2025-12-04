@@ -102,11 +102,6 @@ class Response
             ee()->config->set_item('compress_output', true);
         }
 
-        // Send FLOC headers
-        if (REQ == 'PAGE' && ee()->config->item('enable_floc') !== 'y') {
-            ee()->output->set_header('Permissions-Policy: interest-cohort=()');
-        }
-
         // Parse query count
         if (REQ != 'CP') {
             $output = str_replace(LD.'total_queries'.RD, ee()->db->query_count, $output);
