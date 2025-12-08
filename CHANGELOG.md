@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Removed FLoC header from Response library to mirror [upstream change](https://github.com/ExpressionEngine/ExpressionEngine/pull/2692)
+
 ## [2.1.0] - 2025-11-06
 
 ### Added
