@@ -53,7 +53,7 @@ jobs:
           mysqladmin -u root -proot password ''
 
       - name: Install Laravel
-        run: composer create-project laravel/laravel=^${{ matrix.laravel }} laravel --prefer-dist --no-audit
+        run: composer create-project laravel/laravel=^${{ matrix.laravel }} laravel --prefer-dist --no-audit --no-security-blocking
 
       - name: Add local coilpack
         working-directory: laravel
