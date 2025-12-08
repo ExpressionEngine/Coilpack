@@ -54,6 +54,11 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "phpstan/extension-installer": true
+        },
+        "audit": {
+            "ignore": [
+                "PKSA-8qx3-n5y5-vvnd"
+            ]
         }
     },
     "extra": {
