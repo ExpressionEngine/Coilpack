@@ -58,9 +58,9 @@
       "phpstan/extension-installer": true
     },
     "audit": {
-        "ignore": [
-            "PKSA-8qx3-n5y5-vvnd"
-        ]
+        "ignore": {
+            "PKSA-8qx3-n5y5-vvnd": "Laravel 9 is no longer receiving security updates"
+        }
     }
   },
   "extra": {
