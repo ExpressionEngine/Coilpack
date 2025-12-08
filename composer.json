@@ -1,74 +1,76 @@
 {
-    "name": "expressionengine/coilpack",
-    "description": "Harness the power of Laravel in ExpressionEngine",
-    "keywords": [
-        "expressionengine",
-        "laravel",
-        "coilpack"
-    ],
-    "homepage": "https://github.com/expressionengine/coilpack",
-    "license": "MIT",
-    "authors": [{
-        "name": "ExpressionEngine",
-        "email": "hello@expressionengine.com",
-        "role": "Developer"
-    }],
-    "require": {
-        "php": ">= 8.1",
-        "illuminate/contracts": "^9.0|^10.0|^11.0",
-        "illuminate/database": "^9.0|^10.0|^11.0",
-        "illuminate/support": "^9.0|^10.0|^11.0",
-        "mll-lab/laravel-graphiql": "^3.2",
-        "rcrowe/twigbridge": "^0.14.3",
-        "rebing/graphql-laravel": "^9.2.0"
-    },
-    "require-dev": {
-        "nunomaduro/collision": "^6.1",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^7.0",
-        "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.1",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "Expressionengine\\Coilpack\\": "src",
-            "Expressionengine\\Coilpack\\Database\\Factories\\": "database/factories"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Expressionengine\\Coilpack\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
-        },
-        "audit": {
-            "ignore": [
-                "PKSA-8qx3-n5y5-vvnd"
-            ]
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Expressionengine\\Coilpack\\CoilpackServiceProvider"
-            ],
-            "aliases": {
-                "Coilpack": "Expressionengine\\Coilpack\\Facades\\Coilpack"
-            }
-        }
+  "name": "expressionengine/coilpack",
+  "description": "Harness the power of Laravel in ExpressionEngine",
+  "keywords": [
+    "expressionengine",
+    "laravel",
+    "coilpack"
+  ],
+  "homepage": "https://github.com/expressionengine/coilpack",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ExpressionEngine",
+      "email": "hello@expressionengine.com",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": ">= 8.1",
+    "illuminate/contracts": "^9.0|^10.0|>=11.0",
+    "illuminate/database": "^9.0|^10.0|>=11.0",
+    "illuminate/support": "^9.0|^10.0|>=11.0",
+    "mll-lab/laravel-graphiql": "^3.2",
+    "rcrowe/twigbridge": "^0.14.3",
+    "rebing/graphql-laravel": "^9.2.0"
+  },
+  "require-dev": {
+    "nunomaduro/collision": "^6.1",
+    "nunomaduro/larastan": "^2.0.1",
+    "orchestra/testbench": "^7.0",
+    "pestphp/pest": "^1.21",
+    "pestphp/pest-plugin-laravel": "^1.1",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan-deprecation-rules": "^1.0",
+    "phpstan/phpstan-phpunit": "^1.0",
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Expressionengine\\Coilpack\\": "src",
+      "Expressionengine\\Coilpack\\Database\\Factories\\": "database/factories"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Expressionengine\\Coilpack\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "analyse": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/pest",
+    "test-coverage": "vendor/bin/pest --coverage"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "phpstan/extension-installer": true
+    },
+    "audit": {
+        "ignore": [
+            "PKSA-8qx3-n5y5-vvnd"
+        ]
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Expressionengine\\Coilpack\\CoilpackServiceProvider"
+      ],
+      "aliases": {
+        "Coilpack": "Expressionengine\\Coilpack\\Facades\\Coilpack"
+      }
+    }
+  }
 }
